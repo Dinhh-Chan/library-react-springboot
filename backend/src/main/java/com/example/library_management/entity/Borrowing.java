@@ -36,13 +36,13 @@ public class Borrowing {
     @JsonBackReference("book-borrowings") // Phía ngược lại của mối quan hệ
     private Book book;
 
-    @Column(name = "borrow_date", nullable = false)
+    @Column(name = "borrow_date",nullable = true)
     private LocalDate borrowDate;
 
-    @Column(name = "return_date", nullable = false)
+    @Column(name = "return_date", nullable = true)
     private LocalDate returnDate;
 
-    @Column(name = "actual_return_date")
+    @Column(name = "actual_return_date",nullable = true)
     private LocalDate actualReturnDate;
 
     @Enumerated(EnumType.STRING)

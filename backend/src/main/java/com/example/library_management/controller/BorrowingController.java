@@ -1,134 +1,134 @@
 package com.example.library_management.controller;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.library_management.dto.BorrowingDetailsDTO;
 import com.example.library_management.dto.BorrowingRequest;
+import com.example.library_management.dto.BorrowingResponse;
 import com.example.library_management.entity.Borrowing;
-import com.example.library_management.enums.BorrowingStatus;
-import com.example.library_management.exception.ResourceNotFoundException;
+import com.example.library_management.entity.Book;
+import com.example.library_management.entity.Reader;
 import com.example.library_management.service.BorrowingService;
+import com.example.library_management.service.ReaderService;
+import com.example.library_management.service.BookService;
+import com.example.library_management.exception.ResourceNotFoundException;
+
 @RestController
 @RequestMapping("/api/borrowings")
 public class BorrowingController {
-    
+
     private final BorrowingService borrowingService;
+    private final ReaderService readerService;
+    private final BookService bookService;
 
-    public BorrowingController(BorrowingService borrowingService){
+    public BorrowingController(BorrowingService borrowingService, ReaderService readerService, BookService bookService) {
         this.borrowingService = borrowingService;
+        this.readerService = readerService;
+        this.bookService = bookService;
     }
 
-    // Lấy tất cả các lần mượn
-    @GetMapping
-    public ResponseEntity<List<BorrowingDetailsDTO>> getAllBorrowings() {
-        List<BorrowingDetailsDTO> borrowings = borrowingService.getAllBorrowings();
-        return ResponseEntity.ok(borrowings);
-    }
-    // Lấy lần mượn theo ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Borrowing> getBorrowingById(@PathVariable Long id){
-        try {
-            Borrowing borrowing = borrowingService.getBorrowingById(id);
-            return ResponseEntity.ok(borrowing);
-        } catch (ResourceNotFoundException ex){
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    // Tạo lần mượn mới
+    // Tạo một borrowing mới
     @PostMapping
-    public ResponseEntity<Borrowing> createBorrowing(@RequestBody BorrowingRequest borrowingRequest){
-        Borrowing createdBorrowing = borrowingService.createBorrowing(
-                borrowingRequest.getReaderId(),
-                borrowingRequest.getBookId(),
-                borrowingRequest.getBorrowDate(),
-                borrowingRequest.getReturnDate()
-        );
-        return ResponseEntity.status(201).body(createdBorrowing);
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<BorrowingResponse> createBorrowing(@RequestBody BorrowingRequest borrowingRequest) {
+        // Lấy Reader và Book từ ID
+        Reader reader = readerService.getReaderById(borrowingRequest.getReaderId())
+                .orElseThrow(() -> new ResourceNotFoundException("Reader not found with id " + borrowingRequest.getReaderId()));
+        Book book = bookService.getBookById(borrowingRequest.getBookId())
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id " + borrowingRequest.getBookId()));
+
+        // Tạo Borrowing entity
+        Borrowing borrowing = borrowingRequest.toBorrowing();
+        borrowing.setReader(reader);
+        borrowing.setBook(book);
+
+        // Tạo borrowing
+        Borrowing createdBorrowing = borrowingService.createBorrowing(borrowing);
+        BorrowingResponse response = BorrowingResponse.fromEntity(createdBorrowing);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    // Trả sách (cập nhật lần mượn)
-    @PutMapping("/return/{id}")
-    public ResponseEntity<Borrowing> returnBook(@PathVariable Long id, @RequestParam(required = false) String actualReturnDate){
-        try {
-            Borrowing updatedBorrowing = borrowingService.returnBook(id, 
-                    actualReturnDate != null ? LocalDate.parse(actualReturnDate) : LocalDate.now());
-            return ResponseEntity.ok(updatedBorrowing);
-        } catch (ResourceNotFoundException | IllegalStateException ex){
-            return ResponseEntity.badRequest().body(null);
-        }
+    // Lấy tất cả các borrowings
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<List<BorrowingResponse>> getAllBorrowings() {
+        List<Borrowing> borrowings = borrowingService.getAllBorrowings();
+        List<BorrowingResponse> responses = borrowings.stream()
+                .map(BorrowingResponse::fromEntity)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
-    // Xóa lần mượn
+    // Lấy một borrowing theo ID
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<BorrowingResponse> getBorrowingById(@PathVariable Long id) {
+        Borrowing borrowing = borrowingService.getBorrowingById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Borrowing not found with id " + id));
+        BorrowingResponse response = BorrowingResponse.fromEntity(borrowing);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // Cập nhật một borrowing
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<BorrowingResponse> updateBorrowing(@PathVariable Long id, @RequestBody BorrowingRequest borrowingRequest) {
+        // Lấy Reader và Book từ ID
+        Reader reader = readerService.getReaderById(borrowingRequest.getReaderId())
+                .orElseThrow(() -> new ResourceNotFoundException("Reader not found with id " + borrowingRequest.getReaderId()));
+        Book book = bookService.getBookById(borrowingRequest.getBookId())
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id " + borrowingRequest.getBookId()));
+
+        // Tạo Borrowing entity từ DTO
+        Borrowing borrowingDetails = borrowingRequest.toBorrowing();
+        borrowingDetails.setReader(reader);
+        borrowingDetails.setBook(book);
+
+        // Cập nhật borrowing
+        Borrowing updatedBorrowing = borrowingService.updateBorrowing(id, borrowingDetails);
+        BorrowingResponse response = BorrowingResponse.fromEntity(updatedBorrowing);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // Xóa một borrowing
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBorrowing(@PathVariable Long id){
-        try {
-            borrowingService.deleteBorrowing(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception ex){
-            return ResponseEntity.notFound().build();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteBorrowing(@PathVariable Long id) {
+        borrowingService.deleteBorrowing(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Endpoint để admin duyệt đơn mượn
+    @PostMapping("/{id}/approve")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<BorrowingResponse> approveBorrowing(@PathVariable Long id) {
+        Borrowing approvedBorrowing = borrowingService.approveBorrowing(id);
+        BorrowingResponse response = BorrowingResponse.fromEntity(approvedBorrowing);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // Endpoint để trả sách
+    @PostMapping("/{id}/return")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<BorrowingResponse> returnBorrowing(
+            @PathVariable Long id,
+            @RequestParam(required = false) String actualReturnDate) {
+        LocalDate returnDate = null;
+        if (actualReturnDate != null && !actualReturnDate.isEmpty()) {
+            try {
+                returnDate = LocalDate.parse(actualReturnDate);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Invalid date format for actualReturnDate. Expected format: YYYY-MM-DD");
+            }
         }
-    }
-        @GetMapping("/weekly")
-    public ResponseEntity<Map<String, Long>> getWeeklyBorrowings(
-            @RequestParam int year,
-            @RequestParam int week) {
-        List<Borrowing> borrowings = borrowingService.getBorrowingsByWeek(year, week);
-
-        Map<String, Long> summary = generateSummary(borrowings);
-        return ResponseEntity.ok(summary);
-    }
-
-    @GetMapping("/monthly")
-    public ResponseEntity<Map<String, Long>> getMonthlyBorrowings(
-            @RequestParam int year,
-            @RequestParam int month) {
-        List<Borrowing> borrowings = borrowingService.getBorrowingsByMonth(year, month);
-
-        Map<String, Long> summary = generateSummary(borrowings);
-        return ResponseEntity.ok(summary);
-    }
-
-    @GetMapping("/yearly")
-    public ResponseEntity<Map<String, Long>> getYearlyBorrowings(
-            @RequestParam int year) {
-        List<Borrowing> borrowings = borrowingService.getBorrowingsByYear(year);
-
-        Map<String, Long> summary = generateSummary(borrowings);
-        return ResponseEntity.ok(summary);
-    }
-
-    private Map<String, Long> generateSummary(List<Borrowing> borrowings) {
-        Map<String, Long> summary = new HashMap<>();
-        summary.put("borrowing", borrowingService.countBorrowingsByStatus(borrowings, BorrowingStatus.DANG_MUON));
-        summary.put("returned", borrowingService.countBorrowingsByStatus(borrowings, BorrowingStatus.DA_TRA));
-        summary.put("overdue", borrowingService.countBorrowingsByStatus(borrowings, BorrowingStatus.QUA_HAN));
-        return summary;
-    }
-
-    @GetMapping("/history/{readerId}")
-    public ResponseEntity<List<BorrowingDetailsDTO>> getBorrowingByReaderId(@PathVariable Long readerId) {
-        List<BorrowingDetailsDTO> borrowings = borrowingService.getBorrowingByReaderId(readerId);
-        return ResponseEntity.ok(borrowings);
-    }
-
-    @GetMapping("/borrowed-books")
-    public ResponseEntity<List<BorrowingDetailsDTO>> getBorrowedBooks() {
-        List<BorrowingDetailsDTO> borrowings = borrowingService.getBorrowedBooks();
-        return ResponseEntity.ok(borrowings);
+        Borrowing returnedBorrowing = borrowingService.returnBorrowing(id, returnDate);
+        BorrowingResponse response = BorrowingResponse.fromEntity(returnedBorrowing);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

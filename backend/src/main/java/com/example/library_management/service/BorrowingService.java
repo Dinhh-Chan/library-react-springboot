@@ -1,204 +1,130 @@
 package com.example.library_management.service;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.library_management.dto.BorrowingDetailsDTO;
 import com.example.library_management.entity.Book;
 import com.example.library_management.entity.Borrowing;
 import com.example.library_management.entity.Inventory;
 import com.example.library_management.entity.Reader;
 import com.example.library_management.enums.BorrowingStatus;
 import com.example.library_management.exception.ResourceNotFoundException;
-import com.example.library_management.repository.BookRepository;
 import com.example.library_management.repository.BorrowingRepository;
-import com.example.library_management.repository.ReaderRepository;
 
 @Service
+@Transactional
 public class BorrowingService {
-    
+
     private final BorrowingRepository borrowingRepository;
-    private final ReaderRepository readerRepository;
-    private final BookRepository bookRepository;
+    private final ReaderService readerService;
+    private final BookService bookService;
+    private final InventoryService inventoryService;
 
-    public BorrowingService(BorrowingRepository borrowingRepository,
-                            ReaderRepository readerRepository,
-                            BookRepository bookRepository){
+    public BorrowingService(BorrowingRepository borrowingRepository, ReaderService readerService,
+            BookService bookService, InventoryService inventoryService) {
         this.borrowingRepository = borrowingRepository;
-        this.readerRepository = readerRepository;
-        this.bookRepository = bookRepository;
+        this.readerService = readerService;
+        this.bookService = bookService;
+        this.inventoryService = inventoryService;
     }
 
-    // Chuyển đổi Borrowing thành BorrowingDetailsDTO
-    private BorrowingDetailsDTO toBorrowingDetailsDTO(Borrowing borrowing) {
-        BorrowingDetailsDTO dto = new BorrowingDetailsDTO();
-        dto.setId(borrowing.getId());
-        dto.setIdReader(borrowing.getReader().getId());
-        dto.setBookTitle(borrowing.getBook().getTitle());
-        dto.setBookImageUrl(borrowing.getBook().getFile()); // Sử dụng link_file làm imageUrl
-        dto.setBorrowDate(borrowing.getBorrowDate());
-        dto.setReturnDate(borrowing.getReturnDate());
-        dto.setStatus(borrowing.getStatus().name());
-        return dto;
+    // Tạo một borrowing mới
+    public Borrowing createBorrowing(Borrowing borrowing) {
+        return borrowingRepository.save(borrowing);
     }
 
-    // Lấy tất cả các lần mượn với chi tiết
-    public List<BorrowingDetailsDTO> getAllBorrowingDetails(){
-        List<Borrowing> borrowings = borrowingRepository.findAll();
-        return borrowings.stream()
-                .map(this::toBorrowingDetailsDTO)
-                .collect(Collectors.toList());
+    // Lấy tất cả các borrowings
+    public List<Borrowing> getAllBorrowings() {
+        return borrowingRepository.findAll();
     }
 
-    // Lấy lần mượn theo ID
-    public Borrowing getBorrowingById(Long id){
-        return borrowingRepository.findById(id)
+    // Lấy một borrowing theo ID
+    public Optional<Borrowing> getBorrowingById(Long id) {
+        return borrowingRepository.findById(id);
+    }
+
+    // Cập nhật một borrowing
+    public Borrowing updateBorrowing(Long id, Borrowing borrowingDetails) {
+        Borrowing borrowing = borrowingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Borrowing not found with id " + id));
-    }
 
-    // Tạo lần mượn mới
-    @Transactional
-    public Borrowing createBorrowing(Long readerId, Long bookId, LocalDate borrowDate, LocalDate returnDate){
-        Reader reader = readerRepository.findById(readerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Reader not found with id " + readerId));
-        
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id " + bookId));
-        
-        // Kiểm tra số lượng sách có sẵn nhưng không giảm số lượng
-        Inventory inventory = book.getInventory();
-        if(inventory.getAvailableStock() <= 0){
-            throw new IllegalStateException("No available stock for book id " + bookId);
-        }
-        
-        // Tạo Borrowing với trạng thái DANG_CHO_DUYET
-        Borrowing borrowing = new Borrowing();
-        borrowing.setReader(reader);
-        borrowing.setBook(book);
-        borrowing.setBorrowDate(borrowDate);
-        borrowing.setReturnDate(returnDate);
-        borrowing.setStatus(BorrowingStatus.DANG_CHO_DUYET); // Trạng thái mặc định
-        
+        borrowing.setReader(borrowingDetails.getReader());
+        borrowing.setBook(borrowingDetails.getBook());
+        borrowing.setBorrowDate(borrowingDetails.getBorrowDate());
+        borrowing.setReturnDate(borrowingDetails.getReturnDate());
+        borrowing.setActualReturnDate(borrowingDetails.getActualReturnDate());
+        borrowing.setStatus(borrowingDetails.getStatus());
+
         return borrowingRepository.save(borrowing);
     }
 
-    // Duyệt đơn mượn
-    @Transactional
-    public Borrowing approveBorrowing(Long borrowingId) {
-        Borrowing borrowing = borrowingRepository.findById(borrowingId)
-                .orElseThrow(() -> new ResourceNotFoundException("Borrowing not found with id " + borrowingId));
+    // Xóa một borrowing
+    public void deleteBorrowing(Long id) {
+        Borrowing borrowing = borrowingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Borrowing not found with id " + id));
+        borrowingRepository.delete(borrowing);
+    }
 
-        // Chỉ xử lý nếu trạng thái là DANG_CHO_DUYET
+    // Phương thức duyệt đơn mượn
+    public Borrowing approveBorrowing(Long id) {
+        Borrowing borrowing = borrowingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Borrowing not found with id " + id));
+
         if (borrowing.getStatus() != BorrowingStatus.DANG_CHO_DUYET) {
-            throw new IllegalStateException("Borrowing is not in DANG_CHO_DUYET state");
+            throw new IllegalStateException("Only borrowings with status DANG_CHO_DUYET can be approved.");
         }
 
-        // Giảm số lượng sách
-        Inventory inventory = borrowing.getBook().getInventory();
+        Book book = borrowing.getBook();
+        Inventory inventory = inventoryService.getInventoryByBook(book);
+
         if (inventory.getAvailableStock() <= 0) {
-            throw new IllegalStateException("No available stock for book id " + borrowing.getBook().getId());
+            throw new IllegalStateException("No available stock for book id " + book.getId());
         }
 
+        // Giảm availableStock đi 1
         inventory.setAvailableStock(inventory.getAvailableStock() - 1);
-        borrowing.getBook().setInventory(inventory);
+        inventoryService.saveInventory(inventory);
 
-        // Cập nhật trạng thái và ngày mượn
+        // Cập nhật trạng thái
         borrowing.setStatus(BorrowingStatus.DANG_MUON);
-        borrowing.setBorrowDate(LocalDate.now()); // Set ngày hiện tại làm ngày mượn
 
+        // Cập nhật ngày mượn là ngày hiện tại
+        LocalDate today = LocalDate.now();
+        borrowing.setBorrowDate(today);
+
+        // Cập nhật ngày trả dự kiến là 14 ngày sau
+        borrowing.setReturnDate(today.plusDays(14));
+
+        // Lưu thay đổi
         return borrowingRepository.save(borrowing);
     }
 
-    // Cập nhật lần mượn (ví dụ: trả sách)
-    @Transactional
-    public Borrowing returnBook(Long borrowingId, LocalDate actualReturnDate){
-        Borrowing borrowing = borrowingRepository.findById(borrowingId)
-                .orElseThrow(() -> new ResourceNotFoundException("Borrowing not found with id " + borrowingId));
-        
-        if(borrowing.getStatus() == BorrowingStatus.DA_TRA){
-            throw new IllegalStateException("Book already returned");
+    // Phương thức trả sách
+    public Borrowing returnBorrowing(Long id, LocalDate actualReturnDate) {
+        Borrowing borrowing = borrowingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Borrowing not found with id " + id));
+
+        if (borrowing.getStatus() != BorrowingStatus.DANG_MUON && borrowing.getStatus() != BorrowingStatus.QUA_HAN) {
+            throw new IllegalStateException("Only borrowings with status DANG_MUON or QUA_HAN can be returned.");
         }
-        
-        borrowing.setActualReturnDate(actualReturnDate);
+
+        // Cập nhật trạng thái
         borrowing.setStatus(BorrowingStatus.DA_TRA);
-        
-        // Tăng số lượng sách có sẵn
-        Inventory inventory = borrowing.getBook().getInventory();
+
+        // Cập nhật ngày trả thực tế
+        borrowing.setActualReturnDate(actualReturnDate != null ? actualReturnDate : LocalDate.now());
+
+        // Tăng availableStock lên 1
+        Book book = borrowing.getBook();
+        Inventory inventory = inventoryService.getInventoryByBook(book);
         inventory.setAvailableStock(inventory.getAvailableStock() + 1);
-        
+        inventoryService.saveInventory(inventory);
+
+        // Lưu thay đổi
         return borrowingRepository.save(borrowing);
-    }
-
-    // Xóa lần mượn
-    public void deleteBorrowing(Long id){
-        borrowingRepository.deleteById(id);
-    }
-
-
-    public List<Borrowing> getBorrowingsByWeek(int year, int week) {
-        LocalDate startDate = LocalDate.ofYearDay(year, 1).with(WeekFields.ISO.weekOfYear(), week).with(DayOfWeek.MONDAY);
-        LocalDate endDate = startDate.plusDays(6);
-
-        return borrowingRepository.findByBorrowDateBetween(startDate, endDate);
-    }
-
-    public List<Borrowing> getBorrowingsByMonth(int year, int month) {
-        LocalDate startDate = LocalDate.of(year, month, 1);
-        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
-
-        return borrowingRepository.findByBorrowDateBetween(startDate, endDate);
-    }
-
-    public List<Borrowing> getBorrowingsByYear(int year) {
-        LocalDate startDate = LocalDate.of(year, 1, 1);
-        LocalDate endDate = startDate.withDayOfYear(startDate.lengthOfYear());
-
-        return borrowingRepository.findByBorrowDateBetween(startDate, endDate);
-    }
-        // Lấy đơn mượn theo ID người đọc với chi tiết
-    public List<BorrowingDetailsDTO> getBorrowingByReaderId(Long readerId) {
-        List<Borrowing> borrowings = borrowingRepository.findByReaderId(readerId);
-        return borrowings.stream()
-                .map(this::toBorrowingDetailsDTO)
-                .collect(Collectors.toList());
-    }
-
-    public long countBorrowingsByStatus(List<Borrowing> borrowings, BorrowingStatus status) {
-        return borrowings.stream().filter(borrowing -> borrowing.getStatus() == status).count();
-    }
-
-    // Lấy đơn mượn theo người đọc với chi tiết
-    public List<BorrowingDetailsDTO> getBorrowingDetailsByReaderId(Long readerId) {
-        List<Borrowing> borrowings = borrowingRepository.findByReaderId(readerId);
-        return borrowings.stream()
-                .map(this::toBorrowingDetailsDTO)
-                .collect(Collectors.toList());
-    }
-
-    // Lấy sách đang mượn với chi tiết
-    public List<BorrowingDetailsDTO> getBorrowedBooksDetails() {
-        List<Borrowing> borrowings = borrowingRepository.findByStatus(BorrowingStatus.DANG_MUON);
-        return borrowings.stream()
-                .map(this::toBorrowingDetailsDTO)
-                .collect(Collectors.toList());
-    }
-    public List<BorrowingDetailsDTO> getAllBorrowings(){
-        List<Borrowing> borrowings = borrowingRepository.findAll();
-        return borrowings.stream()
-                .map(this::toBorrowingDetailsDTO)
-                .collect(Collectors.toList());
-    }
-    // Lấy các sách đang mượn với chi tiết
-    public List<BorrowingDetailsDTO> getBorrowedBooks() {
-        List<Borrowing> borrowings = borrowingRepository.findByStatus(BorrowingStatus.DANG_MUON);
-        return borrowings.stream()
-                .map(this::toBorrowingDetailsDTO)
-                .collect(Collectors.toList());
     }
 }

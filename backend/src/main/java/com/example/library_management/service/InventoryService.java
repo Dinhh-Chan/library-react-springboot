@@ -1,5 +1,6 @@
 package com.example.library_management.service;
 
+import com.example.library_management.entity.Book;
 import com.example.library_management.entity.Inventory;
 import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.repository.InventoryRepository;
@@ -20,6 +21,10 @@ public class InventoryService {
     // Lấy tất cả Inventory
     public List<Inventory> getAllInventories(){
         return inventoryRepository.findAll();
+    }
+    // Thêm phương thức saveInventory
+    public Inventory saveInventory(Inventory inventory) {
+        return inventoryRepository.save(inventory);
     }
 
     // Lấy Inventory theo ID
@@ -45,6 +50,12 @@ public class InventoryService {
     // Xóa Inventory
     public void deleteInventory(Long id){
         inventoryRepository.deleteById(id);
+    }
+
+    // Lấy Inventory theo Book
+    public Inventory getInventoryByBook(Book book) {
+        return inventoryRepository.findByBook(book)
+                .orElseThrow(() -> new ResourceNotFoundException("Inventory not found for book id " + book.getId()));
     }
 
     // Thêm các phương thức nghiệp vụ khác nếu cần
