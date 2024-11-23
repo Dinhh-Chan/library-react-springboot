@@ -55,7 +55,7 @@ public class BookService {
     public Book updateBook(Long id, Book bookDetails, Set<Long> categoryIds){
         return bookRepository.findById(id).map(book -> {
             book.setTitle(bookDetails.getTitle());
-            book.setQuantity(bookDetails.getQuantity());
+            // book.setQuantity(bookDetails.getQuantity());
             Set<Category> categories = categoryRepository.findAllById(categoryIds)
                                             .stream().collect(Collectors.toSet());
             book.setCategories(categories);

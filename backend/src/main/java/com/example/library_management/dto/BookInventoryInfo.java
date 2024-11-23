@@ -7,7 +7,6 @@ public class BookInventoryInfo {
     private String title;
     private String description;
     private Year publishedYear;
-    private Integer quantity;
     private String linkFile;
     private Integer totalStock;
     private Integer availableStock;
@@ -17,13 +16,12 @@ public class BookInventoryInfo {
     public BookInventoryInfo() {}
 
     public BookInventoryInfo(Long id, String title, String description, Year publishedYear,
-                             Integer quantity, String linkFile, Integer totalStock, Integer availableStock,
+                             String linkFile, Integer totalStock, Integer availableStock,
                              Long borrowingCount) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.publishedYear = publishedYear;
-        this.quantity = quantity;
         this.linkFile = linkFile;
         this.totalStock = totalStock;
         this.availableStock = availableStock;
@@ -43,9 +41,6 @@ public class BookInventoryInfo {
 
     public Year getPublishedYear() { return publishedYear; }
     public void setPublishedYear(Year publishedYear) { this.publishedYear = publishedYear; }
-
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
     public String getLinkFile() { return linkFile; }
     public void setLinkFile(String linkFile) { this.linkFile = linkFile; }

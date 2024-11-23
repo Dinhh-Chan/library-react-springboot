@@ -57,7 +57,7 @@ public class BookRequest {
         Book book = new Book();
         book.setTitle(this.title);
         book.setFile(this.link_file);
-        book.setQuantity(this.quantity);
+        // book.setQuantity(this.quantity);
         // Các thuộc tính khác nếu cần
         return book;
     }

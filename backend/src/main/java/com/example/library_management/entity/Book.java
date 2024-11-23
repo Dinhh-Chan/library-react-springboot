@@ -36,8 +36,8 @@ public class Book {
     @Column(name = "published_year", nullable= false)
     private Year published_year;
 
-    @Column(name = "quantity", nullable= false )
-    private Integer quantity;
+    // @Column(name = "quantity", nullable= false )
+    // private Integer quantity;
 
     @Column(name = "link_file", nullable = false)
     private String link_file;
@@ -77,7 +77,7 @@ public class Book {
 
     public Book(String title, Integer quantity, String link_file, String description, Year published_year){
         this.title = title;
-        this.quantity = quantity;
+        // this.quantity = quantity;
         this.link_file = link_file; // Sửa lại nếu cần
         this.description = description;
         this.published_year = published_year;
@@ -97,13 +97,13 @@ public class Book {
         this.title = title;
     }
 
-    public Integer getQuantity(){
-        return quantity;
-    }
+    // public Integer getQuantity(){
+    //     return quantity;
+    // }
 
-    public void setQuantity(Integer quantity){
-        this.quantity = quantity;
-    }
+    // public void setQuantity(Integer quantity){
+    //     this.quantity = quantity;
+    // }
 
     public String getFile(){
         return link_file;
