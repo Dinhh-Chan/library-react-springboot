@@ -1,0 +1,47 @@
+/* Container chính */
+.book-container {
+  margin: 2rem;
+  padding-right: 5rem;
+  padding-left: 5rem;
+}
+
+.book-container h1 {
+  margin-bottom: 0px;
+  font-size: 40px;
+  font-weight: bolder;
+  margin-left: 5px;
+}
+
+/* Grid hiển thị sách */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  column-gap: 2px;
+  justify-items: center;
+  row-gap: 30px;
+  margin: 2rem 1rem;
+}
+
+/* Pagination */
+.pagination {
+  text-align: center;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 8px 12px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pagination button.active {
+  background-color: #bbb;
+  font-weight: bold;
+}
+
+.pagination button:hover {
+  background-color: #aaa;
+}

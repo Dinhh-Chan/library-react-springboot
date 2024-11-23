@@ -1,0 +1,74 @@
+.register {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f8ff; /* Màu nền nhạt */
+  }
+  .container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 600px;
+    display: flex;
+  }
+  .form-left {
+    flex: 1;
+    padding-right: 20px;
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .form-left h2 {
+    margin-bottom: 15px;
+    font-size: 24px;
+    color: #333;
+  }
+  .form-left p {
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px; /* Tạo khoảng cách xuống dưới */
+  }
+  .form-right {
+    flex: 2;
+    padding-left: 20px;
+  }
+  .form-right input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  .form-right button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #4a67d6;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .form-right button:hover {
+    background-color: #3b55c5;
+  }
+  .form-right .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px; /* Khoảng cách nhỏ giữa chữ và nút */
+  }
+  .form-right .actions a {
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+  }
+  .form-right .actions a:hover {
+    text-decoration: underline;
+  }

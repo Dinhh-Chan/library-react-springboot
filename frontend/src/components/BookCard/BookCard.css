@@ -1,0 +1,68 @@
+.BookWrapper{
+    font-size: 14px;
+    border-radius: 10px;
+    width: 150px;
+    line-height: 90%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: #ffffff;
+    visibility: hidden;
+    cursor: pointer;
+}
+
+.BookWrapper:hover{
+    visibility: visible;    
+    transform: scale(1.1) translateY(-10px);
+    transition: transform 0.3s ease;
+}
+
+
+.BookCover{
+    height: 200px;
+    background-color:blueviolet;
+    border-radius: 10px;
+    visibility: visible;
+    
+}
+
+.BookCover img{
+    width: 100%;          
+    height: 100%;        
+    object-fit: cover;    
+    border-radius: 8px; 
+}
+
+.BookCardContainer{
+    position: absolute;
+    background-color: #ffffffe3;
+    width: 93.5%;
+    border-radius: 10px;
+    padding-top: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    bottom: 0%;
+    height: fit-content;
+    transition: transform 0.5s ease;
+    padding-left: 10px;
+    
+    
+
+}
+
+
+.BookWrapper b{
+    font-size: 14px;
+    margin: 10px 0;
+    display: -webkit-box;       
+    -webkit-line-clamp: 2;      
+    -webkit-box-orient: vertical; 
+    overflow: hidden;           
+    text-overflow: ellipsis;
+}
+
+.BookWrapper p{
+    font-size: 10px;
+    display: -webkit-box;       
+    -webkit-line-clamp: 2;      
+    -webkit-box-orient: vertical; 
+    overflow: hidden;           
+    text-overflow: ellipsis;
+}

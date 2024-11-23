@@ -1,0 +1,42 @@
+.footerWraper{
+    background-color: #4867c3;
+    width: auto;
+    color: #fff;
+    padding: 2rem 5%;
+    min-height: 100px;
+}
+
+.teamMember{
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    list-style-type: none;
+    justify-content: center;
+}
+
+.teamMember li{
+    padding-left: 20px;
+    border-left: 1px solid #fff;
+}
+
+
+.listWrapper{
+    margin-right: 30px;
+
+}
+
+b{
+    padding-right: 20px;
+    font-size: larger;
+}
+
+.FooterA{
+    color: #fff;
+    font-size: 20px;
+    margin-right: 10px;
+    background-color: transparent;
+}
+
+.row{
+    display: flex;
+}

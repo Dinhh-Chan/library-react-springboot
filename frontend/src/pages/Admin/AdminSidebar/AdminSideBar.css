@@ -1,0 +1,120 @@
+.AdminWrapper{
+    margin-top: 20px;
+    display: flex;
+    gap: 300px;
+    margin-right: 30px;
+}
+
+
+.AdminMenu{
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(135deg, #4b6cb7, #182848);
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: #fff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    padding-top: 1em;
+    display: flex;
+    flex-direction: column;
+}
+
+.Borrow-history-header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+
+.AdminMenu h1{
+    text-align: center;
+    padding: 1.5em;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0;
+    font-size: 1.8em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.AdminLogo img{
+    height: 100px;
+    width: 100px;
+}
+
+.AdminLinks{
+    text-decoration: none;
+    color: #555;
+    text-align: left;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #fff;
+    border: none;
+    padding: 20px;
+    font-size: 16px;
+}
+
+.AdminLinks:hover{
+    background-color: #f0f0f0;
+}
+
+.Borrow-history-header h1{
+    width: 600px;
+    
+}
+
+.DeleteButton{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    border: none;
+    background-color: rgb(255, 55, 55);
+    color: #fff;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.DeleteButton:hover{
+    background-color: rgb(214, 0, 0);
+}
+
+.UpdateButton{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    background-color: #555555c8;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+.UpdateButton:hover{
+    background-color: #555;
+}
+
+.CreateButton{
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    background-color: rgb(0, 194, 0);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.CreateButton:hover{
+    background-color: rgb(15, 185, 15);
+}
+
+.borrow-details{
+    align-items: center;
+}
+
+.borrow-details h2{
+    align-items: center;
+    margin: 0;
+    padding: 30px 10px;
+}

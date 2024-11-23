@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # Dịch vụ ứng dụng Spring Boot
+  springboot-app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/library_management
+      SPRING_DATASOURCE_USERNAME: library_user
+      SPRING_DATASOURCE_PASSWORD: library_pass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+    networks:
+      - app-network
+
+  # Dịch vụ cơ sở dữ liệu PostgreSQL cho Spring Boot và Superset
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: library_management
+      POSTGRES_USER: library_user
+      POSTGRES_PASSWORD: library_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # Dịch vụ Apache Superset
+  superset:
+    image: apache/superset:latest
+    container_name: superset
+    ports:
+      - "8088:8088"
+    environment:
+      SUPERSET_DATABASE_URI: postgresql+psycopg2://superset_user:superset_pass@db:5432/superset
+      SUPERSET_SECRET_KEY: 'your_secret_key'  # Thay thế bằng khóa bí mật của bạn
+    volumes:
+      - superset_home:/var/lib/superset
+    depends_on:
+      - db
+    networks:
+      - app-network
+    command: >
+      /bin/bash -c "
+      superset db upgrade &&
+      superset fab create-admin --username admin --firstname Admin --lastname User --email admin@example.com --password admin &&
+      superset init &&
+      superset run -p 8088 --with-threads --reload --debugger
+      "
+
+networks:
+  app-network:
+
+volumes:
+  db_data:
+  superset_home:
