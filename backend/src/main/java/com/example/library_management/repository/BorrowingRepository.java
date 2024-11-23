@@ -21,4 +21,5 @@ public interface BorrowingRepository extends JpaRepository<Borrowing, Long> {
     List<Borrowing> findByStatus(com.example.library_management.enums.BorrowingStatus status);
     // Thêm các phương thức tùy chỉnh nếu cần
     List<Borrowing> findByBorrowDateBetween(LocalDate startDate, LocalDate endDate);
+
 }

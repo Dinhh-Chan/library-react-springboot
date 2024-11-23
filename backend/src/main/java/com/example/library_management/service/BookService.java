@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.library_management.dto.BookBorrowingInfo;
+import com.example.library_management.dto.BookInventoryInfo;
 import com.example.library_management.entity.Book;
 import com.example.library_management.entity.Category;
 import com.example.library_management.exception.ResourceNotFoundException;
@@ -71,5 +73,9 @@ public class BookService {
     public List<Book> getBooksByCategoryId(Long categoryId) {
         return bookRepository.findByCategories_Id(categoryId);
     }
+    public List<BookInventoryInfo> getAllBooksWithInventoryAndBorrowingCount() {
+        return bookRepository.findAllBooksWithInventoryAndBorrowingCount();
+    }
+
     // Thêm các phương thức nghiệp vụ khác nếu cần
 }
