@@ -15,9 +15,8 @@ import jakarta.persistence.Table;
 @Table(name ="inventory")
 public class Inventory {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     // Mối quan hệ một-một với Book
     @OneToOne
     @JoinColumn(name="book_id", nullable=false, unique=true)

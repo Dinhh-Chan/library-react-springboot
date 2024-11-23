@@ -75,7 +75,7 @@ public class Book {
     public Book(){
     }
 
-    public Book(String title, Integer quantity, String link_file, String description, Year published_year){
+    public Book(String title,  String link_file, String description, Year published_year){
         this.title = title;
         // this.quantity = quantity;
         this.link_file = link_file; // Sửa lại nếu cần
