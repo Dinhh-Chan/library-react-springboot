@@ -1,0 +1,13 @@
+/* src/components/SupersetDashboard.css */
+
+.SupersetDashboard {
+    width: 100%;
+    height: calc(100vh - 60px); /* Adjust based on your layout */
+    overflow: hidden;
+}
+
+.SupersetDashboard iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}

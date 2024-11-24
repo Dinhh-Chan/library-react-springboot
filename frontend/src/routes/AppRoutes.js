@@ -19,7 +19,7 @@ import ManageBorrowBooks from '../pages/Admin/ManageBorrowBooks';
 import ManageUsers from '../pages/Admin/ManageUsers';
 import ManageCategory from '../pages/Admin/ManageCategory';
 import BooksByCategory from "../components/CategoriesList/BookByCategory";
-
+import SupersetDashboard from '../components/SupersetDashboard';
 const AppRoutes = ({ role }) => {
     return (
         <Routes>
@@ -44,6 +44,7 @@ const AppRoutes = ({ role }) => {
           <Route path="manage-borrow-and-returned-books" element={<ManageBorrowBooks/>} />
           <Route path="manage-users" element={<ManageUsers />} />
           <Route path="manage-category" element={<ManageCategory />} />
+          <Route path="superset-dashboard" element={<SupersetDashboard />} />
             </Route>
             <Route
                 path="/borrow-ticket"
