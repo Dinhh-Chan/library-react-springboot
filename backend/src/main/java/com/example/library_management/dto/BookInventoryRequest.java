@@ -1,34 +1,22 @@
 package com.example.library_management.dto;
 
 import java.time.Year;
+import java.util.List;
 
 public class BookInventoryRequest {
-    private Long bookId; // Nếu null, sẽ tạo sách mới
+    private Long bookId;
     private String title;
     private String description;
-    private Year publishedYear;
+    private Year publishedYear; // Sử dụng Integer để dễ dàng chuyển đổi sang Year
     private String linkFile;
     private Integer totalStock;
     private Integer availableStock;
-    private Long[] categoryIds;
-    private Long[] authorIds;
+
+    private List<String> categoryNames; // Danh sách tên thể loại
+    private List<String> authorNames;   // Danh sách tên tác giả
 
     // Constructors
     public BookInventoryRequest() {}
-
-    public BookInventoryRequest(Long bookId, String title, String description, Year publishedYear,
-                                String linkFile, Integer totalStock, Integer availableStock,
-                                Long[] categoryIds, Long[] authorIds) {
-        this.bookId = bookId;
-        this.title = title;
-        this.description = description;
-        this.publishedYear = publishedYear;
-        this.linkFile = linkFile;
-        this.totalStock = totalStock;
-        this.availableStock = availableStock;
-        this.categoryIds = categoryIds;
-        this.authorIds = authorIds;
-    }
 
     // Getters và Setters
 
@@ -68,7 +56,7 @@ public class BookInventoryRequest {
         return linkFile;
     }
 
-    public void setFile(String linkFile) {
+    public void setLinkFile(String linkFile) {
         this.linkFile = linkFile;
     }
 
@@ -88,19 +76,19 @@ public class BookInventoryRequest {
         this.availableStock = availableStock;
     }
 
-    public Long[] getCategoryIds() {
-        return categoryIds;
+    public List<String> getCategoryNames() {
+        return categoryNames;
     }
 
-    public void setCategoryIds(Long[] categoryIds) {
-        this.categoryIds = categoryIds;
+    public void setCategoryNames(List<String> categoryNames) {
+        this.categoryNames = categoryNames;
     }
 
-    public Long[] getAuthorIds() {
-        return authorIds;
+    public List<String> getAuthorNames() {
+        return authorNames;
     }
 
-    public void setAuthorIds(Long[] authorIds) {
-        this.authorIds = authorIds;
+    public void setAuthorNames(List<String> authorNames) {
+        this.authorNames = authorNames;
     }
 }

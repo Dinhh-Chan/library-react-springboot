@@ -17,6 +17,7 @@ import com.example.library_management.repository.AuthorRepository;
 import com.example.library_management.repository.BookRepository;
 import com.example.library_management.repository.CategoryRepository;
 
+import java.time.Year;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -38,33 +39,48 @@ public class InventoryService {
     @Transactional
     public Inventory updateOrCreateBookInventory(BookInventoryRequest request) {
         final Book finalBook;
+
         if (request.getBookId() != null) {
+            // Tìm và cập nhật sách nếu đã tồn tại
             finalBook = bookRepository.findById(request.getBookId())
                     .orElseThrow(() -> new RuntimeException("Book not found with id " + request.getBookId()));
-            // Cập nhật thông tin sách nếu cần
             finalBook.setTitle(request.getTitle());
             finalBook.setDescription(request.getDescription());
             finalBook.setPublishedYear(request.getPublishedYear());
             finalBook.setFile(request.getLinkFile());
-    
+
             // Cập nhật mối quan hệ Category
             Set<Category> categories = new HashSet<>();
-            for (Long categoryId : request.getCategoryIds()) {
-                Category category = categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new RuntimeException("Category not found with id " + categoryId));
-                categories.add(category);
+            if (request.getCategoryNames() != null && !request.getCategoryNames().isEmpty()) {
+                for (String categoryName : request.getCategoryNames()) {
+                    Category category = categoryRepository.findByCategoryName(categoryName)
+                            .orElseGet(() -> {
+                                // Tạo mới nếu không tìm thấy thể loại
+                                Category newCategory = new Category();
+                                newCategory.setCategoryName(categoryName);
+                                return categoryRepository.save(newCategory);
+                            });
+                    categories.add(category);
+                }
             }
             finalBook.setCategories(categories);
-    
+
             // Cập nhật mối quan hệ Author
             Set<Author> authors = new HashSet<>();
-            for (Long authorId : request.getAuthorIds()) {
-                Author author = authorRepository.findById(authorId)
-                        .orElseThrow(() -> new RuntimeException("Author not found with id " + authorId));
-                authors.add(author);
+            if (request.getAuthorNames() != null && !request.getAuthorNames().isEmpty()) {
+                for (String authorName : request.getAuthorNames()) {
+                    Author author = authorRepository.findByName(authorName)
+                            .orElseGet(() -> {
+                                // Tạo mới nếu không tìm thấy tác giả
+                                Author newAuthor = new Author();
+                                newAuthor.setName(authorName);
+                                return authorRepository.save(newAuthor);
+                            });
+                    authors.add(author);
+                }
             }
             finalBook.setAuthors(authors);
-    
+
         } else {
             // Tạo sách mới
             Book newBook = new Book();
@@ -72,29 +88,43 @@ public class InventoryService {
             newBook.setDescription(request.getDescription());
             newBook.setPublishedYear(request.getPublishedYear());
             newBook.setFile(request.getLinkFile());
-    
+
             // Thiết lập mối quan hệ Category
             Set<Category> categories = new HashSet<>();
-            for (Long categoryId : request.getCategoryIds()) {
-                Category category = categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new RuntimeException("Category not found with id " + categoryId));
-                categories.add(category);
+            if (request.getCategoryNames() != null && !request.getCategoryNames().isEmpty()) {
+                for (String categoryName : request.getCategoryNames()) {
+                    Category category = categoryRepository.findByCategoryName(categoryName)
+                            .orElseGet(() -> {
+                                // Tạo mới nếu không tìm thấy thể loại
+                                Category newCategory = new Category();
+                                newCategory.setCategoryName(categoryName);
+                                return categoryRepository.save(newCategory);
+                            });
+                    categories.add(category);
+                }
             }
             newBook.setCategories(categories);
-    
+
             // Thiết lập mối quan hệ Author
             Set<Author> authors = new HashSet<>();
-            for (Long authorId : request.getAuthorIds()) {
-                Author author = authorRepository.findById(authorId)
-                        .orElseThrow(() -> new RuntimeException("Author not found with id " + authorId));
-                authors.add(author);
+            if (request.getAuthorNames() != null && !request.getAuthorNames().isEmpty()) {
+                for (String authorName : request.getAuthorNames()) {
+                    Author author = authorRepository.findByName(authorName)
+                            .orElseGet(() -> {
+                                // Tạo mới nếu không tìm thấy tác giả
+                                Author newAuthor = new Author();
+                                newAuthor.setName(authorName);
+                                return authorRepository.save(newAuthor);
+                            });
+                    authors.add(author);
+                }
             }
             newBook.setAuthors(authors);
-    
+
             finalBook = bookRepository.save(newBook); // Lưu sách mới để có ID
         }
-    
-        // Sử dụng finalBook trong lambda
+
+        // Tạo hoặc cập nhật Inventory
         Inventory inventory = inventoryRepository.findByBookId(finalBook.getId())
                 .orElseGet(() -> {
                     // Nếu Inventory chưa tồn tại, tạo mới
@@ -102,14 +132,14 @@ public class InventoryService {
                     newInventory.setBook(finalBook);
                     return newInventory;
                 });
-    
+
         // Cập nhật thông tin Inventory
         inventory.setTotalStock(request.getTotalStock());
         inventory.setAvailableStock(request.getAvailableStock());
-    
-        // Lưu Inventory
+
         return inventoryRepository.save(inventory);
     }
+
     
 
     // Lấy tất cả Inventory
