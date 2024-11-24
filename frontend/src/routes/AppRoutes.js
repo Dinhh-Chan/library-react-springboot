@@ -1,4 +1,3 @@
-// src/routes/AppRoutes.js
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "../pages/Public/HomePage";
@@ -19,7 +18,7 @@ import ManageBorrowBooks from '../pages/Admin/ManageBorrowBooks';
 import ManageUsers from '../pages/Admin/ManageUsers';
 import ManageCategory from '../pages/Admin/ManageCategory';
 import BooksByCategory from "../components/CategoriesList/BookByCategory";
-import SupersetDashboard from '../components/SupersetDashboard';
+
 const AppRoutes = ({ role }) => {
     return (
         <Routes>
@@ -31,7 +30,7 @@ const AppRoutes = ({ role }) => {
             <Route path="/category" element={<CategoriesPage />} />
             <Route path="/categories/:categoryId" element={<BooksByCategory />} />
 
-            {/* Các trang sau đây chỉ có thể truy cập khi đã đăng nhập */}
+            {/* Các trang admin */}
             <Route
                 path="/admin"
                 element={
@@ -40,12 +39,29 @@ const AppRoutes = ({ role }) => {
                     </ProtectedRoute>
                 }
             >
-                 <Route path="manage-books" element={<ManageBooks/>} />
-          <Route path="manage-borrow-and-returned-books" element={<ManageBorrowBooks/>} />
-          <Route path="manage-users" element={<ManageUsers />} />
-          <Route path="manage-category" element={<ManageCategory />} />
-          <Route path="superset-dashboard" element={<SupersetDashboard />} />
+                <Route path="manage-books" element={<ManageBooks />} />
+                <Route path="manage-borrow-and-returned-books" element={<ManageBorrowBooks />} />
+                <Route path="manage-users" element={<ManageUsers />} />
+                <Route path="manage-category" element={<ManageCategory />} />
+                <Route
+                path="manage-dashboard"
+                element={
+                    <div style={{ position: "relative", width: "calc(100vw - 250px)", height: "100vh" }}>
+                        <iframe
+                            src="http://localhost/superset/dashboard/19/"
+                            title="Superset Dashboard"
+                            style={{
+                                width: "95%",
+                                height: "100%",
+                                border: "none",
+                            }}
+                        ></iframe>
+                    </div>
+                }
+                />
             </Route>
+
+            {/* Các trang user */}
             <Route
                 path="/borrow-ticket"
                 element={
@@ -63,38 +79,10 @@ const AppRoutes = ({ role }) => {
                     </ProtectedRoute>
                 }
             >
-                <Route
-                    path="profile-edit"
-                    element={
-                        <ProtectedRoute>
-                            {role === "USER" ? <EditProfile /> : <Navigate to="/login" />}
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="borrow-history"
-                    element={
-                        <ProtectedRoute>
-                            {role === "USER" ? <BorrowHistory /> : <Navigate to="/login" />}
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="change-password"
-                    element={
-                        <ProtectedRoute>
-                            {role === "USER" ? <ChangePassword /> : <Navigate to="/login" />}
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="report-lost-book"
-                    element={
-                        <ProtectedRoute>
-                            {role === "USER" ? <ReportLostBook /> : <Navigate to="/login" />}
-                        </ProtectedRoute>
-                    }
-                />
+                <Route path="profile-edit" element={<EditProfile />} />
+                <Route path="borrow-history" element={<BorrowHistory />} />
+                <Route path="change-password" element={<ChangePassword />} />
+                <Route path="report-lost-book" element={<ReportLostBook />} />
             </Route>
             
             {/* Bất kỳ URL nào không xác định sẽ điều hướng về trang chủ */}
