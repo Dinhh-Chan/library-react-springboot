@@ -1,0 +1,40 @@
+.BorrowBookTicketWrapper{
+    min-height: 500px;
+    padding: 10px 6vh;
+    margin: 7rem;
+    gap: 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+    padding-bottom: 2rem;
+}
+
+.BookBorrowTicketCover{
+    background-color: black;
+    height: 350px;
+    width: 250px;
+    border-radius: 10px;
+}
+
+.BorrowBookTicketWrapper img{
+    width: 250px;
+    height: 350px;
+    object-fit: cover;
+}
+
+.BorrowBookButton{
+    background-color: #4867C3;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    font-size: 24px;
+    border-radius: 10px;
+}
+
+.BorrowBookTicketWrapper p{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    word-wrap: break-word;
+}

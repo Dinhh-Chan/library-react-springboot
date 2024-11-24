@@ -1,0 +1,32 @@
+
+.navbar{
+    background-color: #4867c3;
+    color: #ffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    position: fixed;
+    padding: 10px 10%;
+    top: 0;
+    width: 80%;
+    z-index: 10;
+}
+.navbar img{
+    height: 60px;
+    width: 60px;
+    background-color: transparent;
+
+}
+.menuButton{
+    font-size: 2rem;
+    background-color: transparent;
+    color: #fff;
+    border-radius: 10px;
+    border-color: #ffffff;
+    border: 3px solid #fff;
+}
+
+.menuButton:hover{
+    cursor: pointer;
+}

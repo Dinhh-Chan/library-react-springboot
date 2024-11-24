@@ -1,0 +1,45 @@
+.categories-list{
+  margin: 20px 20vh;
+  padding-top: 2vh;
+}
+
+.categories-list ul{
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 40px;
+  height: max-content;
+  min-height: 100%;
+}
+
+.categories-list h2{
+  margin-bottom: 0;
+}
+
+.pagination {
+  text-align: center;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 8px 12px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pagination button.active {
+  background-color: #bbb;
+  font-weight: bold;
+}
+
+.pagination button:hover {
+  background-color: #aaa;
+}
+
+.categories-list-content{
+  min-height: 1600px;
+}

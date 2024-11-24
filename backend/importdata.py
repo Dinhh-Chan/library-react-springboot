@@ -34,7 +34,6 @@ class Book(Base):
     __tablename__ = 'books'
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
-    quantity = Column(Integer, default=1)
     link_file = Column(String)
     description = Column(String)
     published_year = Column(Integer)
@@ -56,7 +55,7 @@ DATABASE = {
     'username': 'library_user',
     'password': 'library_pass',
     'host': 'localhost',  # Hoặc địa chỉ IP của container Docker nếu cần
-    'port': '54338',
+    'port': '5432',
     'database': 'library_management'
 }
 
@@ -97,7 +96,7 @@ def generate_bio():
     return random.choice(bios)
 
 # Đường dẫn đến tệp CSV
-csv_file_path = './backend/data.csv'
+csv_file_path = '/home/ubuntu/data-nv-datalake/codecuadinh/library-react-springboot/backend/data.csv'
 
 # Đọc dữ liệu CSV
 with open(csv_file_path, 'r', encoding='utf-8') as f:
@@ -169,7 +168,6 @@ for row in books_data:
 
     book = Book(
         title=row['title'],
-        quantity=10,  # Đặt số lượng mặc định, bạn có thể thay đổi nếu cần
         link_file=row['thumbnail'],  # Giả sử 'thumbnail' là đường link file
         description=row['description'],
         published_year=published_year

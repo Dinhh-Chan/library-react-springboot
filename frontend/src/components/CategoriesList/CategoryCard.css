@@ -1,0 +1,23 @@
+.CategoryCardWrapper{
+    height: fit-content;
+    background-color: #fff;
+    width: 100%;
+    display: flex;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1px solid grey;
+    align-content: center;
+}
+
+.CategoryCardWrapper b{
+    padding: 12px 30px;
+}
+
+.CategoryCardWrapper:hover{
+    background-color: #eaeaea;
+}
+
+.CategoryCardWrapper:active{
+    background-color: #cdcdcd;
+}

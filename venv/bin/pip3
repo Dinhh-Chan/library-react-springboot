@@ -1,4 +1,4 @@
-#!/home/ubuntu/codecuadinh/Library/venv/bin/python3
+#!/home/ubuntu/data-nv-datalake/codecuadinh/library-react-springboot/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

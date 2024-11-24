@@ -1,0 +1,249 @@
+.AdminWrapper{
+    margin-top: 20px;
+    display: flex;
+    gap: 300px;
+    margin-right: 30px;
+}
+
+
+.AdminMenu{
+    width: 280px;
+    height: 100vh;
+    background: #2A2631;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: #fff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    padding-top: 1em;
+    display: flex;
+    flex-direction: column;
+}
+
+.Borrow-history-header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+
+.AdminMenu h1{
+    text-align: center;
+    padding: 1.5em;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0;
+    font-size: 1.8em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.AdminMenu img{
+    height: 100px;
+    width: 100px;
+    align-self: center;
+    border-radius: 100%;
+    padding: 3em;
+}
+
+.AdminLinks{
+    text-decoration: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #2A2631;
+    border: none;
+    padding: 20px;
+    font-size: 16px;
+}
+
+.AdminLinks:hover{
+    background-color: #302c36;
+}
+
+.Borrow-history-header h1{
+    width: 600px;
+    
+}
+
+.DeleteButton{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    border: none;
+    background-color: rgb(255, 55, 55);
+    color: #fff;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.DeleteButton:hover{
+    background-color: rgb(214, 0, 0);
+}
+
+.UpdateButton{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    background-color: #555555c8;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+.UpdateButton:hover{
+    background-color: #555;
+}
+
+.DeleteButton:active{
+    background-color: rgb(173, 0, 0);
+}
+
+
+.CreateButton{
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    background-color: rgb(0, 194, 0);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.CreateButton:hover{
+    background-color: rgb(15, 185, 15);
+}
+
+.borrow-details{
+    align-items: center;
+}
+
+.borrow-details h2{
+    align-items: center;
+    margin: 0;
+    padding: 30px 10px;
+}
+
+.AcceptButton{
+    border-radius: 10px;
+    height: fit-content;
+    background-color: rgb(0, 194, 0);
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+}
+
+.AcceptButton:hover{
+    background-color: rgb(0, 148, 0);
+}
+
+.AcceptButton:active{
+    background-color: rgb(0, 118, 0);
+}
+
+.borrowStatus{
+    align-self: center;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 16px;
+    margin-right: 20px;
+    font-size: 18px;
+    border-bottom: 2px solid grey;
+}
+
+/* Chỉnh sửa form */
+.edit-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Nút Đã trả */
+.ReturnButton {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    border-radius: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.ReturnButton:hover {
+    background-color: #0056b3;
+}
+
+.ReturnButton:active {
+    background-color: #004085;
+}
+
+.status-filter {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.status-filter:hover {
+    background-color: #e9e9e9;
+}
+
+.searchBarAdminWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-form  input{
+    height: fit-content;
+    padding: 20px 20px;
+}
+
+.CancelButton{
+    border-radius: 10px;
+    height: fit-content;
+    background-color: rgb(255, 21, 21);
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    margin-left: 10px;
+}
+
+.CancelButton:hover{
+    background-color: rgb(231, 0, 0);
+}
+
+.CancelButton:active{
+    background-color: rgb(146, 0, 0);;
+}

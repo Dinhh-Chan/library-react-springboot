@@ -1,0 +1,21 @@
+.books-by-category {
+    padding: 20px;
+}
+.aaaaaaaa {
+    text-align: center;
+}
+
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.error-message,
+.empty-message {
+    color: red;
+    font-size: 18px;
+    margin-top: 20px;
+}
