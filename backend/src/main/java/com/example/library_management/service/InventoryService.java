@@ -194,5 +194,4 @@ public class InventoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Inventory not found for book id " + book.getId()));
     }
 
-    // Thêm các phương thức nghiệp vụ khác nếu cần
 }

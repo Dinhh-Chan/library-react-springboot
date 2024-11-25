@@ -1,105 +1,87 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Form.css";
 import axios from "axios";
 
-function AddForm({ bookData, setBookData, setVisibleForm, add }) {
-    const [categories, setCategories] = useState([]);
-    const [authors, setAuthors] = useState([]);
+function AddForm({ bookData, setBookData, setVisibleForm, save }) {
     const [newCategory, setNewCategory] = useState("");
     const [newAuthor, setNewAuthor] = useState("");
 
-    useEffect(() => {
-        // Fetch categories and authors from API
-        const fetchData = async () => {
-            try {
-                const categoryResponse = await axios.get("http://localhost:8080/api/categories");
-                const authorResponse = await axios.get("http://localhost:8080/api/authors");
-                setCategories(categoryResponse.data);
-                setAuthors(authorResponse.data);
-            } catch (error) {
-                console.error("Error fetching categories or authors:", error);
-            }
-        };
-        fetchData();
-    }, []);
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setBookData({ ...bookData, [name]: value });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            // Create new category if needed
-            let categoryIds = bookData.category && bookData.category !== "other"
-                ? [bookData.category]
-                : null;
-
-            if (!categoryIds && newCategory) {
-                const categoryResponse = await axios.post("http://localhost:8080/api/categories", {
-                    categoryName: newCategory,
-                });
-                categoryIds = [categoryResponse.data.id];
-            }
-
-            // Create new author if needed
-            let authorIds = bookData.authors && bookData.authors !== "other"
-                ? [bookData.authors]
-                : null;
-
-            if (!authorIds && newAuthor) {
-                const authorResponse = await axios.post("http://localhost:8080/api/authors", {
-                    name: newAuthor,
-                });
-                authorIds = [authorResponse.data.id];
-            }
-
-            if (!categoryIds || !authorIds) {
-                throw new Error("Category or Author information is missing or incorrect");
-            }
-
-            // Create or update inventory
-            const payload = {
-                bookId: null, // Use existing bookId if editing, null if creating new
-                title: bookData.title,
-                description: bookData.description,
-                publishedYear: bookData.published_year,
-                linkFile: bookData.thumbnail,
-                totalStock: bookData.instock,
-                availableStock: bookData.instock,
-                categoryIds,
-                authorIds,
-            };
-
-            await axios.post("http://localhost:8080/api/inventories/create", payload);
-
-            setBookData({
-                title: "",
-                authors: "",
-                category: "",
-                thumbnail: "",
-                description: "",
-                published_year: "",
-                instock: "",
-                bookId: null,
-            });
-            alert("Thêm hoặc chỉnh sửa sách thành công!");
-            setVisibleForm(false);
-            add(); // Refresh book list
-        } catch (error) {
-            console.error("Error adding or editing book:", error);
+    
+        // Xử lý danh mục và tác giả đặc biệt
+        if (name === "categoryNames" || name === "authorNames") {
+            setBookData({ ...bookData, [name]: value.split(",").map((item) => item.trim()) });
+        } else {
+            setBookData({ ...bookData, [name]: value });
         }
     };
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        // Kiểm tra thông tin bắt buộc
+        if (
+            !bookData.title ||
+            !bookData.description ||
+            !bookData.published_year ||
+            !bookData.thumbnail ||
+            !bookData.instock
+        ) {
+            alert("Vui lòng nhập đầy đủ thông tin sách!");
+            return;
+        }
+    
+        try {
+            // Nếu người dùng không thay đổi danh mục/tác giả, sử dụng dữ liệu đang có trong form
+            const categories = newCategory
+                ? newCategory.split(",").map((cat) => cat.trim())
+                : bookData.categoryNames;
+            const authors = newAuthor
+                ? newAuthor.split(",").map((auth) => auth.trim())
+                : bookData.authorNames;
+    
+            // Tạo dữ liệu mới cho POST
+            const updatedBookData = {
+                ...bookData,
+                publishedYear: bookData.published_year,
+                totalStock: parseInt(bookData.instock, 10),
+                availableStock: parseInt(bookData.availableStock || bookData.instock, 10),
+                categoryNames: categories,
+                authorNames: authors,
+            };
+    
+            // Gọi hàm `save` truyền từ props
+            await save(updatedBookData);
+    
+            // Reset form
+            setBookData({
+                id: null,
+                title: "",
+                description: "",
+                published_year: "",
+                thumbnail: "",
+                instock: "",
+                availableStock: "",
+                categoryNames: [],
+                authorNames: [],
+            });
+            setNewCategory("");
+            setNewAuthor("");
+            setVisibleForm(false);
+        } catch (error) {
+            console.error("Error adding book:", error);
+            alert("Không thể thêm sách. Vui lòng kiểm tra dữ liệu và thử lại.");
+        }
+    };    
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
+           <form onSubmit={handleSubmit}>
                 <div className="admin-form-container">
-                    <h3>{bookData.bookId ? "Chỉnh sửa sách" : "Thêm sách"}</h3>
+                    <h3>{bookData.id ? "Chỉnh sửa sách" : "Thêm sách mới"}</h3>
                     <label>
-                        Title:
+                        Tiêu đề:
                         <input
                             required
                             type="text"
@@ -109,25 +91,28 @@ function AddForm({ bookData, setBookData, setVisibleForm, add }) {
                         />
                     </label>
                     <label>
-                        Description:
+                        Mô tả:
                         <textarea
+                            required
                             name="description"
                             value={bookData.description}
                             onChange={handleInputChange}
                         ></textarea>
                     </label>
                     <label>
-                        Published Year:
+                        Năm xuất bản:
                         <input
-                            type="text"
+                            required
+                            type="number"
                             name="published_year"
                             value={bookData.published_year}
                             onChange={handleInputChange}
                         />
                     </label>
                     <label>
-                        Total Stock:
+                        Tổng số lượng:
                         <input
+                            required
                             type="number"
                             name="instock"
                             value={bookData.instock}
@@ -135,8 +120,19 @@ function AddForm({ bookData, setBookData, setVisibleForm, add }) {
                         />
                     </label>
                     <label>
-                        Thumbnail:
+                        Số lượng có sẵn:
                         <input
+                            required
+                            type="number"
+                            name="availableStock"
+                            value={bookData.availableStock}
+                            onChange={handleInputChange}
+                        />
+                    </label>
+                    <label>
+                        Link file:
+                        <input
+                            required
                             type="text"
                             name="thumbnail"
                             value={bookData.thumbnail}
@@ -144,53 +140,30 @@ function AddForm({ bookData, setBookData, setVisibleForm, add }) {
                         />
                     </label>
                     <label>
-                        Categories:
-                        <select name="category" onChange={handleInputChange} value={bookData.category}>
-                            <option value="">Chọn danh mục</option>
-                            {categories.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                    {category.categoryName}
-                                </option>
-                            ))}
-                            <option value="other">Khác...</option>
-                        </select>
-                        {bookData.category === "other" && (
-                            <input
-                                type="text"
-                                placeholder="Danh mục mới"
-                                value={newCategory}
-                                onChange={(e) => setNewCategory(e.target.value)}
-                            />
-                        )}
+                        Danh mục (cách nhau bằng dấu phẩy):
+                        <input
+                            type="text"
+                            name="categoryNames"
+                            value={newCategory || (bookData.categoryNames ? bookData.categoryNames.join(", ") : "")}
+                            onChange={(e) => setNewCategory(e.target.value)}
+                            placeholder="Nhập danh mục, ví dụ: Khoa học, Lịch sử"
+                        />
                     </label>
                     <label>
-                        Authors:
-                        <select
-                            name="authors"
-                            value={bookData.authors}
-                            onChange={(e) => setBookData({ ...bookData, authors: e.target.value })}
-                        >
-                            <option value="">Chọn tác giả</option>
-                            {authors.map((author) => (
-                                <option key={author.id} value={author.id}>
-                                    {author.name}
-                                </option>
-                            ))}
-                            <option value="other">Khác...</option>
-                        </select>
-                        {bookData.authors === "other" && (
-                            <input
-                                type="text"
-                                placeholder="Tác giả mới"
-                                value={newAuthor}
-                                onChange={(e) => setNewAuthor(e.target.value)}
-                            />
-                        )}
+                        Tác giả (cách nhau bằng dấu phẩy):
+                        <input
+                            type="text"
+                            name="authorNames"
+                            value={newAuthor || (bookData.authorNames ? bookData.authorNames.join(", ") : "")}
+                            onChange={(e) => setNewAuthor(e.target.value)}
+                            placeholder="Nhập tác giả, ví dụ: Nguyễn Văn A, Trần Thị B"
+                        />
                     </label>
+
+                    <button className="admin-button-form" type="submit">
+                        {bookData.id ? "Cập nhật" : "Thêm mới"}
+                    </button>
                 </div>
-                <button className="admin-button-form" type="submit">
-                    {bookData.bookId ? "Update" : "Add"}
-                </button>
             </form>
         </>
     );

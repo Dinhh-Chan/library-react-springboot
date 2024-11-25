@@ -14,5 +14,4 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     Optional<Inventory> findByBookId(Long bookId);
     Optional<Inventory> findByBook(Book book);
     
-    // Thêm các phương thức tùy chỉnh nếu cần
 }

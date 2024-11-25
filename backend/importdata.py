@@ -55,7 +55,7 @@ DATABASE = {
     'username': 'library_user',
     'password': 'library_pass',
     'host': 'localhost',  # Hoặc địa chỉ IP của container Docker nếu cần
-    'port': '5432',
+    'port': '5433',
     'database': 'library_management'
 }
 
@@ -96,7 +96,7 @@ def generate_bio():
     return random.choice(bios)
 
 # Đường dẫn đến tệp CSV
-csv_file_path = '/home/ubuntu/data-nv-datalake/codecuadinh/library-react-springboot/backend/data.csv'
+csv_file_path = '/home/dinhchan/Documents/project/library-react-springboot/backend/data.csv'
 
 # Đọc dữ liệu CSV
 with open(csv_file_path, 'r', encoding='utf-8') as f:

@@ -58,7 +58,6 @@ public class BookRequest {
         book.setTitle(this.title);
         book.setFile(this.link_file);
         // book.setQuantity(this.quantity);
-        // Các thuộc tính khác nếu cần
         return book;
     }
 }

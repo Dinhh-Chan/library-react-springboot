@@ -46,7 +46,7 @@ function BorrowBookTicket() {
             });
 
             if (response.status === 201) {
-                alert("Mượn sách thành công!");
+                alert("Đơn mượn của bạn đã được gửi đi và chờ duyệt");
                 navigate("/"); 
             }
         } catch (error) {

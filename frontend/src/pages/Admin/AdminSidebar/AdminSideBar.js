@@ -19,12 +19,12 @@ function AdminSidebar() {
             <div className="AdminSidebar">
                 <div className="AdminMenu">
                     <img src='https://i.imgur.com/YVydVYH.png' alt='Logo'></img>
-                    <Link to="/admin" className="AdminLinks"><FontAwesomeIcon icon={faChartLine} /> DashBoard</Link>
+                    {/* <Link to="/admin" className="AdminLinks"><FontAwesomeIcon icon={faChartLine} /> DashBoard</Link> */}
                     <Link to="manage-books" className="AdminLinks"><FontAwesomeIcon icon={faBook}/> Kho sách</Link>
                     <Link to="manage-borrow-and-returned-books" className="AdminLinks"><FontAwesomeIcon icon={faSync} /> Sách đang mượn</Link>
                     <Link to="manage-users" className="AdminLinks"><FontAwesomeIcon icon={faUsers}/> Danh sách người dùng</Link>
                     <Link to="manage-category" className="AdminLinks"><FontAwesomeIcon icon={faTags} /> Danh sách danh mục</Link>
-                    <Link to="manage-dashboard" className="AdminLinks"><FontAwesomeIcon icon={faChartLine} /> Superset Dashboard</Link>
+                    <Link to="http://localhost:8088/superset/dashboard/3" className="AdminLinks"><FontAwesomeIcon icon={faChartLine} /> Superset Dashboard</Link>
                     <button className="AdminLinks" onClick={handleLogout}><FontAwesomeIcon icon={faSignOutAlt}/> Đăng xuất</button>
                 </div>
             </div>

@@ -1,0 +1,123 @@
+version: '3.4'
+
+services:
+  redis:
+    image: redis:7
+    container_name: superset_cache
+    restart: unless-stopped
+    volumes:
+      - redis:/data
+
+  db:
+    env_file:
+      - path: docker/.env # default
+        required: true
+      - path: docker/.env-local # optional override
+        required: false
+    image: postgres:15
+    container_name: superset_db
+    restart: unless-stopped
+    volumes:
+      - db_home:/var/lib/postgresql/data
+      - ./docker/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+  superset:
+    env_file:
+      - path: docker/.env # default
+        required: true
+      - path: docker/.env-local # optional override
+        required: false
+    image: apachesuperset.docker.scarf.sh/apache/superset:${TAG:-latest-dev}
+    container_name: superset_app
+    command: ["/app/docker/docker-bootstrap.sh", "app-gunicorn"]
+    user: "root"
+    restart: unless-stopped
+    ports:
+      - "8088:8088"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./docker:/app/docker
+      - superset_home:/app/superset_home
+
+  superset-init:
+    image: apachesuperset.docker.scarf.sh/apache/superset:${TAG:-latest-dev}
+    container_name: superset_init
+    command: ["/app/docker/docker-init.sh"]
+    env_file:
+      - path: docker/.env # default
+        required: true
+      - path: docker/.env-local # optional override
+        required: false
+    depends_on:
+      - db
+      - redis
+    user: "root"
+    volumes:
+      - ./docker:/app/docker
+      - superset_home:/app/superset_home
+    healthcheck:
+      disable: true
+
+  superset-worker:
+    image: apachesuperset.docker.scarf.sh/apache/superset:${TAG:-latest-dev}
+    container_name: superset_worker
+    command: ["/app/docker/docker-bootstrap.sh", "worker"]
+    env_file:
+      - path: docker/.env # default
+        required: true
+      - path: docker/.env-local # optional override
+        required: false
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+    user: "root"
+    volumes:
+      - ./docker:/app/docker
+      - superset_home:/app/superset_home
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "celery -A superset.tasks.celery_app:app inspect ping -d celery@$$HOSTNAME",
+        ]
+
+  superset-worker-beat:
+    image: apachesuperset.docker.scarf.sh/apache/superset:${TAG:-latest-dev}
+    container_name: superset_worker_beat
+    command: ["/app/docker/docker-bootstrap.sh", "beat"]
+    env_file:
+      - path: docker/.env # default
+        required: true
+      - path: docker/.env-local # optional override
+        required: false
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+    user: "root"
+    volumes:
+      - ./docker:/app/docker
+      - superset_home:/app/superset_home
+    healthcheck:
+      disable: true
+
+  nginx:
+    image: nginx:latest
+    container_name: superset_nginx
+    ports:
+      - "80:80"  # Nginx sẽ lắng nghe trên cổng 80
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf  # Mount file cấu hình Nginx
+    depends_on:
+      - superset  # Đảm bảo Nginx sẽ chạy sau khi Superset đã khởi động
+
+volumes:
+  superset_home:
+    external: false
+  db_home:
+    external: false
+  redis:
+    external: false

@@ -26,12 +26,11 @@ const LoginPage = () => {
                 localStorage.setItem("id_user", response.data.id); 
                 localStorage.setItem("role", response.data.role); 
                 localStorage.setItem("userName", responseUser.data.username); 
-                alert("Đăng nhập thành công!");
                 setTimeout(() => {
                     if (response.data.role === "USER") {
                         window.location.href = "/"; 
                     } else if (response.data.role === "ADMIN") {
-                        window.location.href = "/admin"; 
+                        window.location.href = "/admin/manage-books"; 
                     }
                 }, 500);
             } else {

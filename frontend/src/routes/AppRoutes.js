@@ -48,7 +48,7 @@ const AppRoutes = ({ role }) => {
                 element={
                     <div style={{ position: "relative", width: "calc(100vw - 250px)", height: "100vh" }}>
                         <iframe
-                            src="http://localhost/superset/dashboard/19/"
+                            src="http://localhost/superset/dashboard/3/"
                             title="Superset Dashboard"
                             style={{
                                 width: "95%",

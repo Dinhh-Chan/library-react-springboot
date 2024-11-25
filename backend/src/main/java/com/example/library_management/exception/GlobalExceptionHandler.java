@@ -22,5 +22,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    // Bạn có thể thêm các xử lý ngoại lệ khác tại đây
 }
