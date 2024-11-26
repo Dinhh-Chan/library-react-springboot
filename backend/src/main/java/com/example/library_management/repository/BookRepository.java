@@ -25,5 +25,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     "LEFT JOIN b.borrowings br WITH (br.status = 'DANG_MUON' OR br.status = 'QUA_HAN') " +
     "GROUP BY b.id, b.title, b.description, b.published_year, b.link_file, " +
     "i.totalStock, i.availableStock")
-List<BookInventoryInfo> findAllBooksWithInventoryAndBorrowingCount();
+    List<BookInventoryInfo> findAllBooksWithInventoryAndBorrowingCount();
+    List<Book> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrAuthorsNameContainingIgnoreCase(
+        String titleKeyword, String descriptionKeyword, String authorKeyword);
 }

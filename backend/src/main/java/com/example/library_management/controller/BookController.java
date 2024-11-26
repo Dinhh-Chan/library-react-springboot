@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.library_management.dto.BookBorrowingInfo;
@@ -83,6 +84,11 @@ public class BookController {
     public ResponseEntity<List<BookInventoryInfo>> getAllBooksWithInventoryAndBorrowingCount() {
         List<BookInventoryInfo> books = bookService.getAllBooksWithInventoryAndBorrowingCount();
         return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<Book>> searchBooks(@RequestParam String keyword) {
+        List<Book> books = bookService.searchBooksByKeyword(keyword);
+        return ResponseEntity.ok(books);
     }
 
 }

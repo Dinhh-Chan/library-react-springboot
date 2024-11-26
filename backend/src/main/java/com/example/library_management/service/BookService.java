@@ -76,6 +76,9 @@ public class BookService {
     public List<BookInventoryInfo> getAllBooksWithInventoryAndBorrowingCount() {
         return bookRepository.findAllBooksWithInventoryAndBorrowingCount();
     }
+    public List<Book> searchBooksByKeyword(String keyword) {
+        return bookRepository.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrAuthorsNameContainingIgnoreCase(keyword, keyword, keyword);
+    }
 
     // Thêm các phương thức nghiệp vụ khác nếu cần
 }
