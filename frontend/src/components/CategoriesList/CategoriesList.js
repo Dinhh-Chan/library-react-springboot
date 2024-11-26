@@ -40,7 +40,7 @@ const CategoriesList = () => {
     return (
         <>
         <div className="categories-list">
-            <h2>Categories</h2>
+            <h2>Các thể loại sách</h2>
             <hr />
             <div className="categories-list-content">
                 <ul>

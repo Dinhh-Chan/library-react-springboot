@@ -45,7 +45,7 @@ const BookDisplay = () => {
 
   return (
     <div className="book-container">
-      <h1>Sách nổi bật</h1>
+      <h1>Danh sách sách</h1>
       <hr></hr>
       <div className="book-grid">
         {currentBooks.map((book) => (

@@ -1,48 +1,89 @@
-.searchBarWrapper{
-    background-color: #fff;
-    padding: 1px 15px;
-    border-radius: 30px;
-    align-items: center;
-    height: 2rem;
-    border: 1px solid grey;
-    gap: 15px;
+.searchBarWrapper {
     display: flex;
-    flex-direction: column;
-    z-index: 10;
-}
-
-input{
-    background-color: transparent;
-    border: none;
-    height: 100%;
-    font-size: 20px;
-    color: #000 60%;
-}
-
-input:focus{
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px;
+    position: relative; /* Cần thiết để searchResults được hiển thị dưới input */
+  }
+  
+  .searchBarWrapper input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .searchBarWrapper input:focus {
+    border-color: #007bff;
     outline: none;
-}
-
-.SearchBarButton{
-    background-color: transparent;
-    border-radius: 30px;
-    height: 100%;
-    width: 50px;
-    color: grey;
-    left: 10px;
-    position: relative;
+  }
+  
+  .searchBarWrapper .SearchBarButton {
+    background-color: #007bff;
     border: none;
-}
-
-.searchBarWrapper li{
-    width: 100%;
+    padding: 10px 15px;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .searchBarWrapper .SearchBarButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .searchResults {
     list-style-type: none;
+    margin: 0;
     padding: 0;
     background-color: #fff;
-    border: 1px solid grey;
-    padding: 10px 10px;
-}
-
-.searchResults {
-    color:black;
-}
+    border: 1px solid #ccc;
+    border-top: none;
+    position: absolute; /* Đặt searchResults ở vị trí tuyệt đối */
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 10; /* Đảm bảo rằng các kết quả nằm trên các phần tử khác */
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ để làm nổi bật */
+    border-radius: 4px;
+    top: 100%; /* Đặt searchResults hiển thị ngay dưới ô nhập liệu */
+  }
+  
+  .searchResults li {
+    padding: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .searchResults li:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+  }
+  
+  .searchResults li:active {
+    background-color: #e0e0e0;
+    color: #0056b3;
+  }
+  
+  .searchResults li:not(:last-child) {
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .searchResults li.empty {
+    color: #999;
+    text-align: center;
+    font-style: italic;
+  }
+  
+  .searchResults li:focus {
+    background-color: #007bff;
+    color: white;
+  }
+  
