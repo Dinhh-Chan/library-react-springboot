@@ -22,6 +22,10 @@ function ManageBooks() {
         authorIds: [],
     });
     const [searchQuery, setSearchQuery] = useState("");
+    
+    // Trạng thái phân trang
+    const [currentPage, setCurrentPage] = useState(1);
+    const [booksPerPage] = useState(5); // Hiển thị 5 sách mỗi trang
 
     // Fetch books from API
     useEffect(() => {
@@ -87,10 +91,6 @@ function ManageBooks() {
         }
     };
     
-    
-    
-    
-
     const deleteBook = async (id) => {
         if (!window.confirm("Bạn có chắc chắn muốn xóa sách này?")) return;
         try {
@@ -138,13 +138,23 @@ function ManageBooks() {
             alert("Không thể tải thông tin sách. Vui lòng thử lại.");
         }
     };
-    
-    
-    
-    
+
+    // Lọc sách theo từ khóa tìm kiếm
     const filteredBooks = books.filter((book) =>
         book.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    // Tính toán sách cần hiển thị trên mỗi trang
+    const indexOfLastBook = currentPage * booksPerPage;
+    const indexOfFirstBook = indexOfLastBook - booksPerPage;
+    const currentBooks = filteredBooks.slice(indexOfFirstBook, indexOfLastBook);
+
+    // Thêm các nút phân trang
+    const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     return (
         <>
@@ -187,11 +197,12 @@ function ManageBooks() {
                         </button>
                     </div>
                 </div>
+
                 <div className="borrow-list">
-                    {filteredBooks.length === 0 ? (
+                    {currentBooks.length === 0 ? (
                         <p className="empty-history">Không tìm thấy sách nào.</p>
                     ) : (
-                        filteredBooks.map((book) => (
+                        currentBooks.map((book) => (
                             <div key={book.id} className="borrow-item">
                                 <img
                                     src={book.linkFile}
@@ -219,6 +230,32 @@ function ManageBooks() {
                             </div>
                         ))
                     )}
+                </div>
+
+                <div className="pagination">
+                    <button
+                        className="prevPage"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    >
+                        Prev
+                    </button>
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            key={index}
+                            className={`pageNumber ${currentPage === index + 1 ? "active" : ""}`}
+                            onClick={() => handlePageChange(index + 1)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button
+                        className="nextPage"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    >
+                        Next
+                    </button>
                 </div>
             </div>
         </>

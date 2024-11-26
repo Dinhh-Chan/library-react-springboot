@@ -1,64 +1,101 @@
-.dropDownMenu{
-    list-style-type: none;
-    background-color: #ffff;
-    padding: 1rem 2rem;
-    position: fixed;
-    top: 8vh;
-    left: 73%;
-    border-radius: 20px;
-    width: 12rem;
-    border: 1px solid gray;
-    z-index: 11;
+/* Chung cho DropDownMenu */
+.dropDownMenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: #f5d8d8;
+  width: 250px;
+  border-radius: 8px;
+  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  right: 10px; /* Điều chỉnh vị trí menu thả xuống */
+  top: 120px; /* Vị trí so với phần tử cha */
+  z-index: 10;
 }
 
-.menuItems{
-    padding: 10px 5px;
-    color: black;
-    text-decoration: none;
-    border-radius: 10px;
+.dropDownMenu li {
+  padding: 15px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.menuItems:hover{
-    background-color: #d8d8d8;
+.dropDownMenu li:hover {
+  background-color: #f0f0f0;
+  color: #007bff;
 }
 
-.menuItems:first-child{
-    padding-top: 10px;
+.dropDownMenu li:active {
+  background-color: #e0e0e0;
+  color: #0056b3;
 }
 
-.menuItems img{
-    height: 40px;
-    width: 40px;
-    border-radius: 100%;
+/* Đường phân cách giữa các mục */
+.dropDownMenu hr {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 5px 0;
 }
 
-.NavBarProfile{
-    display: flex;
-    width: fit-content;
-    align-items: center;
+/* Đối với các link trong menu */
+.dropDownMenu .menuItems {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
 }
 
-.NavBarProfile h3{
-    justify-items: center;
-    margin-left: 10px;
+.dropDownMenu .menuItems:hover {
+  text-decoration: underline;
 }
 
-.logoutButton{
-    width: 100%;
-    border: none;
-    font-size: 24px;
-    background-color: rgba(243, 20, 20, 0.886);
-    color: #ffff;
-    border-radius: 10px;
-    padding: 10px;
-    text-align: center;
-    margin: 10px 0px;;
+/* Hiển thị hình ảnh Profile */
+.NavBarProfile img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
-.logoutButton:hover{
-    background-color: rgba(212, 0, 0, 0.886);
+/* Tên tài khoản */
+.NavBarProfile h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
 }
 
-.logoutButton:active{
-    background-color: rgba(168, 0, 0, 0.886);;
+/* Button Đăng xuất */
+.logoutButton {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+  text-align: left;
+}
+
+.logoutButton:hover {
+  background-color: #c82333;
+}
+
+.logoutButton:active {
+  background-color: #bd2130;
+}
+
+/* Mục "Đăng nhập" khi chưa đăng nhập */
+.dropDownMenu .menuItems span {
+  font-size: 16px;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.dropDownMenu .menuItems span:hover {
+  color: #0056b3;
+  text-decoration: none;
 }

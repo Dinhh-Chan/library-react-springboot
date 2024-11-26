@@ -15,7 +15,7 @@ const UserDashboard = () => {
       <div className="sidebar">
         <div className="user-info">
           <div className="avatar"></div>
-            <p>UserName: {userName}</p>
+            <p>Tên người dùng: {userName}</p>
                 <p className="user-id">ID: {userId}</p>
               </div>
                 <div className="menu">
