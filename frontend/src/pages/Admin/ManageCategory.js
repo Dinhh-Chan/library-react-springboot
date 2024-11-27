@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import SearchBar from "../../components/SearchBar/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import SearchBar from "../../components/SearchBar/SearchBar";
 
 function ManageCategory() {
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(null);
     const [editCategory, setEditCategory] = useState(null);
     const [newCategoryName, setNewCategoryName] = useState("");
-
+    const [searchQuery, setSearchQuery] = useState("");
     // Trạng thái phân trang
     const [currentPage, setCurrentPage] = useState(1);
     const [categoriesPerPage] = useState(5); // Hiển thị 5 danh mục mỗi trang
@@ -70,13 +70,14 @@ function ManageCategory() {
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+    
 
     return (
         <div className="borrow-history">
             <div className="Borrow-history-header">
                 <h1>Danh sách danh mục</h1>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <SearchBar />
+                    <SearchBar></SearchBar>
                 </div>
             </div>
 

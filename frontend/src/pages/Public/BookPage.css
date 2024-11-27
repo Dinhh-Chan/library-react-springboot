@@ -59,5 +59,13 @@ p .description{
     border-radius: 10px;
     margin-top: 50px;
     margin-bottom: 50px;
+    transition: all 0.2s ease;
+}
 
+.BookPageButton:hover{
+    background-color: #3451a8;
+}
+
+.BookPageButton:active{
+    background-color: #193485;
 }

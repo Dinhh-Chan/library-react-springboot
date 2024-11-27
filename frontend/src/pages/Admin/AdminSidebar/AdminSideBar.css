@@ -27,6 +27,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+    gap: 10px;
 }
 
 
@@ -220,7 +221,18 @@
 .searchBarAdminWrapper {
     display: flex;
     align-items: center;
-    gap: 10px;
+    font-size: 26px;
+}
+
+.searchBarAdminWrapper input{
+    padding: 10px 25px;
+    font-size: 14px;
+}
+
+.SearchBarAdminButton{
+    padding: 10px 25px;
+    font-size: 14px;
+
 }
 
 .edit-form  input{
@@ -275,3 +287,4 @@
 .accept-borrow-button:active{
     background-color: rgb(0, 177, 0);;
 }
+

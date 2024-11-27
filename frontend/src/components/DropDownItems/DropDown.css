@@ -1,15 +1,16 @@
 .dropDownMenu{
+  border-radius: 2;
   list-style-type: none;
   background-color: #ffff;
   padding: 1rem;
   position: fixed;
-  top: 8vh;
+  top: 7vh;
   right: 10%;
-  border-radius: 20px;
   width: 15rem;
   border: 1px solid gray;
   z-index: 11;
-  animation: fade-in 0.5s forwards;
+  animation: fade-in 0.2s ease forwards;
+  box-shadow: 2px 4px 8px 0 rgba(189, 189, 189, 0.2);
 }
 
 @keyframes fade-in {
@@ -22,10 +23,12 @@
   color: black;
   text-decoration: none;
   border-radius: 10px;
+  transition: all 0.2s ease;
 }
 
 .menuItems:hover{
   background-color: #d8d8d8;
+  
 }
 
 .menuItems:first-child{
@@ -65,6 +68,7 @@
   padding: 10px;
   text-align: center;
   margin: 10px 0px;;
+  transition: all 0.2s ease;
 }
 
 .logoutButton:hover{
