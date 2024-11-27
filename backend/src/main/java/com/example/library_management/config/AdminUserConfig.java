@@ -22,11 +22,13 @@ public class AdminUserConfig {
             if (existingAdmin.isEmpty()) {
                 // Tạo người dùng mới với vai trò ADMIN
                 Reader admin = new Reader(
-                        "admin_contact",
+                        "Admin Full Name", // Tên đầy đủ của admin
                         10, // Quota mặc định
-                        "admin",
-                        passwordEncoder.encode("admin"),
-                        UserRole.ADMIN
+                        "admin", // Tên người dùng
+                        passwordEncoder.encode("admin"), // Mã hóa mật khẩu
+                        "admin_phone_number", // Số điện thoại admin
+                        "admin@example.com", // Email admin
+                        UserRole.ADMIN // Vai trò ADMIN
                 );
                 
                 readerRepository.save(admin);
