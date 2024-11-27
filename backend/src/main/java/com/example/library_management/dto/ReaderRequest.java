@@ -4,14 +4,24 @@ import com.example.library_management.entity.Reader;
 import com.example.library_management.enums.UserRole;
 
 public class ReaderRequest {
+    private String hoVaTen;  // Thêm hoVaTen
     private String numberPhone;
     private String email;
     private Integer quota;
     private String username;
     private String password;
     private UserRole role;
+    private String dateOfBirth;  // Thêm dateOfBirth nếu cần
 
     // Getters và Setters
+
+    public String getHoVaTen() {
+        return hoVaTen;
+    }
+
+    public void setHoVaTen(String hoVaTen) {
+        this.hoVaTen = hoVaTen;
+    }
 
     public String getNumberPhone() {
         return numberPhone;
@@ -52,7 +62,7 @@ public class ReaderRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     public UserRole getRole() {
         return role;
     }
@@ -61,15 +71,26 @@ public class ReaderRequest {
         this.role = role;
     }
 
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     // Phương thức chuyển đổi DTO thành Entity
     public Reader toReader() {
         Reader reader = new Reader();
-        reader.setNumberPhone(this.numberPhone); // Cập nhật numberPhone
-        reader.setEmail(this.email); // Cập nhật email
+        reader.setHoVaTen(this.hoVaTen); // Cập nhật hoVaTen
+        reader.setNumberPhone(this.numberPhone);
+        reader.setEmail(this.email);
         reader.setQuota(this.quota);
         reader.setUsername(this.username);
         reader.setPassword(this.password);
         reader.setRole(this.role);
+        // Xử lý dateOfBirth nếu cần
+        // reader.setDateOfBirth(this.dateOfBirth); (chưa xử lý định dạng nếu là String)
         return reader;
     }
 }

@@ -16,7 +16,7 @@ public class Reader {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ho_va_ten", nullable = false)
+    @Column(name = "ho_va_ten")
     private String hoVaTen;  // Tên đầy đủ của độc giả
 
     @Column(name = "quota", nullable = false)
