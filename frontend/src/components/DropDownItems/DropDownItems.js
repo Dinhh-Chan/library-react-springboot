@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import "./DropDown.css";
 
-function DropDownMenu({openMenu}) {
+function DropDownMenu() {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
