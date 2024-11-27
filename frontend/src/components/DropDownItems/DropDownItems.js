@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import "./DropDown.css";
 
-function DropDownMenu() {
+function DropDownMenu({openMenu}) {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
@@ -16,6 +16,7 @@ function DropDownMenu() {
     };
 
     return (
+
         <ul className="dropDownMenu">
             <li className="menuItems" >
                 <Link to="/user" className="NavBarProfile">

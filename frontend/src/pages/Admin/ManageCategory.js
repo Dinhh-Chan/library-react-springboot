@@ -10,6 +10,10 @@ function ManageCategory() {
     const [editCategory, setEditCategory] = useState(null);
     const [newCategoryName, setNewCategoryName] = useState("");
 
+    // Trạng thái phân trang
+    const [currentPage, setCurrentPage] = useState(1);
+    const [categoriesPerPage] = useState(5); // Hiển thị 5 danh mục mỗi trang
+
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -55,6 +59,18 @@ function ManageCategory() {
         setNewCategoryName("");
     };
 
+    // Tính toán sách cần hiển thị trên mỗi trang
+    const indexOfLastCategory = currentPage * categoriesPerPage;
+    const indexOfFirstCategory = indexOfLastCategory - categoriesPerPage;
+    const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory);
+
+    // Tính toán tổng số trang
+    const totalPages = Math.ceil(categories.length / categoriesPerPage);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
     return (
         <div className="borrow-history">
             <div className="Borrow-history-header">
@@ -63,13 +79,14 @@ function ManageCategory() {
                     <SearchBar />
                 </div>
             </div>
+
             <div className="borrow-list">
                 {error ? (
                     <p className="error-message">{error}</p>
-                ) : categories.length === 0 ? (
+                ) : currentCategories.length === 0 ? (
                     <p className="empty-history">Không có danh mục.</p>
                 ) : (
-                    categories.map((category) => (
+                    currentCategories.map((category) => (
                         <div key={category.id} className="borrow-item">
                             {editCategory && editCategory.id === category.id ? (
                                 <div className="edit-form">
@@ -103,6 +120,32 @@ function ManageCategory() {
                         </div>
                     ))
                 )}
+            </div>
+
+            <div className="pagination">
+                <button
+                    className="prevPage"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    Prev
+                </button>
+                {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                        key={index}
+                        className={`pageNumber ${currentPage === index + 1 ? "active" : ""}`}
+                        onClick={() => handlePageChange(index + 1)}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+                <button
+                    className="nextPage"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                >
+                    Next
+                </button>
             </div>
         </div>
     );

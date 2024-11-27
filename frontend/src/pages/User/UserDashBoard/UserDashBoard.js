@@ -19,7 +19,6 @@ const UserDashboard = () => {
                 <p className="user-id">ID: {userId}</p>
               </div>
                 <div className="menu">
-                  <Link to="" className="UserProfileLink" ></Link>
                   <Link to="profile-edit" className="UserProfileLink">Sửa Hồ Sơ</Link>
                   <Link to="borrow-history" className="UserProfileLink">Lịch Sử Mượn Sách</Link>
                   <Link to="change-password" className="UserProfileLink">Đổi Mật Khẩu</Link>

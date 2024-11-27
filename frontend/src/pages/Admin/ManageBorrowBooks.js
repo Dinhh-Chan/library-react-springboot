@@ -145,7 +145,7 @@ const ManageBorrowBooks = () => {
                                 <div className="borrow-actions">
                                     {borrow.status === "DANG_CHO_DUYET" && (
                                         <button
-                                            className="AcceptButton"
+                                            className="accept-borrow-button"
                                             onClick={() =>
                                                 approveBorrowing(
                                                     borrow.id,

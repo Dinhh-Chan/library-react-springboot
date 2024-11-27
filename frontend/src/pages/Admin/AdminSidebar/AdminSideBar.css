@@ -1,10 +1,13 @@
 .AdminWrapper{
     margin-top: 20px;
     display: flex;
-    gap: 300px;
-    margin-right: 30px;
+    justify-content: center;
+    gap: 100px;
 }
 
+.admin-sidebar-content{
+    width: max-content;
+}
 
 .AdminMenu{
     width: 280px;
@@ -246,4 +249,29 @@
 
 .CancelButton:active{
     background-color: rgb(146, 0, 0);;
+}
+
+.borrow-actions{
+    align-content: center;
+}
+
+.accept-borrow-button{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    border: none;
+    background-color: rgb(0, 216, 0);
+    color: #fff;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.accept-borrow-button:hover{
+    background-color: rgb(0, 177, 0);
+}
+
+.accept-borrow-button:active{
+    background-color: rgb(0, 177, 0);;
 }
