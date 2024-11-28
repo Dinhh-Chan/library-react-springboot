@@ -96,12 +96,12 @@ def generate_bio():
     return random.choice(bios)
 
 # Đường dẫn đến tệp CSV
-csv_file_path = '/home/dinhchan/Documents/project/library-react-springboot/backend/data.csv'
+csv_file_path = '/home/dinhchan/Documents/project/library-react-springboot/data_modified.csv'
 
 # Đọc dữ liệu CSV
 with open(csv_file_path, 'r', encoding='utf-8') as f:
     reader = csv.DictReader(f)
-    books_data = list(reader)[:50]  # Lấy 50 cuốn sách đầu tiên
+    books_data = list(reader) # Lấy 50 cuốn sách đầu tiên
 
 # Thu thập danh sách độc giả và thể loại duy nhất
 authors_dict = {}
@@ -164,11 +164,13 @@ for row in books_data:
     try:
         published_year = int(float(row['published_year']))
     except ValueError:
-        published_year = None  # Hoặc đặt một giá trị mặc định khác
-
+        published_year = 2023  # Hoặc đặt một giá trị mặc định khác
+    link = row['thumbnail']
+    if link == '':
+        link = 'https://cdn.theatlantic.com/thumbor/iiuDdmz4ogmRYmYfUH7X8-Rs6eQ=/438x0:1563x1125/1080x1080/media/img/mt/2024/06/books/original.jpg'
     book = Book(
         title=row['title'],
-        link_file=row['thumbnail'],  # Giả sử 'thumbnail' là đường link file
+        link_file=link,  # Giả sử 'thumbnail' là đường link file
         description=row['description'],
         published_year=published_year
     )
