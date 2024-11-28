@@ -4,8 +4,9 @@
     color: white;
     border: none;
     border-radius: 4px;
-    padding: 10px 20px;
     cursor: pointer;
+    height: 40px;
+    bottom:20%;
     font-size: 16px;
     transition: background-color 0.3s;
 }
@@ -30,7 +31,7 @@
 }
 
 .add-category-form input {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -66,7 +67,6 @@
     background-color: #e53935;
 }
 
-/* Overlay làm mờ phần còn lại khi form mở */
 .modal-overlay {
     position: fixed;
     top: 0;
