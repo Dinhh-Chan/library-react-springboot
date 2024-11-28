@@ -3,16 +3,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import "./ManageCategory.css"; // Import CSS
 
 function ManageCategory() {
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(null);
     const [editCategory, setEditCategory] = useState(null);
     const [newCategoryName, setNewCategoryName] = useState("");
+    const [newCategoryNameInput, setNewCategoryNameInput] = useState(""); // Dùng để nhập tên danh mục mới
     const [searchQuery, setSearchQuery] = useState("");
-    // Trạng thái phân trang
     const [currentPage, setCurrentPage] = useState(1);
-    const [categoriesPerPage] = useState(5); // Hiển thị 5 danh mục mỗi trang
+    const [categoriesPerPage] = useState(5);
+    const [showAddCategoryForm, setShowAddCategoryForm] = useState(false); // Trạng thái để hiện thị form thêm danh mục
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -27,6 +29,22 @@ function ManageCategory() {
 
         fetchCategories();
     }, []);
+
+    const handleAddCategory = async () => {
+        try {
+            // Gửi yêu cầu POST để tạo danh mục mới
+            const response = await axios.post("http://localhost:8080/api/categories", {
+                categoryName: newCategoryNameInput,
+            });
+            setCategories([...categories, response.data]); // Cập nhật danh sách danh mục
+            setNewCategoryNameInput(""); // Reset input
+            setShowAddCategoryForm(false); // Ẩn form sau khi thêm thành công
+            alert("Danh mục đã được thêm thành công.");
+        } catch (err) {
+            console.error("Lỗi khi thêm danh mục:", err);
+            alert("Không thể thêm danh mục. Vui lòng thử lại.");
+        }
+    };
 
     // Bắt đầu sửa danh mục
     const handleEdit = (category) => {
@@ -70,7 +88,6 @@ function ManageCategory() {
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
-    
 
     return (
         <div className="borrow-history">
@@ -79,7 +96,36 @@ function ManageCategory() {
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <SearchBar></SearchBar>
                 </div>
+                {/* Nút "Thêm danh mục" */}
+                <button
+                    className="AddCategoryButton"
+                    onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
+                >
+                    Thêm danh mục
+                </button>
             </div>
+
+            {/* Nền mờ khi modal mở */}
+            {showAddCategoryForm && <div className="modal-overlay"></div>}
+
+            {/* Form thêm danh mục */}
+            {showAddCategoryForm && (
+                <div className="add-category-form">
+                    <h2>Thêm danh mục mới</h2>
+                    <input
+                        type="text"
+                        value={newCategoryNameInput}
+                        onChange={(e) => setNewCategoryNameInput(e.target.value)}
+                        placeholder="Nhập tên danh mục mới"
+                    />
+                    <button className="AcceptButton" onClick={handleAddCategory}>
+                        Lưu
+                    </button>
+                    <button className="CancelButton" onClick={() => setShowAddCategoryForm(false)}>
+                        Hủy
+                    </button>
+                </div>
+            )}
 
             <div className="borrow-list">
                 {error ? (

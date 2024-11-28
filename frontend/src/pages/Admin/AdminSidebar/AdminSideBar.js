@@ -20,7 +20,6 @@ function AdminSidebar() {
                 <div className="AdminSidebar">
                     <div className="AdminMenu">
                         <img src='https://i.imgur.com/YVydVYH.png' alt='Logo'></img>
-                        {/* <Link to="/admin" className="AdminLinks"><FontAwesomeIcon icon={faChartLine} /> DashBoard</Link> */}
                         <Link to="manage-books" className="AdminLinks"><FontAwesomeIcon icon={faBook}/> Kho sách</Link>
                         <Link to="manage-borrow-and-returned-books" className="AdminLinks"><FontAwesomeIcon icon={faSync} /> Sách đang mượn</Link>
                         <Link to="manage-users" className="AdminLinks"><FontAwesomeIcon icon={faUsers}/> Danh sách người dùng</Link>

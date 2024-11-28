@@ -1,7 +1,6 @@
 import React from "react";
 import NavBar from "../../components/NavBar/NavBar";
 import Footer from "../../components/Footer/Footer";
-import ChatBot from "../../components/ChatBot/ChatBot"; 
 import BookDisplay from "../../components/BookDisplay/BookDisplay";
 import "./HomePage.css";
 
@@ -16,7 +15,6 @@ function HomePage() {
                 </div>
             </div>
             <BookDisplay /> 
-            {/* <ChatBot />  */}
             <Footer />
         </>
     )
