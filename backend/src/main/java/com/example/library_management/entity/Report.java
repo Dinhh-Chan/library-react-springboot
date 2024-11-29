@@ -2,32 +2,56 @@ package com.example.library_management.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "report")
+@Table(name = "reports")
 public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "report_id")
     private Long reportId;
 
     @ManyToOne
-    @JoinColumn(name = "reader_id", nullable = false)
-    @JsonBackReference("reader-reports")  // Để tránh vòng lặp trong JSON
-    private Reader reader;
+    @JoinColumn(name = "sender_id", nullable = false)
+    @JsonBackReference("sender-reports")
+    private Reader sender;
+
+    @ManyToOne 
+    @JoinColumn(name = "receiver_id", nullable = false)
+    @JsonBackReference("receiver-reports")
+    private Reader receiver;
 
     @Column(name = "content", nullable = false)
     private String content;
 
-    // Constructors
-    public Report() {}
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
-    public Report(Reader reader, String content) {
-        this.reader = reader;
-        this.content = content;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private ReportStatus status;
+
+    public enum ReportStatus {
+        UNREAD, READ
     }
 
-    // Getters và Setters
+    // Constructors
+    public Report() {
+        this.createdAt = LocalDateTime.now();
+        this.status = ReportStatus.UNREAD;
+    }
+
+    public Report(Reader sender, Reader receiver, String content) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.content = content;
+        this.createdAt = LocalDateTime.now();
+        this.status = ReportStatus.UNREAD;
+    }
+
+    // Getters and Setters
     public Long getReportId() {
         return reportId;
     }
@@ -36,12 +60,20 @@ public class Report {
         this.reportId = reportId;
     }
 
-    public Reader getReader() {
-        return reader;
+    public Reader getSender() {
+        return sender;
     }
 
-    public void setReader(Reader reader) {
-        this.reader = reader;
+    public void setSender(Reader sender) {
+        this.sender = sender;
+    }
+
+    public Reader getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(Reader receiver) {
+        this.receiver = receiver;
     }
 
     public String getContent() {
@@ -50,5 +82,21 @@ public class Report {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public ReportStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ReportStatus status) {
+        this.status = status;
     }
 }

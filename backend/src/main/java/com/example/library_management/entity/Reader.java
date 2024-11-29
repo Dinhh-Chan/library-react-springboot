@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.Date;
 
 import com.example.library_management.enums.UserRole;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 
@@ -17,7 +17,7 @@ public class Reader {
     private Long id;
 
     @Column(name = "ho_va_ten")
-    private String hoVaTen;  // Tên đầy đủ của độc giả
+    private String hoVaTen;
 
     @Column(name = "quota", nullable = false)
     private Integer quota;
@@ -29,32 +29,36 @@ public class Reader {
     private String password;
 
     @Column(name = "number_phone")
-    private String numberPhone;  // Số điện thoại
+    private String numberPhone;
 
     @Column(name = "email", nullable = false, unique = true)
-    private String email;  // Email của độc giả
+    private String email;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private UserRole role; // ADMIN hoặc USER
+    private UserRole role;
 
     @Column(name = "date_of_birth")
-    private Date dateOfBirth; // Ngày sinh của độc giả
+    private Date dateOfBirth;
 
-    // Mối quan hệ một-nhiều với Borrowing
     @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference("reader-borrowings") // Phía ngược lại của mối quan hệ
+    @JsonManagedReference("reader-borrowings")
     private Set<Borrowing> borrowings;
 
-    // Mối quan hệ một-nhiều với Report (Độc giả có thể tạo nhiều báo cáo)
-    @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference("reader-reports") // Phía ngược lại của mối quan hệ
-    private Set<Report> reports;
+    // Thay đổi quan hệ với Report
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("sender-reports")
+    private Set<Report> sentReports;
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("receiver-reports")
+    private Set<Report> receivedReports;
 
     // Constructors
     public Reader() {}
 
-    public Reader(String hoVaTen, Integer quota, String username, String password, String numberPhone, String email, UserRole role) {
+    public Reader(String hoVaTen, Integer quota, String username, String password, 
+                 String numberPhone, String email, UserRole role) {
         this.hoVaTen = hoVaTen;
         this.quota = quota;
         this.username = username;
@@ -63,7 +67,7 @@ public class Reader {
         this.email = email;
         this.role = role;
     }
-    // Getters và Setters
+
     public Long getId() {
         return id;
     }
@@ -143,12 +147,40 @@ public class Reader {
     public void setBorrowings(Set<Borrowing> borrowings) {
         this.borrowings = borrowings;
     }
-
-    public Set<Report> getReports() {
-        return reports;
+    public Set<Report> getSentReports() {
+        return sentReports;
     }
 
-    public void setReports(Set<Report> reports) {
-        this.reports = reports;
+    public void setSentReports(Set<Report> sentReports) {
+        this.sentReports = sentReports;
+    }
+
+    public Set<Report> getReceivedReports() {
+        return receivedReports;
+    }
+
+    public void setReceivedReports(Set<Report> receivedReports) {
+        this.receivedReports = receivedReports;
+    }
+
+    // Helper methods để quản lý quan hệ hai chiều
+    public void addSentReport(Report report) {
+        sentReports.add(report);
+        report.setSender(this);
+    }
+
+    public void removeSentReport(Report report) {
+        sentReports.remove(report);
+        report.setSender(null);
+    }
+
+    public void addReceivedReport(Report report) {
+        receivedReports.add(report);
+        report.setReceiver(this);
+    }
+
+    public void removeReceivedReport(Report report) {
+        receivedReports.remove(report);
+        report.setReceiver(null);
     }
 }

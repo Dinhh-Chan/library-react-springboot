@@ -2,6 +2,7 @@ package com.example.library_management.controller;
 
 import com.example.library_management.dto.ReportDTO;
 import com.example.library_management.entity.Report;
+import com.example.library_management.entity.Reader;
 import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.repository.ReportRepository;
 import com.example.library_management.repository.ReaderRepository;
@@ -22,7 +23,6 @@ public class ReportController {
     @Autowired
     private ReaderRepository readerRepository;
 
-    // Lấy tất cả báo cáo
     @GetMapping
     public List<ReportDTO> getAllReports() {
         return reportRepository.findAll().stream()
@@ -30,7 +30,6 @@ public class ReportController {
                 .collect(Collectors.toList());
     }
 
-    // Lấy báo cáo theo ID
     @GetMapping("/{id}")
     public ResponseEntity<ReportDTO> getReportById(@PathVariable Long id) {
         Report report = reportRepository.findById(id)
@@ -38,34 +37,29 @@ public class ReportController {
         return ResponseEntity.ok(ReportDTO.fromEntity(report));
     }
 
-    // Tạo báo cáo mới
     @PostMapping
     public ResponseEntity<ReportDTO> createReport(@RequestBody ReportDTO reportDTO) {
-        // Kiểm tra xem người đọc có tồn tại không
-        var reader = readerRepository.findById(reportDTO.getReaderId())
-                .orElseThrow(() -> new ResourceNotFoundException("Reader not found with id " + reportDTO.getReaderId()));
+        Reader sender = readerRepository.findById(reportDTO.getSenderId())
+                .orElseThrow(() -> new ResourceNotFoundException("Sender not found with id " + reportDTO.getSenderId()));
+        
+        Reader receiver = readerRepository.findById(reportDTO.getReceiverId())
+                .orElseThrow(() -> new ResourceNotFoundException("Receiver not found with id " + reportDTO.getReceiverId()));
 
-        Report report = new Report(reader, reportDTO.getContent());
+        Report report = new Report(sender, receiver, reportDTO.getContent());
         report = reportRepository.save(report);
         return ResponseEntity.status(201).body(ReportDTO.fromEntity(report));
     }
 
-    // Cập nhật báo cáo
     @PutMapping("/{id}")
     public ResponseEntity<ReportDTO> updateReport(@PathVariable Long id, @RequestBody ReportDTO reportDTO) {
-        // Kiểm tra báo cáo đã tồn tại chưa
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Report not found with id " + id));
 
-        // Cập nhật thông tin báo cáo
         report.setContent(reportDTO.getContent());
-
-        // Cập nhật báo cáo trong DB
         report = reportRepository.save(report);
         return ResponseEntity.ok(ReportDTO.fromEntity(report));
     }
 
-    // Xóa báo cáo
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
         Report report = reportRepository.findById(id)
