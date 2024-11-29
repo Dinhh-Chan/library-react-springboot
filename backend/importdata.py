@@ -162,7 +162,7 @@ for row in books_data:
     
     # Tạo đối tượng Book
     try:
-        published_year = int(float(row['published_year']))
+        published_year = int(float(row['published_years']))
     except ValueError:
         published_year = 2023  # Hoặc đặt một giá trị mặc định khác
     link = row['thumbnail']
