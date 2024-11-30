@@ -36,6 +36,9 @@ public class Report {
     @Column(name = "parent_report_id")
     private Long parentReportId;  // To allow replies to the original report
 
+    @Column(name = "title", nullable = false)  // Tiêu đề của báo cáo
+    private String title;
+
     public enum ReportStatus {
         UNREAD, READ
     }
@@ -46,13 +49,14 @@ public class Report {
         this.status = ReportStatus.UNREAD;
     }
 
-    public Report(Reader sender, Reader receiver, String content, Long parentReportId) {
+    public Report(Reader sender, Reader receiver, String content, String title, Long parentReportId) {
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
+        this.title = title; // Set the title
         this.createdAt = LocalDateTime.now();
         this.status = ReportStatus.UNREAD;
-        this.parentReportId = parentReportId;  // Set the parent report ID if this is a reply
+        this.parentReportId = parentReportId;
     }
 
     // Getters and Setters
@@ -110,5 +114,13 @@ public class Report {
 
     public void setParentReportId(Long parentReportId) {
         this.parentReportId = parentReportId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

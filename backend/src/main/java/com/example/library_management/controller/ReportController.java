@@ -1,9 +1,7 @@
 package com.example.library_management.controller;
 
 import com.example.library_management.entity.Report;
-import com.example.library_management.entity.Reader;
 import com.example.library_management.service.ReportService;
-import com.example.library_management.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,7 +54,6 @@ public class ReportController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             Report parentReport = parentReportOpt.get();
-            // Sử dụng ID của báo cáo gốc thay vì toàn bộ đối tượng
             replyReport.setParentReportId(parentReport.getReportId());  // Liên kết với báo cáo gốc
             Report createdReply = reportService.createReport(replyReport);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdReply);

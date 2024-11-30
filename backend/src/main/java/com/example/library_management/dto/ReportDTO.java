@@ -1,32 +1,28 @@
 package com.example.library_management.dto;
 
-import com.example.library_management.entity.Report;
-import com.example.library_management.entity.Reader;
-
 import java.time.LocalDateTime;
 
 public class ReportDTO {
 
     private Long reportId;
-    private Long senderId;
-    private Long receiverId;
+    private String senderName;
+    private String receiverName;
     private String content;
     private LocalDateTime createdAt;
     private String status;
     private Long parentReportId;
+    private String title; // Thêm trường title vào DTO
 
     // Constructors
-    public ReportDTO() {}
-
-    public ReportDTO(Long reportId, Long senderId, Long receiverId, String content, 
-                     LocalDateTime createdAt, String status, Long parentReportId) {
+    public ReportDTO(Long reportId, String senderName, String receiverName, String content, LocalDateTime createdAt, String status, Long parentReportId, String title) {
         this.reportId = reportId;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
+        this.senderName = senderName;
+        this.receiverName = receiverName;
         this.content = content;
         this.createdAt = createdAt;
         this.status = status;
         this.parentReportId = parentReportId;
+        this.title = title;
     }
 
     // Getters and Setters
@@ -38,20 +34,20 @@ public class ReportDTO {
         this.reportId = reportId;
     }
 
-    public Long getSenderId() {
-        return senderId;
+    public String getSenderName() {
+        return senderName;
     }
 
-    public void setSenderId(Long senderId) {
-        this.senderId = senderId;
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
-    public Long getReceiverId() {
-        return receiverId;
+    public String getReceiverName() {
+        return receiverName;
     }
 
-    public void setReceiverId(Long receiverId) {
-        this.receiverId = receiverId;
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     public String getContent() {
@@ -86,16 +82,11 @@ public class ReportDTO {
         this.parentReportId = parentReportId;
     }
 
-    // Phương thức chuyển đổi từ entity Report sang ReportDTO
-    public static ReportDTO fromReport(Report report) {
-        return new ReportDTO(
-            report.getReportId(),
-            report.getSender().getId(),  // Truyền ID của Sender (Reader)
-            report.getReceiver().getId(),  // Truyền ID của Receiver (Reader)
-            report.getContent(),
-            report.getCreatedAt(),
-            report.getStatus().name(),  // Trả về trạng thái dạng String
-            report.getParentReportId()
-        );
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
