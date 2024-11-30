@@ -11,7 +11,6 @@
   .login-container {
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 30px;
     width: 320px;
     text-align: center;
@@ -53,3 +52,25 @@
   .login-container a:hover {
     text-decoration: underline;
   }
+
+  .LoginImg{
+    height: 400px;
+    width: 350px;
+    background-color: red;
+    border-radius: 20px;
+  }
+
+  .LoginImg img{
+    height: 400px;
+    width: 350px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.Logincontainer{
+    background-color: #fff;
+    padding: 10px;
+    display: flex;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}

@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import BookCard from "../BookCard/BookCard";
 import { useNavigate } from "react-router-dom";
 import "./BookDisplay.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGreaterThan, faLessThan } from "@fortawesome/free-solid-svg-icons";
+
 
 const BookDisplay = () => {
   const [books, setBooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 49; // Số sách tối đa trên 1 trang
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +24,8 @@ const BookDisplay = () => {
         setBooks(data);
       } catch (error) {
         console.error("Error fetching books:", error);
-      }
+      } finally {
+        setIsLoading(false);}
     };
 
     fetchBooks();
@@ -50,6 +55,23 @@ const BookDisplay = () => {
     navigate(`/books/${id}`);
   };
 
+  if (isLoading) {
+    return (
+        <>
+         <div className="book-container">
+            <h1>Danh sách sách</h1>
+            <hr></hr>
+         </div>
+        
+          <div className="BookPageContainer">
+              <p>Đang tải thông tin sách...</p>
+              <div className="spinner"></div>
+          </div>
+        </>
+    );
+}
+
+
   return (
     <div className="book-container">
       <h1>Danh sách sách</h1>
@@ -68,11 +90,11 @@ const BookDisplay = () => {
       </div>
       {/* Phân trang */}
       <div className="pagination">
-        <button onClick={() => handlePageChange(1)} disabled={currentPage === 1}>
+        <button className="active" onClick={() => handlePageChange(1)} disabled={currentPage === 1}>
           Đầu
         </button>
         <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-          Trước
+          <FontAwesomeIcon icon={faLessThan}></FontAwesomeIcon>
         </button>
 
         {pageNumbers.map((page) => (
@@ -86,9 +108,9 @@ const BookDisplay = () => {
         ))}
 
         <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-          Tiếp theo
+          <FontAwesomeIcon icon={faGreaterThan}></FontAwesomeIcon>
         </button>
-        <button onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages}>
+        <button className="active" onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages}>
           Cuối
         </button>
       </div>

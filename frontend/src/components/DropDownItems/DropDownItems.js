@@ -42,6 +42,10 @@ function DropDownMenu() {
                         <Link to="user/change-password" className="menuItems">Đổi mật khẩu</Link>
                     </li>
                     <hr />
+                    <li className="menuItems">
+                        <Link to="user/report-lost-book" className="menuItems">Báo cáo với quản trị viên</Link>
+                    </li>
+                    <hr/>
                     <li>
                         <button className="logoutButton" onClick={handleLogout}>
                             Đăng xuất

@@ -3,12 +3,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
 import Footer from "../../components/Footer/Footer";
 import "./BookPage.css";
+import Modal from "../../components/Modal/Modal";
+import BorrowBookTicket from "../../components/BookBorrowTicket/BookBorrowTicket";
 
 function BookPage() {
     const { id } = useParams(); // Lấy `id` từ URL
     const [book, setBook] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
+
+    const [visibleForm, setVisibleForm] = useState(false);
 
     useEffect(() => {
         // Gọi API để lấy thông tin sách
@@ -48,9 +52,10 @@ function BookPage() {
         return (
             <>
                 <NavBar />
-                <div className="BookPageContainer">
-                    <p>Đang tải thông tin sách...</p>
-                </div>
+                    <div className="BookPageContainer">
+                        <p>Đang tải thông tin sách...</p>
+                        <div className="spinner"></div>
+                    </div>
                 <Footer />
             </>
         );
@@ -70,6 +75,9 @@ function BookPage() {
 
     return (
         <>
+        <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
+            <BorrowBookTicket></BorrowBookTicket>
+        </Modal>
             <NavBar />
                 <div className="BookPageWrapper">
                     <div className="BookpageContainer1">
@@ -86,7 +94,8 @@ function BookPage() {
                                 
                             </div>
                             <div>
-                                <button className="BookPageButton" onClick={handleBorrowClick}>
+                                <button className="BookPageButton" onClick={handleBorrowClick}
+                                >
                                     Mượn sách
                                 </button>
                             </div>

@@ -87,7 +87,7 @@ function ManageUsers() {
                         filteredUsers.map((user) => (
                             <div key={user.id} className="borrow-item">
                                 <img
-                                    src={user.avatar}
+                                    src={'https://www.pngarts.com/files/10/Default-Profile-Picture-Transparent-Images.png'}
                                     alt={`Avatar của: ${user.username}`}
                                     className="book-cover"
                                 />

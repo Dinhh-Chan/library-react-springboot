@@ -18,6 +18,7 @@ import ManageBorrowBooks from '../pages/Admin/ManageBorrowBooks';
 import ManageUsers from '../pages/Admin/ManageUsers';
 import ManageCategory from '../pages/Admin/ManageCategory';
 import BooksByCategory from "../components/CategoriesList/BookByCategory";
+import NotificationPage from "../pages/User/NotificationPage";
 
 const AppRoutes = ({ role }) => {
     return (
@@ -78,7 +79,8 @@ const AppRoutes = ({ role }) => {
                         {role === "USER" ? <UserDashBoard /> : <Navigate to="/login" />}
                     </ProtectedRoute>
                 }
-            >
+            >   
+                <Route path="notification" element={<NotificationPage/>}/>
                 <Route path="profile-edit" element={<EditProfile />} />
                 <Route path="borrow-history" element={<BorrowHistory />} />
                 <Route path="change-password" element={<ChangePassword />} />

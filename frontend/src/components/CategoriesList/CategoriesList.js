@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./CategoriesList.css";
 import CategoryCard from "./CategoryCard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGreaterThan, faLessThan } from "@fortawesome/free-solid-svg-icons";
 
 const CategoriesList = () => {
     const [categories, setCategories] = useState([]);
@@ -62,11 +64,11 @@ const CategoriesList = () => {
                 </ul>
             </div>
             <div className="pagination">
-                    <button onClick={goToFirstPage}>Trang đầu</button>
-                    <button className="prevPage" onClick={goToPreviousPage}>Trang trước</button>
+                    <button className="active" onClick={goToFirstPage}>Trang đầu</button>
+                    <button  onClick={goToPreviousPage}><FontAwesomeIcon icon={faLessThan}></FontAwesomeIcon></button>
                     <span>{`Trang ${currentPage} / ${totalPages}`}</span>
-                    <button className="nextPage" onClick={goToNextPage}>Trang sau</button>
-                    <button onClick={goToLastPage}>Trang cuối</button>
+                    <button  onClick={goToNextPage}><FontAwesomeIcon icon={faGreaterThan}></FontAwesomeIcon></button>
+                    <button className="active" onClick={goToLastPage}>Trang cuối</button>
                 </div>
         </div>
     </>

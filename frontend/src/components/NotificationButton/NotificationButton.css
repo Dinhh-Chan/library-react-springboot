@@ -1,0 +1,25 @@
+.NotificationButton{
+    font-size: 2rem;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    align-self: center;
+    transition: all 0.2s ease;
+}
+
+.NotificationButton:hover{
+    color: #bcbcbc;
+}
+
+.NotificationButton:active{
+    color: #959595;
+}
+
+.ReddotNoti{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faGreaterThan, faLessThan, faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import "./ManageCategory.css"; // Import CSS
@@ -180,11 +180,11 @@ const goToNextPage = () => handlePageChange(currentPage + 1);
             </div>
 
             <div className="pagination">
-                    <button onClick={goToFirstPage}>Trang đầu</button>
-                    <button className="prevPage" onClick={goToPreviousPage}>Trang trước</button>
+                    <button className="active" onClick={goToFirstPage}>Trang đầu</button>
+                    <button onClick={goToPreviousPage}><FontAwesomeIcon icon={faLessThan}></FontAwesomeIcon></button>
                     <span>{`Trang ${currentPage} / ${totalPages}`}</span>
-                    <button className="nextPage" onClick={goToNextPage}>Trang sau</button>
-                    <button onClick={goToLastPage}>Trang cuối</button>
+                    <button onClick={goToNextPage}><FontAwesomeIcon icon={faGreaterThan}></FontAwesomeIcon></button>
+                    <button className="active" onClick={goToLastPage}>Trang cuối</button>
                 </div>
         </div>
     );

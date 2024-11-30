@@ -1,4 +1,4 @@
-import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faGreaterThan, faLessThan, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -244,11 +244,11 @@ function ManageBooks() {
                     )}
                 </div>
                 <div className="pagination">
-                    <button onClick={goToFirstPage}>Trang đầu</button>
-                    <button className="prevPage" onClick={goToPreviousPage}>Trang trước</button>
+                    <button className="active" onClick={goToFirstPage}>Trang đầu</button>
+                    <button onClick={goToPreviousPage}><FontAwesomeIcon icon={faLessThan}></FontAwesomeIcon></button>
                     <span>{`Trang ${currentPage} / ${totalPages}`}</span>
-                    <button className="nextPage" onClick={goToNextPage}>Trang sau</button>
-                    <button onClick={goToLastPage}>Trang cuối</button>
+                    <button onClick={goToNextPage}><FontAwesomeIcon icon={faGreaterThan}></FontAwesomeIcon></button>
+                    <button className="active" onClick={goToLastPage}>Trang cuối</button>
                 </div>
 
             </div>

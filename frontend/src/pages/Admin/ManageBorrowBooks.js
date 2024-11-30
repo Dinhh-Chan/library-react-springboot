@@ -146,12 +146,13 @@ const ManageBorrowBooks = () => {
                                     {borrow.status === "DANG_CHO_DUYET" && (
                                         <button
                                             className="accept-borrow-button"
-                                            onClick={() =>
-                                                approveBorrowing(
-                                                    borrow.id,
-                                                    borrow.readerId,
-                                                    borrow.bookId
-                                                )
+                                            onClick={() => 
+                                                            {approveBorrowing(
+                                                                borrow.id,
+                                                                borrow.readerId,
+                                                                borrow.bookId
+                                                            )}
+                                                
                                             }
                                         >
                                             Duyệt

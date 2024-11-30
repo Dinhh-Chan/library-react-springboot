@@ -43,12 +43,16 @@ const LoginPage = () => {
 
     return (
         <div className="login">
+            <div className="Logincontainer">
+            <div className="LoginImg">
+                    <img src="https://letsenhance.io/static/a31ab775f44858f1d1b80ee51738f4f3/11499/EnhanceAfter.jpg" alt=""></img>
+            </div>
             <div className="login-container">
                 <h1>Đăng Nhập</h1>
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <label>Tên đăng nhập:</label>
                         <input
+                            placeholder="Username"
                             type="text"
                             name="username"
                             value={formData.username}
@@ -57,8 +61,8 @@ const LoginPage = () => {
                         />
                     </div>
                     <div>
-                        <label>Mật khẩu:</label>
                         <input
+                            placeholder="Password"
                             type="password"
                             name="password"
                             value={formData.password}
@@ -77,6 +81,7 @@ const LoginPage = () => {
                         Đăng ký tại đây
                     </a>
                 </p>
+            </div>
             </div>
         </div>
     );
