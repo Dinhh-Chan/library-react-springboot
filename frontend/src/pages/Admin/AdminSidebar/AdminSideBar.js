@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, Outlet } from "react-router-dom";
-import { faBook, faUsers, faTags, faSync, faSignOutAlt, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faUsers, faTags, faSync, faSignOutAlt, faChartLine, faFlag } from '@fortawesome/free-solid-svg-icons';
 import "./AdminSideBar.css";
 import { useNavigate } from "react-router-dom";
 
@@ -27,6 +27,7 @@ function AdminSidebar() {
                             <Link to="manage-borrow-and-returned-books" className="AdminLinks"><FontAwesomeIcon icon={faSync} /> Sách đang mượn</Link>
                             <Link to="manage-users" className="AdminLinks"><FontAwesomeIcon icon={faUsers}/> Danh sách người dùng</Link>
                             <Link to="manage-category" className="AdminLinks"><FontAwesomeIcon icon={faTags} /> Danh sách danh mục</Link>
+                            <Link to="report" className="AdminLinks"><FontAwesomeIcon icon={faFlag} /> Đơn báo cáo</Link>
                             <Link to="http://localhost:8088/superset/dashboard/3" className="AdminLinks"><FontAwesomeIcon icon={faChartLine} /> Superset Dashboard</Link>
                             <button className="AdminLinks" onClick={handleLogout}><FontAwesomeIcon icon={faSignOutAlt}/> Đăng xuất</button>
                         </div>

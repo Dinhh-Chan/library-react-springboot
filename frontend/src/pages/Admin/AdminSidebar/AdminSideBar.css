@@ -291,3 +291,59 @@
     background-color: rgb(0, 177, 0);;
 }
 
+/* Tạo hiệu ứng nền mờ khi mở modal */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền mờ */
+    z-index: 9999;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Cửa sổ nội dung của modal */
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 800px;
+    max-height: 80%;
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+/* Nút đóng ở góc trên bên phải */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+}
+
+.close-button:hover {
+    color: #f00;
+}
+
+/* Định dạng các phần tử thông tin người gửi */
+.info-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.info-section p {
+    margin: 8px 0;
+}

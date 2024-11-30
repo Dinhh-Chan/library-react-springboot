@@ -18,6 +18,8 @@ import ManageBorrowBooks from '../pages/Admin/ManageBorrowBooks';
 import ManageUsers from '../pages/Admin/ManageUsers';
 import ManageCategory from '../pages/Admin/ManageCategory';
 import BooksByCategory from "../components/CategoriesList/BookByCategory";
+import ManageReport from '../pages/Admin/ManageReport';
+
 
 const AppRoutes = ({ role }) => {
     return (
@@ -38,7 +40,8 @@ const AppRoutes = ({ role }) => {
                         {role === "ADMIN" ? <AdminSideBar /> : <Navigate to="/" />}
                     </ProtectedRoute>
                 }
-            >
+            >   
+                <Route path="report" element={<ManageReport/>}/>
                 <Route path="manage-books" element={<ManageBooks />} />
                 <Route path="manage-borrow-and-returned-books" element={<ManageBorrowBooks />} />
                 <Route path="manage-users" element={<ManageUsers />} />

@@ -4,10 +4,12 @@ import axios from "axios";
 const EditProfile = () => {
     const [formData, setFormData] = useState({
         username: "",
-        contactInfo: "",
-        quota: 0,
+        hoVaTen: "",
+        dateOfBirth: "",
+        numberPhone: "",
+        email: "",
         password: "",
-        role: "USER", 
+        role: "USER",
     });
 
     const userId = localStorage.getItem("id_user"); 
@@ -17,8 +19,8 @@ const EditProfile = () => {
         const fetchUserData = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/readers/${userId}`);
-                const { username, contactInfo, quota, password, role } = response.data;
-                setFormData({ username, contactInfo, quota, password, role });
+                const { username, hoVaTen, dateOfBirth, numberPhone, email, contactInfo, quota, password, role } = response.data;
+                setFormData({ username, hoVaTen, dateOfBirth, numberPhone, email, contactInfo, quota, password, role });
             } catch (err) {
                 console.error("Lỗi khi tải dữ liệu người dùng:", err);
                 setError("Không thể tải dữ liệu người dùng.");
@@ -58,6 +60,53 @@ const EditProfile = () => {
             {error && <p className="error-message">{error}</p>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
+                    <label htmlFor="hoVaTen">Họ và tên:</label>
+                    <input
+                        type="text"
+                        id="hoVaTen"
+                        name="hoVaTen"
+                        placeholder="Nhập họ và tên"
+                        value={formData.hoVaTen}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="dateOfBirth">Ngày sinh:</label>
+                    <input
+                        type="date"
+                        id="dateOfBirth"
+                        name="dateOfBirth"
+                        value={formData.dateOfBirth}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="numberPhone">Số điện thoại:</label>
+                    <input
+                        type="text"
+                        id="numberPhone"
+                        name="numberPhone"
+                        placeholder="Nhập số điện thoại"
+                        value={formData.numberPhone}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="email">Gmail:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Nhập email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
                     <label htmlFor="username">Tên người dùng:</label>
                     <input
                         type="text"
@@ -65,18 +114,6 @@ const EditProfile = () => {
                         name="username"
                         placeholder="Nhập tên người dùng mới"
                         value={formData.username}
-                        onChange={handleInputChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="contactInfo">Thông tin iên lạc:</label>
-                    <input
-                        type="text"
-                        id="contactInfo"
-                        name="contactInfo"
-                        placeholder="Nhập thông tin liên lạc mới"
-                        value={formData.contactInfo}
                         onChange={handleInputChange}
                         required
                     />
