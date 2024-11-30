@@ -89,8 +89,7 @@ public class ReaderRequest {
         reader.setUsername(this.username);
         reader.setPassword(this.password);
         reader.setRole(this.role);
-        // Xử lý dateOfBirth nếu cần
-        // reader.setDateOfBirth(this.dateOfBirth); (chưa xử lý định dạng nếu là String)
+        reader.setDateOfBirth(this.dateOfBirth); 
         return reader;
     }
 }

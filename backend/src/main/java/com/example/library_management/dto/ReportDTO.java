@@ -1,34 +1,17 @@
 package com.example.library_management.dto;
-
-import com.example.library_management.entity.Report;
+import com.example.library_management.entity.*;
 import java.time.LocalDateTime;
 
 public class ReportDTO {
-    private Long reportId;
-    private Long senderId;      
-    private Long receiverId;    
-    private String content;
-    private String status;
-    private LocalDateTime createdAt;
 
-    // Constructors
-    public ReportDTO() {}
-
-    public ReportDTO(Long senderId, Long receiverId, String content) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.content = content;
-    }
+    private Long senderId;           // ID của người gửi
+    private Long receiverId;         // ID của người nhận
+    private String content;          // Nội dung báo cáo
+    private String status;           // Trạng thái báo cáo (UNREAD/READ)
+    private String title;            // Tiêu đề của báo cáo
+    private Long parentReportId;     // ID của báo cáo gốc (nếu là trả lời báo cáo khác)
 
     // Getters and Setters
-    public Long getReportId() {
-        return reportId;
-    }
-
-    public void setReportId(Long reportId) {
-        this.reportId = reportId;
-    }
-
     public Long getSenderId() {
         return senderId;
     }
@@ -61,30 +44,31 @@ public class ReportDTO {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public String getTitle() {
+        return title;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    // Phương thức chuyển đổi từ Entity sang DTO
-    public static ReportDTO fromEntity(Report report) {
-        ReportDTO dto = new ReportDTO();
-        dto.setReportId(report.getReportId());
-        dto.setSenderId(report.getSender().getId());
-        dto.setReceiverId(report.getReceiver().getId());
-        dto.setContent(report.getContent());
-        dto.setStatus(report.getStatus().name());
-        dto.setCreatedAt(report.getCreatedAt());
-        return dto;
+    public Long getParentReportId() {
+        return parentReportId;
     }
 
-    // Phương thức chuyển đổi từ DTO sang Entity
-    public Report toEntity() {
+    public void setParentReportId(Long parentReportId) {
+        this.parentReportId = parentReportId;
+    }
+
+    // Method to convert ReportDTO to Report entity
+    public Report toReport(Reader sender, Reader receiver) {
         Report report = new Report();
-        report.setReportId(this.reportId);
+        report.setSender(sender);
+        report.setReceiver(receiver);
+        report.setContent(this.content);
+        report.setTitle(this.title);
+        report.setStatus(Report.ReportStatus.valueOf(this.status));  // Assuming status is sent as a string
+        report.setParentReportId(this.parentReportId);  // If it's a reply, set the parent report ID
         return report;
     }
 }

@@ -6,6 +6,7 @@ function DropDownMenu() {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
+    const fullName =localStorage.getItem("fullName");
 
     // Hàm xử lý khi nhấn vào nút Đăng Xuất
     const handleLogout = () => {
@@ -20,8 +21,12 @@ function DropDownMenu() {
         <ul className="dropDownMenu">
             <li className="menuItems" >
                 <Link to="/user" className="NavBarProfile">
-                    <img src="https://i.imgur.com/B8ta5Aa.jpeg" alt="Profile" />
-                    <h3>Tài khoản</h3>
+                    {role === "USER" ?
+                       (<>
+                            <img src="https://i.imgur.com/B8ta5Aa.jpeg" alt="Profile" />
+                            <h3>{fullName}</h3>
+                        </>):
+                        (<button>Dang nhap</button>)}
                 </Link>
             </li>
             <hr />
