@@ -75,6 +75,17 @@ public class BorrowingController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // Lấy tất cả borrowings theo readerId
+    @GetMapping("/reader/{readerId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<List<BorrowingResponse>> getBorrowingsByReaderId(@PathVariable Long readerId) {
+        List<Borrowing> borrowings = borrowingService.getBorrowingsByReaderId(readerId);
+        List<BorrowingResponse> responses = borrowings.stream()
+                .map(BorrowingResponse::fromEntity)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
     // Cập nhật một borrowing
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")

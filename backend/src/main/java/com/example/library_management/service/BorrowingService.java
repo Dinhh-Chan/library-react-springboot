@@ -69,6 +69,9 @@ public class BorrowingService {
         borrowingRepository.delete(borrowing);
     }
 
+    public List<Borrowing> getBorrowingsByReaderId(Long readerId) {
+        return borrowingRepository.findByReaderId(readerId);  // Tìm tất cả borrowings của một reader
+    }
     // Phương thức duyệt đơn mượn
     public Borrowing approveBorrowing(Long id) {
         Borrowing borrowing = borrowingRepository.findById(id)
