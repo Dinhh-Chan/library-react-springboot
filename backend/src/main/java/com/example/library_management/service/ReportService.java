@@ -35,4 +35,7 @@ public class ReportService {
     public void deleteReport(Long id) {
         reportRepository.deleteById(id);
     }
+    public List<Report> getReportsByUserId(Long userId) {
+        return reportRepository.findBySenderIdOrReceiverId(userId, userId);
+    }
 }

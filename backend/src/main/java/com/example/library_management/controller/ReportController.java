@@ -103,4 +103,12 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Report>> getReportsByUserId(@PathVariable Long userId) {
+        List<Report> reports = reportService.getReportsByUserId(userId);
+        if (reports.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(reports);
+        }
+        return ResponseEntity.ok(reports);
+    }
 }
