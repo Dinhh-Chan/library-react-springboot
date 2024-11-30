@@ -1,12 +1,16 @@
 .AdminWrapper{
-    margin-top: 20px;
+    margin-top: 50px;
     display: flex;
     justify-content: center;
-    gap: 100px;
+    padding:  0 10vh;
 }
 
 .admin-sidebar-content{
     width: max-content;
+}
+
+.admin-sidebar-wrapper{
+    width: 280px;
 }
 
 .AdminMenu{
@@ -232,7 +236,6 @@
 .SearchBarAdminButton{
     padding: 10px 25px;
     font-size: 14px;
-
 }
 
 .edit-form  input{

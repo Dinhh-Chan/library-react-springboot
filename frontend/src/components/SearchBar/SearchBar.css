@@ -5,6 +5,7 @@
     margin: 0 auto;
     padding: 10px;
     position: relative; /* Cần thiết để searchResults được hiển thị dưới input */
+    flex-direction: row;
   }
   
   .searchBarWrapper input {

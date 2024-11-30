@@ -31,11 +31,18 @@ const CategoriesList = () => {
         navigate(`/categories/${categoryId}`);
     };
 
-    const handlePageChange = (page) => {
-        if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page);
-        }
+
+    const handlePageChange = (newPage) => {
+        if (newPage < 1) newPage = 1; // Tránh chuyển đến trang nhỏ hơn 1
+        if (newPage > totalPages) newPage = totalPages; // Tránh chuyển đến trang lớn hơn tổng số trang
+        setCurrentPage(newPage);
     };
+    
+    // Nút "Trang đầu", "Trang cuối", "Trang trước", "Trang sau"
+    const goToFirstPage = () => handlePageChange(1);
+    const goToLastPage = () => handlePageChange(totalPages);
+    const goToPreviousPage = () => handlePageChange(currentPage - 1);
+    const goToNextPage = () => handlePageChange(currentPage + 1);
 
     return (
         <>
@@ -55,16 +62,12 @@ const CategoriesList = () => {
                 </ul>
             </div>
             <div className="pagination">
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index + 1}
-                        onClick={() => handlePageChange(index + 1)}
-                        className={currentPage === index + 1 ? "active" : ""}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-            </div>
+                    <button onClick={goToFirstPage}>Trang đầu</button>
+                    <button className="prevPage" onClick={goToPreviousPage}>Trang trước</button>
+                    <span>{`Trang ${currentPage} / ${totalPages}`}</span>
+                    <button className="nextPage" onClick={goToNextPage}>Trang sau</button>
+                    <button onClick={goToLastPage}>Trang cuối</button>
+                </div>
         </div>
     </>
     );

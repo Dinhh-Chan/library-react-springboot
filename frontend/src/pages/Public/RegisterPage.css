@@ -45,6 +45,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
+    box-sizing:border-box
   }
   .form-right button {
     padding: 10px 20px;

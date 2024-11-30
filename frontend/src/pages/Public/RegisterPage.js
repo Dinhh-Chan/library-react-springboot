@@ -14,6 +14,9 @@ const RegisterPage = () => {
     contactInfo: "",
     quota: 10, // Mặc định là 10
     role: "USER", // Mặc định là "USER"
+    date_of_birth: "",
+    ho_va_ten: "",
+    email:"",
   });
   const [errors, setErrors] = useState({
     password: "",
@@ -72,6 +75,9 @@ const RegisterPage = () => {
         contactInfo: formData.contactInfo,
         quota: formData.quota,
         role: formData.role,
+        ho_va_ten: formData.ho_va_ten,
+        email: formData.email,
+        date_of_birth:formData.date_of_birth,
       };
       await axios.post("http://localhost:8080/api/readers", payload);
 
@@ -98,6 +104,14 @@ const RegisterPage = () => {
           <form onSubmit={handleSubmit}>
             <input
               type="text"
+              name="ho_va_ten"
+              placeholder="Họ và tên"
+              value={formData.ho_va_ten}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
               name="username"
               placeholder="Tên đăng nhập"
               value={formData.username}
@@ -106,9 +120,25 @@ const RegisterPage = () => {
             />
             <input
               type="text"
+              name="email"
+              placeholder="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
               name="contactInfo"
               placeholder="Thông tin liên lạc"
               value={formData.contactInfo}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="date"
+              name="date_of_birth"
+              placeholder="Ngày sinh"
+              value={formData.date_of_birth}
               onChange={handleChange}
               required
             />
@@ -129,6 +159,7 @@ const RegisterPage = () => {
               onChange={handleChange}
               required
             />
+            
             {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
             <div className="actions">
               <a href="/login">Đăng nhập</a>

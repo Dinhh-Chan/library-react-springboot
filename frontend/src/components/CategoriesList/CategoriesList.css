@@ -42,5 +42,5 @@
 }
 
 .categories-list-content{
-  min-height: 1600px;
+  min-height: max-content;
 }

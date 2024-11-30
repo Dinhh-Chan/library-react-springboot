@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import "./ManageCategory.css"; // Import CSS
@@ -85,9 +85,18 @@ function ManageCategory() {
     // Tính toán tổng số trang
     const totalPages = Math.ceil(categories.length / categoriesPerPage);
 
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
+    // Các nút phân trang với tính năng nhảy qua trang
+const handlePageChange = (newPage) => {
+    if (newPage < 1) newPage = 1; // Tránh chuyển đến trang nhỏ hơn 1
+    if (newPage > totalPages) newPage = totalPages; // Tránh chuyển đến trang lớn hơn tổng số trang
+    setCurrentPage(newPage);
+};
+
+// Nút "Trang đầu", "Trang cuối", "Trang trước", "Trang sau"
+const goToFirstPage = () => handlePageChange(1);
+const goToLastPage = () => handlePageChange(totalPages);
+const goToPreviousPage = () => handlePageChange(currentPage - 1);
+const goToNextPage = () => handlePageChange(currentPage + 1);
 
     return (
         <div className="borrow-history">
@@ -95,14 +104,15 @@ function ManageCategory() {
                 <h1>Danh sách danh mục</h1>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <SearchBar></SearchBar>
+                    <button
+                        className="CreateButton"
+                        onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
+                    >
+                        <FontAwesomeIcon icon={faPlus} />
+                    </button>
                 </div>
                 {/* Nút "Thêm danh mục" */}
-                <button
-                    className="AddCategoryButton"
-                    onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
-                >
-                    Thêm danh mục
-                </button>
+                
             </div>
 
             {/* Nền mờ khi modal mở */}
@@ -170,30 +180,12 @@ function ManageCategory() {
             </div>
 
             <div className="pagination">
-                <button
-                    className="prevPage"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                >
-                    Prev
-                </button>
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index}
-                        className={`pageNumber ${currentPage === index + 1 ? "active" : ""}`}
-                        onClick={() => handlePageChange(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-                <button
-                    className="nextPage"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                >
-                    Next
-                </button>
-            </div>
+                    <button onClick={goToFirstPage}>Trang đầu</button>
+                    <button className="prevPage" onClick={goToPreviousPage}>Trang trước</button>
+                    <span>{`Trang ${currentPage} / ${totalPages}`}</span>
+                    <button className="nextPage" onClick={goToNextPage}>Trang sau</button>
+                    <button onClick={goToLastPage}>Trang cuối</button>
+                </div>
         </div>
     );
 }

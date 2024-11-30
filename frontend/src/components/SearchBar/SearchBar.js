@@ -56,13 +56,12 @@ const SearchBar = () => {
           placeholder="Tìm kiếm sách"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        ></input>
         <button className="SearchBarButton">
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </button>
       </div>
 
-      {isLoading && <div>Đang tìm kiếm...</div>}
       {error && <div>{error}</div>}
 
       {searchTerm && (

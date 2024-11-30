@@ -23,9 +23,7 @@ function ManageBooks() {
     });
     const [searchQuery, setSearchQuery] = useState("");
     
-    // Trạng thái phân trang
-    const [currentPage, setCurrentPage] = useState(1);
-    const [booksPerPage] = useState(5); // Hiển thị 5 sách mỗi trang
+
 
     // Fetch books from API
     useEffect(() => {
@@ -144,6 +142,10 @@ function ManageBooks() {
         book.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+
+    // Trạng thái phân trang
+    const [currentPage, setCurrentPage] = useState(1);
+    const [booksPerPage] = useState(5); // Hiển thị 5 sách mỗi trang
     // Tính toán sách cần hiển thị trên mỗi trang
     const indexOfLastBook = currentPage * booksPerPage;
     const indexOfFirstBook = indexOfLastBook - booksPerPage;
@@ -152,9 +154,19 @@ function ManageBooks() {
     // Thêm các nút phân trang
     const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
 
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+    const handlePageChange = (newPage) => {
+        if (newPage < 1) newPage = 1; // Tránh chuyển đến trang nhỏ hơn 1
+        if (newPage > totalPages) newPage = totalPages; // Tránh chuyển đến trang lớn hơn tổng số trang
+        setCurrentPage(newPage);
     };
+    
+    // Nút "Trang đầu", "Trang cuối", "Trang trước", "Trang sau"
+    const goToFirstPage = () => handlePageChange(1);
+    const goToLastPage = () => handlePageChange(totalPages);
+    const goToPreviousPage = () => handlePageChange(currentPage - 1);
+    const goToNextPage = () => handlePageChange(currentPage + 1);
+
+
 
     return (
         <>
@@ -231,32 +243,14 @@ function ManageBooks() {
                         ))
                     )}
                 </div>
-
                 <div className="pagination">
-                    <button
-                        className="prevPage"
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        Prev
-                    </button>
-                    {Array.from({ length: totalPages }, (_, index) => (
-                        <button
-                            key={index}
-                            className={`pageNumber ${currentPage === index + 1 ? "active" : ""}`}
-                            onClick={() => handlePageChange(index + 1)}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
-                    <button
-                        className="nextPage"
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    >
-                        Next
-                    </button>
+                    <button onClick={goToFirstPage}>Trang đầu</button>
+                    <button className="prevPage" onClick={goToPreviousPage}>Trang trước</button>
+                    <span>{`Trang ${currentPage} / ${totalPages}`}</span>
+                    <button className="nextPage" onClick={goToNextPage}>Trang sau</button>
+                    <button onClick={goToLastPage}>Trang cuối</button>
                 </div>
+
             </div>
         </>
     );

@@ -6,7 +6,7 @@ import "./BookDisplay.css";
 const BookDisplay = () => {
   const [books, setBooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const booksPerPage = 28; // Số sách tối đa trên 1 trang
+  const booksPerPage = 49; // Số sách tối đa trên 1 trang
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const BookDisplay = () => {
     fetchBooks();
   }, []);
 
-  // Tính toán sách hiển thị trên trang hiện tại
+
   const totalPages = Math.ceil(books.length / booksPerPage); // Tổng số trang
   const startIndex = (currentPage - 1) * booksPerPage;
   const endIndex = startIndex + booksPerPage;
@@ -38,6 +38,13 @@ const BookDisplay = () => {
       setCurrentPage(page);
     }
   };
+
+  // Hiển thị phạm vi các trang gần trang hiện tại (ví dụ: 5 trang quanh trang hiện tại)
+  const pageNumbers = [];
+  const range = 2; // Số lượng trang hiển thị quanh trang hiện tại
+  for (let i = Math.max(1, currentPage - range); i <= Math.min(totalPages, currentPage + range); i++) {
+    pageNumbers.push(i);
+  }
 
   const handleBookClick = (id) => {
     navigate(`/books/${id}`);
@@ -61,15 +68,29 @@ const BookDisplay = () => {
       </div>
       {/* Phân trang */}
       <div className="pagination">
-        {Array.from({ length: totalPages }, (_, index) => (
+        <button onClick={() => handlePageChange(1)} disabled={currentPage === 1}>
+          Đầu
+        </button>
+        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+          Trước
+        </button>
+
+        {pageNumbers.map((page) => (
           <button
-            key={index + 1}
-            onClick={() => handlePageChange(index + 1)}
-            className={currentPage === index + 1 ? "active" : ""}
+            key={page}
+            onClick={() => handlePageChange(page)}
+            className={page === currentPage ? 'active' : ''}
           >
-            {index + 1}
+            {page}
           </button>
         ))}
+
+        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+          Tiếp theo
+        </button>
+        <button onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages}>
+          Cuối
+        </button>
       </div>
     </div>
   );

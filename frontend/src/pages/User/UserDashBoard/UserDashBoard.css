@@ -84,7 +84,7 @@ body {
     padding: 20px 50px 50px 50px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: fit-content;
+    height:max-content;
 }
 
 .borrow-history h1 {
@@ -106,6 +106,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    min-height: auto;
 }
 
 .borrow-item {
