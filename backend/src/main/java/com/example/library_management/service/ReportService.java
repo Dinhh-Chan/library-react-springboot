@@ -3,7 +3,7 @@ package com.example.library_management.service;
 import com.example.library_management.entity.Report;
 import com.example.library_management.repository.ReportRepository;
 import org.springframework.stereotype.Service;
-
+import com.example.library_management.entity.Reader;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +37,8 @@ public class ReportService {
     }
     public List<Report> getReportsByUserId(Long userId) {
         return reportRepository.findBySenderIdOrReceiverId(userId, userId);
+    }
+    public List<Report> getReportsBySenderOrReceiver(Reader sender, Reader receiver) {
+        return reportRepository.findBySenderOrReceiver(sender, receiver);
     }
 }

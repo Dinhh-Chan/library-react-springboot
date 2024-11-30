@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -25,9 +26,11 @@ public class ReportController {
     }
 
     // Lấy tất cả báo cáo
+
     @GetMapping
-    public List<Report> getAllReports() {
-        return reportService.getAllReports();
+    public ResponseEntity<List<Report>> getAllReports() {
+        List<Report> reports = reportService.getAllReports();
+        return ResponseEntity.ok(reports);
     }
 
     // Lấy báo cáo theo ID

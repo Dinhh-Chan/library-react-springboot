@@ -165,9 +165,12 @@ for row in books_data:
         published_year = int(float(row['published_year']))
     except ValueError:
         published_year = 2023  # Hoặc đặt một giá trị mặc định khác
+    
+    # Xử lý đường dẫn file
     link = row['thumbnail']
     if link == '':
         link = 'https://cdn.theatlantic.com/thumbor/iiuDdmz4ogmRYmYfUH7X8-Rs6eQ=/438x0:1563x1125/1080x1080/media/img/mt/2024/06/books/original.jpg'
+    
     book = Book(
         title=row['title'],
         link_file=link,  # Giả sử 'thumbnail' là đường link file
@@ -175,12 +178,41 @@ for row in books_data:
         published_year=published_year
     )
     
-    # Thêm tác giả và thể loại vào sách
+    # Thêm tác giả và thể loại vào sách (mối quan hệ nhiều-nhiều)
     book.authors = author_objs
     book.categories = category_objs
     
     # Thêm sách vào session
     session.add(book)
+import random
+
+# Lấy tất cả các book_id và author_id từ cơ sở dữ liệu
+book_ids = [book.id for book in session.query(Book).all()]
+author_ids = [author.id for author in session.query(Author).all()]
+
+# Kiểm tra xem danh sách có rỗng không
+if not book_ids or not author_ids:
+    print("Không có sách hoặc tác giả trong cơ sở dữ liệu.")
+else:
+    # Tạo số lượng liên kết ngẫu nhiên bạn muốn thêm vào bảng book_authors
+    num_relations = 6000  # Ví dụ: thêm 10 liên kết ngẫu nhiên
+
+    for _ in range(num_relations):
+        book_id = random.choice(book_ids)
+        author_id = random.choice(author_ids)
+
+        # Kiểm tra xem mối quan hệ đã tồn tại trong bảng book_authors chưa
+        existing_relation = session.query(book_authors).filter_by(book_id=book_id, author_id=author_id).first()
+        if existing_relation:
+            print(f"Liên kết giữa book_id {book_id} và author_id {author_id} đã tồn tại. Bỏ qua.")
+        else:
+            # Thêm mối quan hệ vào bảng book_authors
+            new_relation = book_authors.insert().values(book_id=book_id, author_id=author_id)
+            session.execute(new_relation)
+            print(f"Thêm mối quan hệ book_id {book_id} và author_id {author_id} vào bảng book_authors.")
+
+    # Commit tất cả thay đổi vào cơ sở dữ liệu
+    session.commit()
 
 # Commit tất cả các thay đổi
 session.commit()
