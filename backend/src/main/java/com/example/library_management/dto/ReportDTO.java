@@ -1,6 +1,7 @@
 package com.example.library_management.dto;
-import com.example.library_management.entity.*;
-import java.time.LocalDateTime;
+
+import com.example.library_management.entity.Report;
+import com.example.library_management.entity.Reader;
 
 public class ReportDTO {
 
@@ -63,11 +64,11 @@ public class ReportDTO {
     // Method to convert ReportDTO to Report entity
     public Report toReport(Reader sender, Reader receiver) {
         Report report = new Report();
-        report.setSender(sender);
-        report.setReceiver(receiver);
-        report.setContent(this.content);
-        report.setTitle(this.title);
-        report.setStatus(Report.ReportStatus.valueOf(this.status));  // Assuming status is sent as a string
+        report.setSender(sender);         // Set the sender as the Reader object
+        report.setReceiver(receiver);     // Set the receiver as the Reader object
+        report.setContent(this.content);  // Set the content of the report
+        report.setTitle(this.title);      // Set the title of the report
+        report.setStatus(Report.ReportStatus.valueOf(this.status));  // Convert string status to ReportStatus enum
         report.setParentReportId(this.parentReportId);  // If it's a reply, set the parent report ID
         return report;
     }

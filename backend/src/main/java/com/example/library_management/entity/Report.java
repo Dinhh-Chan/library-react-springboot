@@ -1,6 +1,7 @@
 package com.example.library_management.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -8,58 +9,72 @@ import java.time.LocalDateTime;
 @Table(name = "reports")
 public class Report {
 
+    // Enum for Report Status (e.g., UNREAD or READ)
+    public enum ReportStatus {
+        UNREAD,
+        READ
+    }
+
+    // Fields for the Report entity
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "report_id")
     private Long reportId;
 
+    // Many-to-one relationship with Reader (Sender)
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
-    @JsonBackReference("sender-reports")
+    @JsonBackReference("sender-reports")  // Prevent infinite recursion in JSON serialization
     private Reader sender;
 
+    // Many-to-one relationship with Reader (Receiver)
     @ManyToOne
     @JoinColumn(name = "receiver_id", nullable = false)
-    @JsonBackReference("receiver-reports")
+    @JsonBackReference("receiver-reports")  // Prevent infinite recursion in JSON serialization
     private Reader receiver;
 
+    // Content of the report
     @Column(name = "content", nullable = false)
     private String content;
 
+    // Creation timestamp for the report
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    // Status of the report (UNREAD or READ)
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ReportStatus status;
 
+    // If this report is a reply to another report, this holds the parent report ID
     @Column(name = "parent_report_id")
-    private Long parentReportId;  // To allow replies to the original report
+    private Long parentReportId;
 
-    @Column(name = "title", nullable = false)  // Tiêu đề của báo cáo
+    // Title of the report
+    @Column(name = "title", nullable = false)
     private String title;
 
-    public enum ReportStatus {
-        UNREAD, READ
-    }
+    // Getters and setters for the fields
 
-    // Constructors
+    // Constructor without parameters
     public Report() {
         this.createdAt = LocalDateTime.now();
         this.status = ReportStatus.UNREAD;
     }
 
+    // Constructor with parameters (to create a new report)
     public Report(Reader sender, Reader receiver, String content, String title, Long parentReportId) {
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
-        this.title = title; // Set the title
+        this.title = title;
         this.createdAt = LocalDateTime.now();
         this.status = ReportStatus.UNREAD;
         this.parentReportId = parentReportId;
     }
 
     // Getters and Setters
+
     public Long getReportId() {
         return reportId;
     }
@@ -122,5 +137,16 @@ public class Report {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    // Methods to get sender and receiver IDs directly
+    @JsonProperty("senderId")
+    public Long getSenderId() {
+        return sender != null ? sender.getId() : null;
+    }
+
+    @JsonProperty("receiverId")
+    public Long getReceiverId() {
+        return receiver != null ? receiver.getId() : null;
     }
 }
