@@ -56,7 +56,8 @@ public class ReportController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             Report parentReport = parentReportOpt.get();
-            replyReport.setParentReport(parentReport);  // Liên kết với báo cáo gốc
+            // Sử dụng ID của báo cáo gốc thay vì toàn bộ đối tượng
+            replyReport.setParentReportId(parentReport.getReportId());  // Liên kết với báo cáo gốc
             Report createdReply = reportService.createReport(replyReport);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdReply);
         } catch (Exception e) {
