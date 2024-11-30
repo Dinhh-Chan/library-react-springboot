@@ -39,7 +39,7 @@ public class Reader {
     private UserRole role;
 
     @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    private String dateOfBirth;
 
     @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("reader-borrowings")
@@ -132,11 +132,11 @@ public class Reader {
         this.role = role;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
