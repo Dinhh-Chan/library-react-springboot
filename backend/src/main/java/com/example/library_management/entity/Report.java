@@ -3,6 +3,7 @@ package com.example.library_management.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "reports")
@@ -18,7 +19,7 @@ public class Report {
     @JsonBackReference("sender-reports")
     private Reader sender;
 
-    @ManyToOne 
+    @ManyToOne
     @JoinColumn(name = "receiver_id", nullable = false)
     @JsonBackReference("receiver-reports")
     private Reader receiver;
@@ -33,6 +34,13 @@ public class Report {
     @Column(name = "status", nullable = false)
     private ReportStatus status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_report_id")  // Liên kết với báo cáo gốc
+    private Report parentReport;  // Dùng đối tượng Report thay vì chỉ lưu id
+
+    @OneToMany(mappedBy = "parentReport")
+    private List<Report> replies;  // Danh sách các báo cáo trả lời
+
     public enum ReportStatus {
         UNREAD, READ
     }
@@ -43,12 +51,13 @@ public class Report {
         this.status = ReportStatus.UNREAD;
     }
 
-    public Report(Reader sender, Reader receiver, String content) {
+    public Report(Reader sender, Reader receiver, String content, Report parentReport) {
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
         this.createdAt = LocalDateTime.now();
         this.status = ReportStatus.UNREAD;
+        this.parentReport = parentReport;  // Liên kết với báo cáo gốc
     }
 
     // Getters and Setters
@@ -98,5 +107,21 @@ public class Report {
 
     public void setStatus(ReportStatus status) {
         this.status = status;
+    }
+
+    public Report getParentReport() {
+        return parentReport;
+    }
+
+    public void setParentReport(Report parentReport) {
+        this.parentReport = parentReport;
+    }
+
+    public List<Report> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<Report> replies) {
+        this.replies = replies;
     }
 }
