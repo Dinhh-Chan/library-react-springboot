@@ -72,16 +72,17 @@ const RegisterPage = () => {
       const payload = {
         username: formData.username,
         password: formData.password,
-        contactInfo: formData.contactInfo,
+        numberPhone: formData.contactInfo,
         quota: formData.quota,
         role: formData.role,
-        ho_va_ten: formData.ho_va_ten,
+        hoVaTen: formData.ho_va_ten,
         email: formData.email,
-        date_of_birth:formData.date_of_birth,
+        dateOfBirth:formData.date_of_birth,
       };
       await axios.post("http://localhost:8080/api/readers", payload);
 
       // Nếu thành công, thông báo người dùng
+      alert("Đăng kí thành công!");
       navigate("/login");
     } catch (error) {
       // Nếu có lỗi, thông báo cho người dùng

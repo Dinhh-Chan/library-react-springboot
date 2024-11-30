@@ -1,10 +1,12 @@
 import React from "react";
 
 const ReportLostBook = () => {
+    const id = localStorage.getItem("id_user");
+    
     return (
     <>
         <div className="form-container">
-            <h1>Report Mất Sách</h1>
+            <h1>Báo cáo với quản trị viên</h1>
             <form>
                 <div class="form-group">
                     <label for="username">Tên người dùng:</label>

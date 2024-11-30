@@ -26,13 +26,12 @@ const LoginPage = () => {
                 localStorage.setItem("id_user", response.data.id); 
                 localStorage.setItem("role", response.data.role); 
                 localStorage.setItem("userName", responseUser.data.username); 
-                setTimeout(() => {
-                    if (response.data.role === "USER") {
-                        window.location.href = "/"; 
-                    } else if (response.data.role === "ADMIN") {
-                        window.location.href = "/admin/manage-books"; 
-                    }
-                }, 500);
+                localStorage.setItem("fullName", responseUser.data.hoVaTen);
+                if (response.data.role === "USER") {
+                    window.location.href = "/"; 
+                } else if (response.data.role === "ADMIN") {
+                    window.location.href = "/admin/manage-books"; 
+                }
             } else {
                 alert("Đăng nhập thất bại: Sai tên đăng nhập hoặc mật khẩu");
             }

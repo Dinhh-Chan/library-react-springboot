@@ -20,8 +20,12 @@ function DropDownMenu() {
         <ul className="dropDownMenu">
             <li className="menuItems" >
                 <Link to="/user" className="NavBarProfile">
-                    <img src="https://i.imgur.com/B8ta5Aa.jpeg" alt="Profile" />
-                    <h3>Tài khoản</h3>
+                    {role === "USER" ?
+                       (<>
+                            <img src="https://i.imgur.com/B8ta5Aa.jpeg" alt="Profile" />
+                            <h3>Tài khoản</h3>
+                        </>):
+                        (<button>Dang nhap</button>)}
                 </Link>
             </li>
             <hr />

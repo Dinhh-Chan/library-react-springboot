@@ -69,7 +69,7 @@ const SearchBar = () => {
           {filteredItems.length > 0 ? (
             filteredItems.map((item) => (
               <li key={item.id} onClick={() => handleItemClick(item.id)}>
-                {item.title} - {item.publishedYear}
+                {item.title}
               </li>
             ))
           ) : (

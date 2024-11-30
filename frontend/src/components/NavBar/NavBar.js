@@ -1,7 +1,5 @@
-// src/components/NavBar/NavBar.js
-
 import React, { useState } from "react";
-import { Link } from 'react-router-dom'; // Import Link từ react-router-dom
+import { Link } from 'react-router-dom';
 import './NavBar.css';
 import SearchBar from "../SearchBar/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +9,7 @@ import DropDownMenu from "../DropDownItems/DropDownItems";
 function NavBar() {
     const [openMenu, setOpenMenu] = useState(false);
 
+    
     return ( 
         <>
             <nav className="navbar">
