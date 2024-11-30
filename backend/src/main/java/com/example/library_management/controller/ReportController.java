@@ -1,7 +1,9 @@
 package com.example.library_management.controller;
+import com.example.library_management.dto.ReportDTO;
+import com.example.library_management.entity.*;
+import com.example.library_management.service.*;
+import com.example.library_management.exception.ResourceNotFoundException;
 
-import com.example.library_management.entity.Report;
-import com.example.library_management.service.ReportService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class ReportController {
 
     private final ReportService reportService;
+    private final ReaderService readerService;  // Khai báo readerService
 
-    // Inject ReportService
-    public ReportController(ReportService reportService) {
+    // Inject ReportService và ReaderService vào constructor
+    public ReportController(ReportService reportService, ReaderService readerService) {
         this.reportService = reportService;
+        this.readerService = readerService;  // Inject readerService
     }
 
     // Lấy tất cả báo cáo
@@ -36,13 +40,19 @@ public class ReportController {
 
     // Tạo báo cáo mới
     @PostMapping
-    public ResponseEntity<Report> createReport(@RequestBody Report report) {
-        try {
-            Report createdReport = reportService.createReport(report);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<Report> createReport(@RequestBody ReportDTO reportDTO) {
+        // Retrieve sender and receiver from their IDs
+        Reader sender = readerService.getReaderById(reportDTO.getSenderId())
+                .orElseThrow(() -> new ResourceNotFoundException("Sender not found with id " + reportDTO.getSenderId()));
+        Reader receiver = readerService.getReaderById(reportDTO.getReceiverId())
+                .orElseThrow(() -> new ResourceNotFoundException("Receiver not found with id " + reportDTO.getReceiverId()));
+
+        // Convert ReportDTO to Report entity
+        Report report = reportDTO.toReport(sender, receiver);
+
+        // Save the report
+        Report createdReport = reportService.createReport(report);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
     }
 
     // Trả lời một báo cáo (tạo báo cáo con)

@@ -1,53 +1,31 @@
 package com.example.library_management.dto;
-
+import com.example.library_management.entity.*;
 import java.time.LocalDateTime;
 
 public class ReportDTO {
 
-    private Long reportId;
-    private String senderName;
-    private String receiverName;
-    private String content;
-    private LocalDateTime createdAt;
-    private String status;
-    private Long parentReportId;
-    private String title; // Thêm trường title vào DTO
-
-    // Constructors
-    public ReportDTO(Long reportId, String senderName, String receiverName, String content, LocalDateTime createdAt, String status, Long parentReportId, String title) {
-        this.reportId = reportId;
-        this.senderName = senderName;
-        this.receiverName = receiverName;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.status = status;
-        this.parentReportId = parentReportId;
-        this.title = title;
-    }
+    private Long senderId;           // ID của người gửi
+    private Long receiverId;         // ID của người nhận
+    private String content;          // Nội dung báo cáo
+    private String status;           // Trạng thái báo cáo (UNREAD/READ)
+    private String title;            // Tiêu đề của báo cáo
+    private Long parentReportId;     // ID của báo cáo gốc (nếu là trả lời báo cáo khác)
 
     // Getters and Setters
-    public Long getReportId() {
-        return reportId;
+    public Long getSenderId() {
+        return senderId;
     }
 
-    public void setReportId(Long reportId) {
-        this.reportId = reportId;
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
     }
 
-    public String getSenderName() {
-        return senderName;
+    public Long getReceiverId() {
+        return receiverId;
     }
 
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-
-    public String getReceiverName() {
-        return receiverName;
-    }
-
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
+    public void setReceiverId(Long receiverId) {
+        this.receiverId = receiverId;
     }
 
     public String getContent() {
@@ -58,20 +36,20 @@ public class ReportDTO {
         this.content = content;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Long getParentReportId() {
@@ -82,11 +60,15 @@ public class ReportDTO {
         this.parentReportId = parentReportId;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    // Method to convert ReportDTO to Report entity
+    public Report toReport(Reader sender, Reader receiver) {
+        Report report = new Report();
+        report.setSender(sender);
+        report.setReceiver(receiver);
+        report.setContent(this.content);
+        report.setTitle(this.title);
+        report.setStatus(Report.ReportStatus.valueOf(this.status));  // Assuming status is sent as a string
+        report.setParentReportId(this.parentReportId);  // If it's a reply, set the parent report ID
+        return report;
     }
 }
