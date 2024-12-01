@@ -3,14 +3,14 @@ import com.example.library_management.dto.ReportDTO;
 import com.example.library_management.entity.*;
 import com.example.library_management.service.*;
 import com.example.library_management.exception.ResourceNotFoundException;
-
+import java.util.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -77,21 +77,34 @@ public class ReportController {
 
     // Cập nhật trạng thái báo cáo (đánh dấu là đã đọc hay chưa đọc)
     @PutMapping("/{id}/status")
-    public ResponseEntity<Report> updateReportStatus(@PathVariable Long id, @RequestBody Report.ReportStatus status) {
+    public ResponseEntity<Report> updateReportStatus(@PathVariable Long id, @RequestBody Map<String, String> statusRequest) {
         try {
             Optional<Report> reportOpt = reportService.getReportById(id);
             if (!reportOpt.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             Report report = reportOpt.get();
-            report.setStatus(status);
+            String status = statusRequest.get("status"); // Lấy giá trị "status" từ body JSON
+            report.setStatus(Report.ReportStatus.valueOf(status)); // Chuyển đổi thành enum
             Report updatedReport = reportService.updateReport(report);
             return ResponseEntity.ok(updatedReport);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @GetMapping("/user/{userId}/paged")
+    public ResponseEntity<List<Report>> getReportsByUserIdPaged(@PathVariable Long userId, 
+                                                                @RequestParam int page, 
+                                                                @RequestParam int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Report> reportPage = reportService.getReportsByUserId(userId, pageable);
 
+        if (reportPage.hasContent()) {
+            return ResponseEntity.ok(reportPage.getContent());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
     // Xóa báo cáo
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
@@ -106,12 +119,24 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Report>> getReportsByUserId(@PathVariable Long userId) {
-        List<Report> reports = reportService.getReportsByUserId(userId);
-        if (reports.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(reports);
+    @GetMapping("/user/{userId}/all")
+    public ResponseEntity<List<Report>> getAllReportsByUserId(
+        @PathVariable Long userId, 
+        Pageable pageable) {
+        
+        // Fetch reports by userId with pagination
+        Page<Report> reports = reportService.getReportsByUserId(userId, pageable);
+        
+        // Convert Page<Report> to List<Report>
+        List<Report> reportList = reports.getContent();
+        
+        // Check if there are reports
+        if (reportList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(reports);
+    
+        // Return paginated reports
+        return ResponseEntity.ok(reportList);
     }
+
 }
