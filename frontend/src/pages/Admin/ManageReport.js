@@ -4,11 +4,28 @@ const ManageReport = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [reports, setReports] = useState([]);
     const [selectedReport, setSelectedReport] = useState(null);
+    const [replyContent, setReplyContent] = useState("");
 
     useEffect(() => {
+        // Lấy danh sách báo cáo từ API
+        const fetchReports = async () => {
+            try {
+                const response = await fetch("http://localhost:8080/api/reports");
+                const data = await response.json();
+                setReports(data);
+
+                // Sau khi lấy danh sách báo cáo, lấy thông tin người dùng
+                if (data.length > 0) {
+                    const senderId = data[0].senderId; // Giả sử senderId từ báo cáo đầu tiên
+                    fetchUserInfo(senderId);
+                }
+            } catch (error) {
+                console.error("Lỗi khi lấy báo cáo:", error);
+            }
+        };
+
         // Lấy thông tin người dùng từ API
-        const fetchUserInfo = async () => {
-            const userId = 8; // Thay đổi id người dùng theo trường hợp của bạn
+        const fetchUserInfo = async (userId) => {
             try {
                 const response = await fetch(`http://localhost:8080/api/readers/${userId}`);
                 const data = await response.json();
@@ -18,18 +35,6 @@ const ManageReport = () => {
             }
         };
 
-        // Lấy danh sách báo cáo từ API
-        const fetchReports = async () => {
-            try {
-                const response = await fetch("http://localhost:8080/api/reports");
-                const data = await response.json();
-                setReports(data);
-            } catch (error) {
-                console.error("Lỗi khi lấy báo cáo:", error);
-            }
-        };
-
-        fetchUserInfo();
         fetchReports();
     }, []);
 
@@ -45,6 +50,47 @@ const ManageReport = () => {
 
     const handleCloseModal = () => {
         setSelectedReport(null); // Đóng modal
+    };
+
+    const handleReplyChange = (event) => {
+        setReplyContent(event.target.value);
+    };
+
+    const handleReplySubmit = async (reportId) => {
+        if (!replyContent.trim()) {
+            alert("Vui lòng nhập nội dung phản hồi.");
+            return;
+        }
+
+        try {
+            const { senderId, receiverId } = selectedReport; // Get senderId (receiverId is the sender of the original report)
+            const newReply = {
+                senderId: 1, // Admin's senderId
+                receiverId: senderId, // The original sender of the report
+                content: replyContent,
+                status: "UNREAD", // Assuming the status should be "UNREAD"
+                title: `Phản hồi từ admin: ${selectedReport.title}`, // Title for the reply
+                parentReportId: reportId, // The original report's ID
+            };
+
+            const response = await fetch(`http://localhost:8080/api/reports/${reportId}/reply`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newReply),
+            });
+
+            if (response.ok) {
+                const updatedReport = await response.json();
+                setSelectedReport(updatedReport); // Update the selected report with the new reply
+                setReplyContent(""); // Clear the reply input
+            } else {
+                console.error("Lỗi khi gửi phản hồi");
+            }
+        } catch (error) {
+            console.error("Lỗi khi gửi phản hồi:", error);
+        }
     };
 
     // Hàm format thời gian
@@ -94,6 +140,21 @@ const ManageReport = () => {
                                 </>
                             )}
                         </div>
+
+                        {/* Chỉ hiển thị khung trả lời nếu báo cáo không phải của admin */}
+                        {selectedReport.senderId !== 1 && (
+                            <div className="reply-section">
+                                <h3>Phản hồi</h3>
+                                <textarea
+                                    value={replyContent}
+                                    onChange={handleReplyChange}
+                                    placeholder="Nhập nội dung phản hồi"
+                                />
+                                <button onClick={() => handleReplySubmit(selectedReport.reportId)}>
+                                    Gửi phản hồi
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
