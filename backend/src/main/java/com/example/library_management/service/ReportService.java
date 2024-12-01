@@ -47,4 +47,8 @@ public class ReportService {
     public Report saveReport(Report report) {
         return reportRepository.save(report);
     }
+    public List<Report> getRepliesToReport(Long parentReportId) {
+        return reportRepository.findByParentReportId(parentReportId);
+    }
+
 }

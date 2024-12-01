@@ -65,26 +65,27 @@ public class ReportController {
 
     // Trả lời một báo cáo (tạo báo cáo con)
     @PostMapping("/{reportId}/reply")
-    public ResponseEntity<?> replyToReport(
+    public ResponseEntity<Report> replyToReport(
             @PathVariable Long reportId,   // Get the parent report ID
             @RequestBody ReportDTO reportDTO) {  // Receive the ReportDTO
-
+    
         // Fetch sender and receiver from the repository
         Reader sender = readerRepository.findById(reportDTO.getSenderId())
                 .orElseThrow(() -> new RuntimeException("Sender not found"));
         Reader receiver = readerRepository.findById(reportDTO.getReceiverId())
                 .orElseThrow(() -> new RuntimeException("Receiver not found"));
-
+    
         // Convert ReportDTO to Report entity
         Report report = reportDTO.toReport(sender, receiver);
-
+    
         // Set parent report if it's a reply
         report.setParentReportId(reportId);
-
+    
         // Save the report
-        reportService.saveReport(report);
-
-        return ResponseEntity.ok("Report created successfully");
+        Report savedReport = reportService.saveReport(report);
+    
+        // Return the saved report in the response
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedReport);
     }
     // Cập nhật trạng thái báo cáo (đánh dấu là đã đọc hay chưa đọc)
     @PutMapping("/{id}/status")
@@ -149,5 +150,45 @@ public class ReportController {
         // Return paginated reports
         return ResponseEntity.ok(reportList);
     }
+    @GetMapping("/{reportId}/parentReports")
+        public ResponseEntity<List<Report>> getParentReports(@PathVariable Long reportId) {
+        List<Report> parentReports = new ArrayList<>();
+        Optional<Report> currentReportOpt = reportService.getReportById(reportId);
 
+        if (!currentReportOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();  // Nếu không tìm thấy báo cáo
+        }
+
+        Report currentReport = currentReportOpt.get();
+
+        // Lặp lại cho đến khi không có báo cáo cha nữa
+        while (currentReport.getParentReportId() != null) {
+            Optional<Report> parentReportOpt = reportService.getReportById(currentReport.getParentReportId());
+            if (parentReportOpt.isPresent()) {
+                parentReports.add(parentReportOpt.get());
+                currentReport = parentReportOpt.get();  // Cập nhật báo cáo hiện tại là báo cáo cha
+            } else {
+                break;  // Nếu không tìm thấy báo cáo cha, thoát khỏi vòng lặp
+            }
+        }
+
+        // Nếu không có báo cáo cha nào
+        if (parentReports.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        // Trả về danh sách báo cáo cha
+        Collections.reverse(parentReports);  // Để hiển thị báo cáo cha gần nhất trước
+        return ResponseEntity.ok(parentReports);
+    }
+    @GetMapping("/{reportId}/replies")
+    public ResponseEntity<List<Report>> getRepliesToReport(@PathVariable Long reportId) {
+        List<Report> replies = reportService.getRepliesToReport(reportId);
+    
+        if (replies.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();  // Trả về 204 nếu không có báo cáo trả lời
+        }
+    
+        return ResponseEntity.ok(replies);  // Trả về danh sách báo cáo trả lời
+    }
 }

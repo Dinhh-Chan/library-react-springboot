@@ -95,9 +95,8 @@ function NotificationPage() {
                         <p><b>Nội dung:</b> {selectedReport.content}</p>
                         <p><b>Thời gian tạo:</b> {formatDate(selectedReport.createdAt)}</p> {/* Hiển thị thời gian đã format */}
                         <div>
-                            <h3>Thông tin người gửi {senderId}</h3>
+                            <h3>Thông tin người gửi </h3>
                             <p><b>Họ và tên:</b> {sender.hoVaTen}</p>
-                            <p><b>Tên người dùng:</b> {sender.username}</p>
                             <p><b>Gmail:</b> {sender.email}</p>
                             <p><b>Số điện thoại:</b> {sender.numberPhone}</p>
                             <p><b>Ngày sinh:</b> {sender.dateOfBirth || "Chưa có thông tin"}</p>

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
     // Các phương thức truy vấn tùy chỉnh nếu cần
+    List<Report> findByParentReportId(Long parentReportId);
     List<Report> findBySenderOrReceiver(Reader sender, Reader receiver);
     @Query("SELECT r FROM Report r WHERE r.sender.id = :senderId OR r.receiver.id = :receiverId")
     Page<Report> findByReceiverIdOrSenderId(@Param("senderId") Long senderId, 
