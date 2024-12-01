@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from "react";
-import Modal from "../../components/Modal/Modal";
-
 
 const ManageReport = () => {
+    const [userInfo, setUserInfo] = useState(null);
     const [reports, setReports] = useState([]);
     const [selectedReport, setSelectedReport] = useState(null);
-    const [visibleForm, setVisibleForm] = useState(true);
 
     useEffect(() => {
-        // Fetch danh sách báo cáo từ API
+        // Lấy thông tin người dùng từ API
+        const fetchUserInfo = async () => {
+            const userId = 8; // Thay đổi id người dùng theo trường hợp của bạn
+            try {
+                const response = await fetch(`http://localhost:8080/api/readers/${userId}`);
+                const data = await response.json();
+                setUserInfo(data);
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin người dùng:", error);
+            }
+        };
+
+        // Lấy danh sách báo cáo từ API
         const fetchReports = async () => {
             try {
                 const response = await fetch("http://localhost:8080/api/reports");
@@ -19,12 +29,12 @@ const ManageReport = () => {
             }
         };
 
+        fetchUserInfo();
         fetchReports();
     }, []);
 
     const handleReportClick = async (reportId) => {
         try {
-            // Lấy thông tin chi tiết của báo cáo khi click vào báo cáo
             const response = await fetch(`http://localhost:8080/api/reports/${reportId}`);
             const data = await response.json();
             setSelectedReport(data);
@@ -51,40 +61,43 @@ const ManageReport = () => {
     };
 
     return (
-        <>
         <div className="form-container">
             <h1>Danh sách báo cáo</h1>
-        <div className="borrow-list">
             <ul>
                 {reports.map((report) => (
-                    <li key={report.reportId} onClick={() => {handleReportClick(report.reportId);
-                        setVisibleForm(true)
-                    }}>
+                    <li key={report.reportId} onClick={() => handleReportClick(report.reportId)}>
                         <h3>{report.title}</h3>
                         <p>{formatDate(report.createdAt)}</p> {/* Hiển thị thời gian đã format */}
                     </li>
                 ))}
             </ul>
-        </div>
 
             {/* Modal thông tin chi tiết báo cáo */}
             {selectedReport && (
-                <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
+                <div className="modal">
+                    <div className="modal-content">
+                        <span className="close-button" onClick={handleCloseModal}>
+                            &times;
+                        </span>
                         <h2>{selectedReport.title}</h2>
                         <p><b>Nội dung:</b> {selectedReport.content}</p>
                         <p><b>Thời gian tạo:</b> {formatDate(selectedReport.createdAt)}</p> {/* Hiển thị thời gian đã format */}
-                        <div>
+                        <div className="info-section">
                             <h3>Thông tin người gửi</h3>
-                            <p><b>Họ và tên:</b> {selectedReport.senderInfo?.hoVaTen}</p>
-                            <p><b>Tên người dùng:</b> {selectedReport.senderInfo?.username}</p>
-                            <p><b>Gmail:</b> {selectedReport.senderInfo?.email}</p>
-                            <p><b>Số điện thoại:</b> {selectedReport.senderInfo?.numberPhone}</p>
-                            <p><b>Ngày sinh:</b> {selectedReport.senderInfo?.dateOfBirth || "Chưa có thông tin"}</p>
+                            {userInfo && (
+                                <>
+                                    <p><b>Họ và tên:</b> {userInfo.hoVaTen}</p>
+                                    <p><b>Tên người dùng:</b> {userInfo.username}</p>
+                                    <p><b>Gmail:</b> {userInfo.email}</p>
+                                    <p><b>Số điện thoại:</b> {userInfo.numberPhone}</p>
+                                    <p><b>Ngày sinh:</b> {userInfo.dateOfBirth || "Chưa có thông tin"}</p>
+                                </>
+                            )}
                         </div>
-                </Modal>
+                    </div>
+                </div>
             )}
         </div>
-        </>
     );
 };
 
