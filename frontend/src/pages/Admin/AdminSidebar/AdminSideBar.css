@@ -374,3 +374,10 @@
     background-color: #002a57;
 }
 
+.form-container .Unread{
+    background-color: #FF5733;
+}
+
+.form-container .Read{
+    background-color: #80ef80;
+}

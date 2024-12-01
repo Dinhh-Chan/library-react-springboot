@@ -147,7 +147,7 @@ const ManageReport = () => {
                 {reports
                     .filter(report => report.senderId !== 1) // Chỉ hiển thị các báo cáo gửi đến admin
                     .map((report) => (
-                        <li key={report.reportId} onClick={() => handleReportClick(report.reportId)}>
+                        <li className={report.status == "READ"? "Read": "Unread"} key={report.reportId} onClick={() => handleReportClick(report.reportId)}>
                             <h3>{report.title}</h3>
                             <p>{formatDate(report.createdAt)}</p> {/* Hiển thị thời gian đã format */}
                         </li>

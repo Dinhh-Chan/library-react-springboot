@@ -227,9 +227,9 @@ body {
 }
 
 .borrow-list .Unread{
-    background-color: red;
+    background-color: #FF5733;
 }
 
 .borrow-list .Read{
-    background-color: rgb(32, 232, 32);
+    background-color: #80ef80;
 }

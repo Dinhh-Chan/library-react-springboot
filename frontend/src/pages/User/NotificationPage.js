@@ -120,7 +120,7 @@ function NotificationPage() {
                         </div>
 
                         {/* Nút xóa báo cáo */}
-                        <button onClick={() => handleDeleteReport(selectedReport.reportId)}>Xóa báo cáo</button>
+                        <button className="DeleteButton" onClick={() => handleDeleteReport(selectedReport.reportId)}>Xóa báo cáo</button>
                     </Modal>
                 )}
             </div>
