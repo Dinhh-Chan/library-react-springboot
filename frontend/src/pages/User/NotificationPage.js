@@ -16,8 +16,11 @@ function NotificationPage() {
             try {
                 const response = await fetch("http://localhost:8080/api/reports");
                 const data = await response.json();
-                const userNoti = data.filter(data => data.receiverId == userId);
-                setReports(userNoti);
+                const userNoti = data.filter((data) => data.receiverId == userId);
+
+                // Sắp xếp báo cáo, đưa báo cáo UNREAD lên đầu
+                const sortedReports = userNoti.sort((a, b) => (a.status === "UNREAD" ? -1 : 1) - (b.status === "UNREAD" ? -1 : 1));
+                setReports(sortedReports);
             } catch (error) {
                 console.error("Lỗi khi lấy báo cáo:", error);
             }
