@@ -32,7 +32,7 @@ function NavBar() {
             })
             .catch(error => console.error("Error fetching notifications:", error))
             .finally(console.log(userId,notifications))
-    }, [userId]); // Chạy lại khi userId thay đổi
+    }, [userId,notifications]); // Chạy lại khi userId thay đổi
     
     return ( 
         <>

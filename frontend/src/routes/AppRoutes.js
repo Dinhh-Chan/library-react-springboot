@@ -22,6 +22,7 @@ import ManageReport from '../pages/Admin/ManageReport';
 import NotificationPage from "../pages/User/NotificationPage";
 
 
+
 const AppRoutes = ({ role }) => {
     return (
         <Routes>
@@ -83,7 +84,7 @@ const AppRoutes = ({ role }) => {
                     </ProtectedRoute>
                 }
             >   
-                <Route path="notification" element={<NotificationPage/>}/>
+                <Route path="notification" element={<NotificationPage></NotificationPage>}/>
                 <Route path="profile-edit" element={<EditProfile />} />
                 <Route path="borrow-history" element={<BorrowHistory />} />
                 <Route path="change-password" element={<ChangePassword />} />
