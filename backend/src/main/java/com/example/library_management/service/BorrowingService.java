@@ -1,9 +1,10 @@
 package com.example.library_management.service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
+import com.example.library_management.dto.BorrowingLimitResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -129,5 +130,18 @@ public class BorrowingService {
 
         // Lưu thay đổi
         return borrowingRepository.save(borrowing);
+    }
+
+    // Kiểm tra số lượng đơn mượn của người dùng
+    public boolean isLimitReached(Long readerId) {
+        // Kiểm tra số lượng đơn mượn của người dùng có status "DANG_MUON", "DA_TRA" và "QUA_HAN"
+        long total = borrowingRepository.countByReaderIdAndStatusIn(readerId, 
+                Arrays.asList(BorrowingStatus.DANG_MUON, BorrowingStatus.DA_TRA, BorrowingStatus.QUA_HAN));
+        return total >= 10;  // Kiểm tra xem có hơn 10 đơn hay không
+    }
+    public BorrowingLimitResponse getBorrowLimit(Long readerId) {
+        long count = borrowingRepository.countByReaderIdAndStatusIn(readerId, 
+                                List.of(BorrowingStatus.DANG_MUON, BorrowingStatus.DANG_CHO_DUYET, BorrowingStatus.QUA_HAN));
+        return new BorrowingLimitResponse(count);
     }
 }

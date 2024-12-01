@@ -1,9 +1,9 @@
 package com.example.library_management.controller;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
-
+import com.example.library_management.dto.BorrowingLimitResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +22,21 @@ import com.example.library_management.exception.ResourceNotFoundException;
 @RestController
 @RequestMapping("/api/borrowings")
 public class BorrowingController {
-
+    public class ErrorResponse {
+        private String message;
+    
+        public ErrorResponse(String message) {
+            this.message = message;
+        }
+    
+        public String getMessage() {
+            return message;
+        }
+    
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
     private final BorrowingService borrowingService;
     private final ReaderService readerService;
     private final BookService bookService;
@@ -34,20 +48,28 @@ public class BorrowingController {
     }
 
     // Tạo một borrowing mới
+
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<BorrowingResponse> createBorrowing(@RequestBody BorrowingRequest borrowingRequest) {
+    public ResponseEntity<?> createBorrowing(@RequestBody BorrowingRequest borrowingRequest) {
         // Lấy Reader và Book từ ID
         Reader reader = readerService.getReaderById(borrowingRequest.getReaderId())
                 .orElseThrow(() -> new ResourceNotFoundException("Reader not found with id " + borrowingRequest.getReaderId()));
         Book book = bookService.getBookById(borrowingRequest.getBookId())
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found with id " + borrowingRequest.getBookId()));
-
+        
+        // Kiểm tra số lượng đơn mượn của người dùng
+        if (borrowingService.isLimitReached(reader.getId())) {
+            // Nếu tổng số đơn mượn, đã trả và quá hạn lớn hơn hoặc bằng 10, trả về lỗi
+            ErrorResponse errorResponse = new ErrorResponse("Cannot borrow more books, limit reached.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+        }
+    
         // Tạo Borrowing entity
         Borrowing borrowing = borrowingRequest.toBorrowing();
         borrowing.setReader(reader);
         borrowing.setBook(book);
-
+    
         // Tạo borrowing
         Borrowing createdBorrowing = borrowingService.createBorrowing(borrowing);
         BorrowingResponse response = BorrowingResponse.fromEntity(createdBorrowing);
@@ -141,5 +163,10 @@ public class BorrowingController {
         Borrowing returnedBorrowing = borrowingService.returnBorrowing(id, returnDate);
         BorrowingResponse response = BorrowingResponse.fromEntity(returnedBorrowing);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/user/{userId}/limit")
+    public ResponseEntity<BorrowingLimitResponse> getBorrowLimit(@PathVariable Long userId) {
+        BorrowingLimitResponse borrowLimitResponse = borrowingService.getBorrowLimit(userId);
+        return ResponseEntity.ok(borrowLimitResponse);
     }
 }

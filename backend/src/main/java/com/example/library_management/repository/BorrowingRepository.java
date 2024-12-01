@@ -13,7 +13,7 @@ import com.example.library_management.enums.BorrowingStatus;
 public interface BorrowingRepository extends JpaRepository<Borrowing, Long> {
     // Tìm tất cả các lần mượn theo ID của người đọc
     List<Borrowing> findByReaderId(Long readerId);
-    
+    long countByReaderIdAndStatusIn(Long readerId, List<BorrowingStatus> statuses);
     // Tìm tất cả các lần mượn theo ID của sách
     List<Borrowing> findByBookId(Long bookId);
     
