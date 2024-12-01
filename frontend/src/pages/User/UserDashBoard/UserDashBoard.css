@@ -225,3 +225,11 @@ body {
 .save-button:hover {
     background-color: #0056b3;
 }
+
+.borrow-list .Unread{
+    background-color: red;
+}
+
+.borrow-list .Read{
+    background-color: rgb(32, 232, 32);
+}

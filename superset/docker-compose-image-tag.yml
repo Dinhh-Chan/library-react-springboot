@@ -110,7 +110,7 @@ services:
     ports:
       - "81:80"  # Nginx sẽ lắng nghe trên cổng 80
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf  # Mount file cấu hình Nginx
+      - ./nginx.conf:/etcc/nginx/conf.d/default.conf  # Mount file cấu hình Nginx
     depends_on:
       - superset  # Đảm bảo Nginx sẽ chạy sau khi Superset đã khởi động
 

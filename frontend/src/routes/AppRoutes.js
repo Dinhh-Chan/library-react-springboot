@@ -21,8 +21,6 @@ import BooksByCategory from "../components/CategoriesList/BookByCategory";
 import ManageReport from '../pages/Admin/ManageReport';
 import NotificationPage from "../pages/User/NotificationPage";
 
-
-
 const AppRoutes = ({ role }) => {
     return (
         <Routes>
@@ -48,24 +46,42 @@ const AppRoutes = ({ role }) => {
                 <Route path="manage-borrow-and-returned-books" element={<ManageBorrowBooks />} />
                 <Route path="manage-users" element={<ManageUsers />} />
                 <Route path="manage-category" element={<ManageCategory />} />
+                
+                {/* Render the iframe inside /admin/dashboard route */}
                 <Route
-                path="manage-dashboard"
-                element={
-                    <div style={{ position: "relative", width: "calc(100vw - 250px)", height: "100vh" }}>
-                        <iframe
-                            src="http://localhost/superset/dashboard/3/"
-                            title="Superset Dashboard"
-                            style={{
-                                width: "95%",
-                                height: "100%",
-                                border: "none",
-                            }}
-                        ></iframe>
-                    </div>
-                }
-                />
-            </Route>
+    path="dashboard"
+    element={
+        <div
+            style={{
+                position: "relative",
+                width: "100%",
+                height: "100vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#f4f7fa", // Màu nền nhẹ cho trang
+            }}
+        >
+            <iframe
+                src="http://localhost:8088/superset/dashboard/3"
+                title="Superset Dashboard"
+                style={{
+                    width: "1300px",
+                    height: "80vh", // Chiếm 80% chiều cao của màn hình
+                    border: "none",
+                    borderRadius: "8px", // Bo góc cho iframe
+                    boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", //
+                    // transition: "transform 0.3s ease", // Hiệu ứng khi hover
+                }}
+                onMouseEnter={(e) => (e.target.style.transform = "scale(1.02)")}
+                onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+            ></iframe>
+        </div>
+    }
+/>
 
+            </Route>
+                    
             {/* Các trang user */}
             <Route
                 path="/borrow-ticket"
@@ -84,14 +100,14 @@ const AppRoutes = ({ role }) => {
                     </ProtectedRoute>
                 }
             >   
-                <Route path="notification" element={<NotificationPage></NotificationPage>}/>
+                <Route path="notification" element={<NotificationPage />} />
                 <Route path="profile-edit" element={<EditProfile />} />
                 <Route path="borrow-history" element={<BorrowHistory />} />
                 <Route path="change-password" element={<ChangePassword />} />
                 <Route path="report-lost-book" element={<ReportLostBook />} />
             </Route>
-            
-            {/* Bất kỳ URL nào không xác định sẽ điều hướng về trang chủ */}
+
+            {/* Default route */}
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     );

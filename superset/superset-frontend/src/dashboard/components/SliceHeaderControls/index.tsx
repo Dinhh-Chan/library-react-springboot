@@ -41,7 +41,6 @@ import {
   t,
   useTheme,
   ensureIsArray,
-  VizType,
 } from '@superset-ui/core';
 import { useSelector } from 'react-redux';
 import {
@@ -690,8 +689,8 @@ const SliceHeaderControls = (props: SliceHeaderControlsPropsWithRouter) => {
     supersetCanShare = false,
     isCached = [],
   } = props;
-  const isTable = slice.viz_type === VizType.Table;
-  const isPivotTable = slice.viz_type === VizType.PivotTable;
+  const isTable = slice.viz_type === 'table';
+  const isPivotTable = slice.viz_type === 'pivot_table_v2';
   const cachedWhen = (cachedDttm || []).map(itemCachedDttm =>
     moment.utc(itemCachedDttm).fromNow(),
   );
