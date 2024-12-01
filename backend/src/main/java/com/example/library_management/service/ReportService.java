@@ -44,4 +44,7 @@ public class ReportService {
     public List<Report> getReportsBySenderOrReceiver(Reader sender, Reader receiver) {
         return reportRepository.findBySenderOrReceiver(sender, receiver);
     }
+    public Report saveReport(Report report) {
+        return reportRepository.save(report);
+    }
 }

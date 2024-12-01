@@ -4,6 +4,9 @@ import com.example.library_management.entity.*;
 import com.example.library_management.service.*;
 import com.example.library_management.exception.ResourceNotFoundException;
 import java.util.*;
+
+import com.example.library_management.repository.ReaderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
@@ -15,10 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/reports")
 public class ReportController {
-
+    @Autowired
     private final ReportService reportService;
+    @Autowired
     private final ReaderService readerService;  // Khai báo readerService
-
+    @Autowired
+    private ReaderRepository readerRepository; 
     // Inject ReportService và ReaderService vào constructor
     public ReportController(ReportService reportService, ReaderService readerService) {
         this.reportService = reportService;
@@ -60,21 +65,27 @@ public class ReportController {
 
     // Trả lời một báo cáo (tạo báo cáo con)
     @PostMapping("/{reportId}/reply")
-    public ResponseEntity<Report> replyToReport(@PathVariable Long reportId, @RequestBody Report replyReport) {
-        try {
-            Optional<Report> parentReportOpt = reportService.getReportById(reportId);
-            if (!parentReportOpt.isPresent()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-            Report parentReport = parentReportOpt.get();
-            replyReport.setParentReportId(parentReport.getReportId());  // Liên kết với báo cáo gốc
-            Report createdReply = reportService.createReport(replyReport);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdReply);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
+    public ResponseEntity<?> replyToReport(
+            @PathVariable Long reportId,   // Get the parent report ID
+            @RequestBody ReportDTO reportDTO) {  // Receive the ReportDTO
 
+        // Fetch sender and receiver from the repository
+        Reader sender = readerRepository.findById(reportDTO.getSenderId())
+                .orElseThrow(() -> new RuntimeException("Sender not found"));
+        Reader receiver = readerRepository.findById(reportDTO.getReceiverId())
+                .orElseThrow(() -> new RuntimeException("Receiver not found"));
+
+        // Convert ReportDTO to Report entity
+        Report report = reportDTO.toReport(sender, receiver);
+
+        // Set parent report if it's a reply
+        report.setParentReportId(reportId);
+
+        // Save the report
+        reportService.saveReport(report);
+
+        return ResponseEntity.ok("Report created successfully");
+    }
     // Cập nhật trạng thái báo cáo (đánh dấu là đã đọc hay chưa đọc)
     @PutMapping("/{id}/status")
     public ResponseEntity<Report> updateReportStatus(@PathVariable Long id, @RequestBody Map<String, String> statusRequest) {
