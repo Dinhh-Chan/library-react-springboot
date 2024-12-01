@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import Modal from "../../components/Modal/Modal";
+
 
 const ManageReport = () => {
     const [reports, setReports] = useState([]);
     const [selectedReport, setSelectedReport] = useState(null);
+    const [visibleForm, setVisibleForm] = useState(true);
 
     useEffect(() => {
         // Fetch danh sách báo cáo từ API
@@ -48,28 +51,29 @@ const ManageReport = () => {
     };
 
     return (
+        <>
         <div className="form-container">
             <h1>Danh sách báo cáo</h1>
+        <div className="borrow-list">
             <ul>
                 {reports.map((report) => (
-                    <li key={report.reportId} onClick={() => handleReportClick(report.reportId)}>
+                    <li key={report.reportId} onClick={() => {handleReportClick(report.reportId);
+                        setVisibleForm(true)
+                    }}>
                         <h3>{report.title}</h3>
                         <p>{formatDate(report.createdAt)}</p> {/* Hiển thị thời gian đã format */}
                     </li>
                 ))}
             </ul>
+        </div>
 
             {/* Modal thông tin chi tiết báo cáo */}
             {selectedReport && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <span className="close-button" onClick={handleCloseModal}>
-                            &times;
-                        </span>
+                <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
                         <h2>{selectedReport.title}</h2>
                         <p><b>Nội dung:</b> {selectedReport.content}</p>
                         <p><b>Thời gian tạo:</b> {formatDate(selectedReport.createdAt)}</p> {/* Hiển thị thời gian đã format */}
-                        <div className="info-section">
+                        <div>
                             <h3>Thông tin người gửi</h3>
                             <p><b>Họ và tên:</b> {selectedReport.senderInfo?.hoVaTen}</p>
                             <p><b>Tên người dùng:</b> {selectedReport.senderInfo?.username}</p>
@@ -77,10 +81,10 @@ const ManageReport = () => {
                             <p><b>Số điện thoại:</b> {selectedReport.senderInfo?.numberPhone}</p>
                             <p><b>Ngày sinh:</b> {selectedReport.senderInfo?.dateOfBirth || "Chưa có thông tin"}</p>
                         </div>
-                    </div>
-                </div>
+                </Modal>
             )}
         </div>
+        </>
     );
 };
 

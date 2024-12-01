@@ -151,6 +151,19 @@ body {
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     height: fit-content;
+    min-width: 1000px;
+}
+
+.form-container ul{
+    list-style-type: none;
+    padding: 0;
+}
+
+.form-container li{
+    padding: 15px 40px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .form-container h1 {

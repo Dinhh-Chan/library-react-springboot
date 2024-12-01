@@ -41,14 +41,14 @@ function DropDownMenu() {
                         <Link to="/user/profile-edit" className="menuItems">Sửa hồ sơ</Link>
                     </li>
                     <li className="menuItems">
-                        <Link to="user/borrow-history" className="menuItems">Lịch sử mượn</Link>
+                        <Link to="/user/borrow-history" className="menuItems">Lịch sử mượn</Link>
                     </li>
                     <li className="menuItems">
-                        <Link to="user/change-password" className="menuItems">Đổi mật khẩu</Link>
+                        <Link to="/user/change-password" className="menuItems">Đổi mật khẩu</Link>
                     </li>
                     <hr />
                     <li className="menuItems">
-                        <Link to="user/report-lost-book" className="menuItems">Báo cáo với quản trị viên</Link>
+                        <Link to="/user/report-lost-book" className="menuItems">Báo cáo với quản trị viên</Link>
                     </li>
                     <hr/>
                     <li>
