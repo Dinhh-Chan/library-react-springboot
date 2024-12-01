@@ -5,6 +5,7 @@ const ManageReport = () => {
     const [reports, setReports] = useState([]);
     const [selectedReport, setSelectedReport] = useState(null);
     const [replyContent, setReplyContent] = useState("");
+    const [replies, setReplies] = useState([]);
 
     useEffect(() => {
         // Lấy danh sách báo cáo từ API
@@ -38,11 +39,42 @@ const ManageReport = () => {
         fetchReports();
     }, []);
 
+    // Hàm lấy các phản hồi của báo cáo
+    const fetchReplies = async (reportId) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/reports/${reportId}/replies`);
+            const data = await response.json();
+            setReplies(data);
+        } catch (error) {
+            console.error("Lỗi khi lấy phản hồi:", error);
+        }
+    };
+
+    // Hàm xóa phản hồi
+    const handleDeleteReply = async (replyId, reportId) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/reports/reply/${replyId}`, {
+                method: "DELETE",
+            });
+
+            if (response.ok) {
+                // Cập nhật lại danh sách phản hồi sau khi xóa
+                setReplies(replies.filter(reply => reply.reportId !== replyId));
+                console.log("Phản hồi đã bị xóa.");
+            } else {
+                console.error("Lỗi khi xóa phản hồi");
+            }
+        } catch (error) {
+            console.error("Lỗi khi xóa phản hồi:", error);
+        }
+    };
+
     const handleReportClick = async (reportId) => {
         try {
             const response = await fetch(`http://localhost:8080/api/reports/${reportId}`);
             const data = await response.json();
             setSelectedReport(data);
+            fetchReplies(reportId);  // Gọi hàm để lấy phản hồi của báo cáo này
         } catch (error) {
             console.error("Lỗi khi lấy chi tiết báo cáo:", error);
         }
@@ -50,6 +82,7 @@ const ManageReport = () => {
 
     const handleCloseModal = () => {
         setSelectedReport(null); // Đóng modal
+        setReplies([]); // Xóa danh sách phản hồi khi đóng modal
     };
 
     const handleReplyChange = (event) => {
@@ -85,6 +118,7 @@ const ManageReport = () => {
                 const updatedReport = await response.json();
                 setSelectedReport(updatedReport); // Update the selected report with the new reply
                 setReplyContent(""); // Clear the reply input
+                fetchReplies(reportId); // Refresh the replies after submitting a new one
             } else {
                 console.error("Lỗi khi gửi phản hồi");
             }
@@ -110,12 +144,14 @@ const ManageReport = () => {
         <div className="form-container">
             <h1>Danh sách báo cáo</h1>
             <ul>
-                {reports.map((report) => (
-                    <li key={report.reportId} onClick={() => handleReportClick(report.reportId)}>
-                        <h3>{report.title}</h3>
-                        <p>{formatDate(report.createdAt)}</p> {/* Hiển thị thời gian đã format */}
-                    </li>
-                ))}
+                {reports
+                    .filter(report => report.senderId !== 1) // Chỉ hiển thị các báo cáo gửi đến admin
+                    .map((report) => (
+                        <li key={report.reportId} onClick={() => handleReportClick(report.reportId)}>
+                            <h3>{report.title}</h3>
+                            <p>{formatDate(report.createdAt)}</p> {/* Hiển thị thời gian đã format */}
+                        </li>
+                    ))}
             </ul>
 
             {/* Modal thông tin chi tiết báo cáo */}
@@ -138,6 +174,29 @@ const ManageReport = () => {
                                     <p><b>Số điện thoại:</b> {userInfo.numberPhone}</p>
                                     <p><b>Ngày sinh:</b> {userInfo.dateOfBirth || "Chưa có thông tin"}</p>
                                 </>
+                            )}
+                        </div>
+
+                        {/* Hiển thị các phản hồi của báo cáo */}
+                        <div className="replies-section">
+                            <h3>Phản hồi:</h3>
+                            {replies.length > 0 ? (
+                                <ul>
+                                    {replies.map((reply) => (
+                                        <li key={reply.reportId}>
+                                            <p><b>{reply.title}</b></p>
+                                            <p>{reply.content}</p>
+                                            <p><i>{formatDate(reply.createdAt)}</i></p>
+                                            <p><b>Trạng thái:</b> {reply.status==="UNREAD"? "Chưa đọc":"Đã đọc"}</p>
+                                            {/* Nút xóa phản hồi */}
+                                            <button onClick={() => handleDeleteReply(reply.reportId, selectedReport.reportId)}>
+                                                Xóa
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>Không có phản hồi nào.</p>
                             )}
                         </div>
 
