@@ -49,22 +49,37 @@ const AppRoutes = ({ role }) => {
                 
                 {/* Render the iframe inside /admin/dashboard route */}
                 <Route
-                    path="dashboard"
-                    element={
-                        <div style={{ position: "relative", width: "100%", height: "100vh" }}>
-                            <iframe
-                                src="http://localhost:8088/superset/dashboard/3/?native_filters_key=b2uP4dJK338fPPyAwHd3fxSLMLSkfPnXgbuw-8a3eqYgHPw0KURyvyvjgmQr4aVg"
-                                title="Superset Dashboard"
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    border: "none",
-                                }}
-                                allowFullScreen // For full-screen functionality
-                            ></iframe>
-                        </div>
-                    }
-                />
+    path="dashboard"
+    element={
+        <div
+            style={{
+                position: "relative",
+                width: "100%",
+                height: "100vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#f4f7fa", // Màu nền nhẹ cho trang
+            }}
+        >
+            <iframe
+                src="http://localhost:8088/superset/dashboard/3"
+                title="Superset Dashboard"
+                style={{
+                    width: "1300px",
+                    height: "80vh", // Chiếm 80% chiều cao của màn hình
+                    border: "none",
+                    borderRadius: "8px", // Bo góc cho iframe
+                    boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", //
+                    // transition: "transform 0.3s ease", // Hiệu ứng khi hover
+                }}
+                onMouseEnter={(e) => (e.target.style.transform = "scale(1.02)")}
+                onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+            ></iframe>
+        </div>
+    }
+/>
+
             </Route>
                     
             {/* Các trang user */}
