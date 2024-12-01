@@ -28,13 +28,17 @@ function NavBar() {
                 // Kiểm tra xem có thông báo nào chưa đọc hay không
                 const hasUnread = userNotifications.some(notification => notification.status == "UNREAD");
                 setHasNotifications(hasUnread);
-                
+                if (hasUnread){
+                    setHasNotifications(hasUnread)}
+                else{
+                    setNotifications(false) 
+                };
             })
             .catch(error => console.error("Error fetching notifications:", error))
             .finally(console.log(userId,notifications))
-    }, [userId,notifications]); // Chạy lại khi userId thay đổi
+    }, [userId,hasNotification]); // Chạy lại khi userId thay đổi
     
-    return ( 
+    return (
         <>
             <nav className="navbar">
                 {/* Bao bọc img bằng Link để chuyển hướng về "/" */}

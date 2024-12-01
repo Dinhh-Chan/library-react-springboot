@@ -8,6 +8,8 @@ function NotificationPage() {
     const [selectedReport, setSelectedReport] = useState(null);
     const [visibleForm, setVisibleForm] = useState(true);
     const userId = localStorage.getItem("id_user");
+    const [senderId, setSenderId] = useState("")
+    const [sender, setSender] = useState([])
 
     useEffect(() => {
         // Fetch danh sách báo cáo từ API
@@ -25,12 +27,21 @@ function NotificationPage() {
         fetchReports();
     }, []);
 
+    
     const handleReportClick = async (reportId) => {
         try {
             // Lấy thông tin chi tiết của báo cáo khi click vào báo cáo
             const response = await fetch(`http://localhost:8080/api/reports/${reportId}`);
             const data = await response.json();
             setSelectedReport(data);
+            const senderId = data.senderId;
+            setSenderId(senderId);
+            if (senderId) {
+                // Fetch sender details
+                const responseReader = await fetch(`http://localhost:8080/api/readers/${senderId}`);
+                const senderData = await responseReader.json();
+                setSender(senderData);
+            }
         } catch (error) {
             console.error("Lỗi khi lấy chi tiết báo cáo:", error);
         } 
@@ -86,12 +97,12 @@ function NotificationPage() {
                         <p><b>Nội dung:</b> {selectedReport.content}</p>
                         <p><b>Thời gian tạo:</b> {formatDate(selectedReport.createdAt)}</p> {/* Hiển thị thời gian đã format */}
                         <div>
-                            <h3>Thông tin người gửi</h3>
-                            <p><b>Họ và tên:</b> {selectedReport.senderInfo?.hoVaTen}</p>
-                            <p><b>Tên người dùng:</b> {selectedReport.senderInfo?.username}</p>
-                            <p><b>Gmail:</b> {selectedReport.senderInfo?.email}</p>
-                            <p><b>Số điện thoại:</b> {selectedReport.senderInfo?.numberPhone}</p>
-                            <p><b>Ngày sinh:</b> {selectedReport.senderInfo?.dateOfBirth || "Chưa có thông tin"}</p>
+                            <h3>Thông tin người gửi {senderId}</h3>
+                            <p><b>Họ và tên:</b> {sender.hoVaTen}</p>
+                            <p><b>Tên người dùng:</b> {sender.username}</p>
+                            <p><b>Gmail:</b> {sender.email}</p>
+                            <p><b>Số điện thoại:</b> {sender.numberPhone}</p>
+                            <p><b>Ngày sinh:</b> {sender.dateOfBirth || "Chưa có thông tin"}</p>
                         </div>
                 </Modal>
             )}
