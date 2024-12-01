@@ -6,6 +6,7 @@ import "./RegisterPage.css"; // Optional, for the provided styles
 import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
+  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
   // Thêm các trường bổ sung vào state để chứa thông tin đăng ký
   const [formData, setFormData] = useState({
     username: "",
@@ -139,6 +140,7 @@ const RegisterPage = () => {
               type="date"
               name="date_of_birth"
               placeholder="Ngày sinh"
+              max={today}
               value={formData.date_of_birth}
               onChange={handleChange}
               required

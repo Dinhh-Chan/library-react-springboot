@@ -78,7 +78,7 @@ function NotificationPage() {
             <div className="borrow-list">
             <ul>
                 {reports.map((report) => (
-                    <li key={report.reportId} onClick={() => {handleReportClick(report.reportId);
+                    <li className={report.status == "UNREAD"? "Unread":"Read"} key={report.reportId} onClick={() => {handleReportClick(report.reportId);
                         setVisibleForm(true)
                     }}>
                         <h3>{report.title}</h3>
