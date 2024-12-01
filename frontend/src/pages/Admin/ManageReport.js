@@ -164,7 +164,7 @@ const ManageReport = () => {
                         <h2>{selectedReport.title}</h2>
                         <p><b>Nội dung:</b> {selectedReport.content}</p>
                         <p><b>Thời gian tạo:</b> {formatDate(selectedReport.createdAt)}</p> {/* Hiển thị thời gian đã format */}
-                        <div className="info-section">
+                        <div>
                             <h3>Thông tin người gửi</h3>
                             {userInfo && (
                                 <>
