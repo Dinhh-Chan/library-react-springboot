@@ -7,8 +7,8 @@ function NotificationPage() {
     const [selectedReport, setSelectedReport] = useState(null);
     const [visibleForm, setVisibleForm] = useState(true);
     const userId = localStorage.getItem("id_user");
-    const [senderId, setSenderId] = useState("");
-    const [sender, setSender] = useState([]);
+    const [senderId, setSenderId] = useState("")
+    const [sender, setSender] = useState([])
 
     useEffect(() => {
         // Fetch danh sách báo cáo từ API
@@ -16,11 +16,8 @@ function NotificationPage() {
             try {
                 const response = await fetch("http://localhost:8080/api/reports");
                 const data = await response.json();
-                const userNoti = data.filter((data) => data.receiverId == userId);
-
-                // Sắp xếp báo cáo, đưa báo cáo UNREAD lên đầu
-                const sortedReports = userNoti.sort((a, b) => (a.status === "UNREAD" ? -1 : 1) - (b.status === "UNREAD" ? -1 : 1));
-                setReports(sortedReports);
+                const userNoti = data.filter(data => data.receiverId == userId)
+                setReports(userNoti);
             } catch (error) {
                 console.error("Lỗi khi lấy báo cáo:", error);
             }
@@ -44,7 +41,7 @@ function NotificationPage() {
             }
         } catch (error) {
             console.error("Lỗi khi lấy chi tiết báo cáo:", error);
-        }
+        } 
 
         await fetch(`http://localhost:8080/api/reports/${reportId}/status`, {
             method: "PUT",
@@ -57,28 +54,9 @@ function NotificationPage() {
         // Update the state to reflect the "read" status
         setReports((prevReports) =>
             prevReports.map((report) =>
-                report.reportId === reportId ? { ...report, status: "READ" } : report
+                report.reportId === reportId ? { ...report, status: "Read" } : report
             )
         );
-    };
-
-    const handleDeleteReport = async (reportId) => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/reports/${reportId}`, {
-                method: "DELETE",
-            });
-
-            if (response.ok) {
-                // Cập nhật lại danh sách báo cáo sau khi xóa
-                setReports((prevReports) => prevReports.filter((report) => report.reportId !== reportId));
-                setSelectedReport(null); // Đóng modal sau khi xóa
-                console.log("Báo cáo đã bị xóa.");
-            } else {
-                console.error("Lỗi khi xóa báo cáo");
-            }
-        } catch (error) {
-            console.error("Lỗi khi xóa báo cáo:", error);
-        }
     };
 
     const formatDate = (dateString) => {
@@ -93,42 +71,40 @@ function NotificationPage() {
         return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
     };
 
-    return (
-        <>
-            <div className="form-container">
-                <h1>Thông báo</h1>
-                <div className="borrow-list">
-                    <ul>
-                        {reports.map((report) => (
-                            <li className={report.status === "UNREAD" ? "Unread" : "Read"} key={report.reportId} onClick={() => { handleReportClick(report.reportId); setVisibleForm(true); }}>
-                                <h3>{report.title}</h3>
-                                <p>{formatDate(report.createdAt)}</p> {/* Hiển thị thời gian đã format */}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+    return ( <>
+        <div className="form-container">
+            <h1>Thông báo</h1>
+            <div className="borrow-list">
+            <ul>
+                {reports.map((report) => (
+                    <li className={report.status == "Unread"? "Unread" : "Read"} key={report.reportId} onClick={() => {handleReportClick(report.reportId);
+                        setVisibleForm(true)
+                    }}>
+                        <h3>{report.title}</h3>
+                        <p>{formatDate(report.createdAt)}</p> {/* Hiển thị thời gian đã format */}
+                    </li>
+                ))}
+            </ul>
+        </div>
 
-                {/* Modal thông tin chi tiết báo cáo */}
-                {selectedReport && (
-                    <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
+            {/* Modal thông tin chi tiết báo cáo */}
+            {selectedReport && (
+                <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
                         <h2>{selectedReport.title}</h2>
                         <p><b>Nội dung:</b> {selectedReport.content}</p>
                         <p><b>Thời gian tạo:</b> {formatDate(selectedReport.createdAt)}</p> {/* Hiển thị thời gian đã format */}
                         <div>
-                            <h3>Thông tin người gửi</h3>
+                            <h3>Thông tin người gửi {senderId}</h3>
                             <p><b>Họ và tên:</b> {sender.hoVaTen}</p>
+                            <p><b>Tên người dùng:</b> {sender.username}</p>
                             <p><b>Gmail:</b> {sender.email}</p>
                             <p><b>Số điện thoại:</b> {sender.numberPhone}</p>
                             <p><b>Ngày sinh:</b> {sender.dateOfBirth || "Chưa có thông tin"}</p>
                         </div>
-
-                        {/* Nút xóa báo cáo */}
-                        <button className="DeleteButton" onClick={() => handleDeleteReport(selectedReport.reportId)}>Xóa báo cáo</button>
-                    </Modal>
-                )}
-            </div>
-        </>
-    );
+                </Modal>
+            )}
+        </div>
+    </> );
 }
 
 export default NotificationPage;

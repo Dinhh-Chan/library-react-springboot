@@ -71,7 +71,6 @@ const AppRoutes = ({ role }) => {
                     border: "none",
                     borderRadius: "8px", // Bo góc cho iframe
                     boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", //
-                    // transition: "transform 0.3s ease", // Hiệu ứng khi hover
                 }}
                 onMouseEnter={(e) => (e.target.style.transform = "scale(1.02)")}
                 onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
