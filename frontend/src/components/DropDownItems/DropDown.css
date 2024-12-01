@@ -78,3 +78,24 @@
 .logoutButton:active{
   background-color: rgba(168, 0, 0, 0.886);;
 }
+
+.siginbutton{
+  width: 100%;
+  border: none;
+  font-size: 24px;
+  background-color: rgba(57, 20, 243, 0.886);
+  color: #ffff;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  margin: 10px 0px;;
+  transition: all 0.2s ease;
+}
+
+.siginbutton{
+  background-color: rgba(29, 0, 177, 0.886);
+}
+
+.siginbutton{
+  background-color: rgba(22, 0, 129, 0.886);;
+}

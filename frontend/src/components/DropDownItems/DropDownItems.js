@@ -26,7 +26,7 @@ function DropDownMenu() {
                             <img src="https://i.imgur.com/B8ta5Aa.jpeg" alt="Profile" />
                             <h3>{fullName}</h3>
                         </>):
-                        (<button>Dang nhap</button>)}
+                        (<><button className="siginbutton" onClick={() => navigate("/login")}>Đăng nhập</button></>)}
                 </Link>
             </li>
             <hr />
@@ -58,9 +58,7 @@ function DropDownMenu() {
                     </li>
                 </>
             ) : (
-                <li className="menuItems" onClick={() => navigate("/login")}>
-                    <span>Đăng nhập</span>
-                </li>
+                <></>
             )}
             {/* Liên kết cho Admin */}
             {role === "ADMIN" && (

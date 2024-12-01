@@ -347,3 +347,30 @@
     margin: 8px 0;
 }
 
+.reply-section{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.reply-section textarea{
+    min-height: 120px;
+}
+
+.reply-section button{
+    padding: 15px 10px;
+    background-color: #0057b4;
+    color: #fff;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.reply-section button:hover{
+    background-color: #004894;
+}
+
+.reply-section button:active{
+    background-color: #002a57;
+}
+
