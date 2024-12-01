@@ -23,11 +23,9 @@ function NotificationPage() {
                 console.error("Lỗi khi lấy báo cáo:", error);
             }
         };
-
         fetchReports();
     }, []);
 
-    
     const handleReportClick = async (reportId) => {
         try {
             // Lấy thông tin chi tiết của báo cáo khi click vào báo cáo
