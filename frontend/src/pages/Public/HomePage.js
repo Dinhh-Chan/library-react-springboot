@@ -5,7 +5,7 @@ import BookDisplay from "../../components/BookDisplay/BookDisplay";
 import "./HomePage.css";
 
 function HomePage() {
-    const userName = localStorage.getItem("userName") || "";
+    const userName = localStorage.getItem("fullName") || "";
 
     return (
         <>
@@ -14,7 +14,7 @@ function HomePage() {
                 <div className="LandingPageContent">
                     <h1>Thư viện trực tuyến <br></br>cho học sinh, sinh viên</h1>
                     <p>Do sinh viên, của sinh viên, vì sinh viên</p>
-                    {userName == "" ? <></> : <h2>Xin chào {userName}</h2>}
+                    {userName == "" ? <></> : <h2>Xin chào, {userName}</h2>}
                 </div>
             </div>
             <BookDisplay /> 

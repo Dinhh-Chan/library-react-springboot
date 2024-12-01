@@ -1,7 +1,10 @@
 package com.example.library_management.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -11,8 +14,29 @@ public class Report {
 
     // Enum for Report Status (e.g., UNREAD or READ)
     public enum ReportStatus {
-        UNREAD,
-        READ
+        UNREAD("UNREAD"),
+        READ("READ");
+
+        private final String status;
+
+        ReportStatus(String status) {
+            this.status = status;
+        }
+
+        @JsonValue
+        public String getStatus() {
+            return status;
+        }
+
+        @JsonCreator
+        public static ReportStatus fromStatus(String status) {
+            for (ReportStatus reportStatus : values()) {
+                if (reportStatus.getStatus().equalsIgnoreCase(status)) {
+                    return reportStatus;
+                }
+            }
+            throw new IllegalArgumentException("Unknown status: " + status);
+        }
     }
 
     // Fields for the Report entity

@@ -2,6 +2,8 @@ package com.example.library_management.service;
 
 import com.example.library_management.entity.Report;
 import com.example.library_management.repository.ReportRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.library_management.entity.Reader;
 import java.util.List;
@@ -35,8 +37,9 @@ public class ReportService {
     public void deleteReport(Long id) {
         reportRepository.deleteById(id);
     }
-    public List<Report> getReportsByUserId(Long userId) {
-        return reportRepository.findBySenderIdOrReceiverId(userId, userId);
+    public Page<Report> getReportsByUserId(Long userId, Pageable pageable) {
+        // Call the repository's find method with pagination
+        return reportRepository.findByReceiverIdOrSenderId(userId, userId, pageable);
     }
     public List<Report> getReportsBySenderOrReceiver(Reader sender, Reader receiver) {
         return reportRepository.findBySenderOrReceiver(sender, receiver);
