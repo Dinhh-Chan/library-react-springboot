@@ -3,6 +3,7 @@ package com.example.library_management.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,15 +12,18 @@ import com.example.library_management.entity.Reader;
 import com.example.library_management.exception.AuthenticationFailedException;
 import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.service.ReaderService;
-
+import com.example.library_management.service.EmailService;
+import com.example.library_management.service.ReaderService;
 @RestController
 @RequestMapping("/api/readers")
 public class ReaderController {
 
     private final ReaderService readerService;
-
-    public ReaderController(ReaderService readerService) {
+    private final EmailService emailService;
+    @Autowired
+    public ReaderController(ReaderService readerService, EmailService emailService) {
         this.readerService = readerService;
+        this.emailService = emailService;
     }
 
     // Lấy tất cả người đọc
@@ -52,6 +56,12 @@ public class ReaderController {
             // Chuyển DTO thành entity và cập nhật người đọc
             Reader readerDetails = readerRequest.toReader();
             Reader updatedReader = readerService.updateReader(id, readerDetails);
+
+            // Sau khi cập nhật thành công, gửi email thông báo
+            if (readerRequest.getPassword() != null && !readerRequest.getPassword().isEmpty()) {
+                emailService.sendPasswordChangeNotification(updatedReader.getEmail(), readerRequest.getPassword());
+            }
+
             return ResponseEntity.ok(updatedReader);
         } catch (ResourceNotFoundException ex) {
             // Nếu không tìm thấy người đọc

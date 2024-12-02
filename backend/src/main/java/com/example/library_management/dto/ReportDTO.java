@@ -61,15 +61,22 @@ public class ReportDTO {
         this.parentReportId = parentReportId;
     }
 
-    // Method to convert ReportDTO to Report entity
     public Report toReport(Reader sender, Reader receiver) {
         Report report = new Report();
-        report.setSender(sender);         // Set the sender as the Reader object
-        report.setReceiver(receiver);     // Set the receiver as the Reader object
-        report.setContent(this.content);  // Set the content of the report
-        report.setTitle(this.title);      // Set the title of the report
-        report.setStatus(Report.ReportStatus.valueOf(this.status));  // Convert string status to ReportStatus enum
-        report.setParentReportId(this.parentReportId);  // If it's a reply, set the parent report ID
+        report.setSender(sender);
+        report.setReceiver(receiver);
+        report.setContent(this.content);
+        report.setTitle(this.title);
+    
+        try {
+            // Convert string status to enum, add a check to ensure the status is valid
+            report.setStatus(Report.ReportStatus.valueOf(this.status));
+        } catch (IllegalArgumentException e) {
+            // Handle invalid status, you could set a default value or throw an exception
+            throw new IllegalArgumentException("Invalid status value: " + this.status);
+        }
+    
+        report.setParentReportId(this.parentReportId);
         return report;
     }
 }

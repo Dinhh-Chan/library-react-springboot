@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 import com.example.library_management.dto.BorrowingLimitResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,10 +20,12 @@ import com.example.library_management.service.BorrowingService;
 import com.example.library_management.service.ReaderService;
 import com.example.library_management.service.BookService;
 import com.example.library_management.exception.ResourceNotFoundException;
-
+import com.example.library_management.service.EmailService;
 @RestController
 @RequestMapping("/api/borrowings")
 public class BorrowingController {
+    @Autowired
+    private EmailService emailService;
     public class ErrorResponse {
         private String message;
     
@@ -137,12 +141,33 @@ public class BorrowingController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Endpoint để admin duyệt đơn mượn
     @PostMapping("/{id}/approve")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BorrowingResponse> approveBorrowing(@PathVariable Long id) {
         Borrowing approvedBorrowing = borrowingService.approveBorrowing(id);
         BorrowingResponse response = BorrowingResponse.fromEntity(approvedBorrowing);
+    
+        // Lấy thông tin người mượn và sách từ Borrowing
+        Reader reader = approvedBorrowing.getReader();
+        String email = reader.getEmail();
+        String fullName = reader.getHoVaTen();
+        String bookTitle = approvedBorrowing.getBook().getTitle();
+        String borrowDate = approvedBorrowing.getBorrowDate().toString();
+        String returnDate = approvedBorrowing.getReturnDate().toString();
+    
+        // Nội dung email
+        String emailSubject = "Đơn mượn sách đã được duyệt";
+        String emailBody = "<h3>Chào " + fullName + ",</h3>"
+                         + "<p>Đơn mượn sách của bạn đã được duyệt thành công.</p>"
+                         + "<p><strong>Thông tin sách:</strong></p>"
+                         + "<p>Tiêu đề: " + bookTitle + "</p>"
+                         + "<p>Ngày mượn: " + borrowDate + "</p>"
+                         + "<p>Ngày trả dự kiến: " + returnDate + "</p>"
+                         + "<p>Chúc bạn đọc sách vui vẻ!</p>";
+    
+        // Gửi email
+        emailService.sendEmail(email, emailSubject, emailBody);
+    
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

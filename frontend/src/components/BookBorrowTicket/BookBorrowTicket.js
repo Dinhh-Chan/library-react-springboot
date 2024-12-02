@@ -47,36 +47,36 @@ function BorrowBookTicket() {
             navigate("/login");
             return;
         }
-
+    
         // Check borrow limit before proceeding
         if (borrowLimit >= 10) {
             alert("Bạn không thể mượn thêm sách. Vui lòng trả lại sách trước khi mượn thêm.");
             return;
         }
-
+    
         const borrowDate = new Date().toISOString().split("T")[0]; // Ngày mượn hiện tại
         const returnDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]; // Ngày trả dự kiến (14 ngày sau)
-
+    
         try {
             console.log(readerId, book.id, borrowDate, returnDate);
             const response = await axios.post("http://localhost:8080/api/borrowings", {
                 readerId,
                 bookId: book.id,
+                borrowDate,  // Thêm thông tin ngày mượn
+                returnDate,  // Thêm thông tin ngày trả dự kiến
             });
-
+    
             if (response.status === 201) {
                 alert("Đơn mượn của bạn đã được gửi đi và chờ duyệt");
-                navigate("/"); 
+    
+                // Reload lại trang sau khi duyệt đơn
+                navigate(0); // `navigate(0)` sẽ reload lại trang hiện tại
             }
         } catch (error) {
             console.error("Lỗi khi mượn sách:", error);
             alert("Không thể mượn sách. Vui lòng thử lại sau.");
         }
     };
-
-    if (!book) {
-        return <div>Không có thông tin sách để hiển thị.</div>;
-    }
 
     return (
         <>

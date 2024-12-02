@@ -136,7 +136,7 @@ public class BorrowingService {
     public boolean isLimitReached(Long readerId) {
         // Kiểm tra số lượng đơn mượn của người dùng có status "DANG_MUON", "DA_TRA" và "QUA_HAN"
         long total = borrowingRepository.countByReaderIdAndStatusIn(readerId, 
-                Arrays.asList(BorrowingStatus.DANG_MUON, BorrowingStatus.DA_TRA, BorrowingStatus.QUA_HAN));
+                Arrays.asList(BorrowingStatus.DANG_MUON, BorrowingStatus.QUA_HAN));
         return total >= 10;  // Kiểm tra xem có hơn 10 đơn hay không
     }
     public BorrowingLimitResponse getBorrowLimit(Long readerId) {

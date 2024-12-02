@@ -381,3 +381,45 @@
 .form-container .Read{
     background-color: #80ef80;
 }
+
+.ViewButton{
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    background-color: rgb(0, 194, 0);
+    color: white;
+    border: none;
+    cursor: pointer;
+    justify-content: center;
+    align-self:center;
+    transition: all 00.2s ease;
+}
+
+.ViewButton:hover{
+    background-color: rgb(0, 150, 0);
+}
+
+.ViewButton:active{
+    background-color: rgb(0, 104, 0);
+}
+
+.UpdateButtonManageUser{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    background-color: #555555c8;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.UpdateButtonManageUser:hover{
+    background-color: #555;
+}
+
+.UpdateButtonManageUser:active{
+    background-color: #383838;
+}

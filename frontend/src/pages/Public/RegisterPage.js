@@ -131,7 +131,7 @@ const RegisterPage = () => {
             <input
               type="text"
               name="contactInfo"
-              placeholder="Thông tin liên lạc"
+              placeholder="Số điện thoại"
               value={formData.contactInfo}
               onChange={handleChange}
               required

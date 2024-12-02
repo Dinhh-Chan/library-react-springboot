@@ -52,10 +52,10 @@ class Category(Base):
 # Cấu hình cơ sở dữ liệu
 DATABASE = {
     'drivername': 'postgresql+psycopg',
-    'username': 'postgres',
-    'password': '',
+    'username': 'library_user',
+    'password': 'library_pass',
     'host': 'localhost',  # Hoặc địa chỉ IP của container Docker nếu cần
-    'port': '5432',
+    'port': '5433',
     'database': 'library_management'
 }
 
@@ -96,12 +96,12 @@ def generate_bio():
     return random.choice(bios)
 
 # Đường dẫn đến tệp CSV
-csv_file_path = 'C:/Users/ADMIN/Documents/semester 3/lapTrinhWeb/git dinhchan/library-react-springboot/data/data.csv'
+csv_file_path = '/home/dinhchan/Documents/project/library-react-springboot/data_modified.csv'
 
 # Đọc dữ liệu CSV
 with open(csv_file_path, 'r', encoding='utf-8') as f:
     reader = csv.DictReader(f)
-    books_data = list(reader) # Lấy 50 cuốn sách đầu tiên
+    books_data = list(reader)[:1000] # Lấy 50 cuốn sách đầu tiên
 
 # Thu thập danh sách độc giả và thể loại duy nhất
 authors_dict = {}
@@ -162,7 +162,7 @@ for row in books_data:
     
     # Tạo đối tượng Book
     try:
-        published_year = int(float(row['published_year']))
+        published_year = int(float(row['published_years']))
     except ValueError:
         published_year = 2023  # Hoặc đặt một giá trị mặc định khác
     
