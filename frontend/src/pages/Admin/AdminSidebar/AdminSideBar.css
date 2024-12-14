@@ -1,10 +1,17 @@
 .AdminWrapper{
-    margin-top: 20px;
+    margin-top: 50px;
     display: flex;
-    gap: 300px;
-    margin-right: 30px;
+    justify-content: center;
+    padding:  0 10vh;
 }
 
+.admin-sidebar-content{
+    width: max-content;
+}
+
+.admin-sidebar-wrapper{
+    width: 280px;
+}
 
 .AdminMenu{
     width: 280px;
@@ -24,6 +31,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+    gap: 10px;
 }
 
 
@@ -62,7 +70,6 @@
 
 .Borrow-history-header h1{
     width: 600px;
-    
 }
 
 .DeleteButton{
@@ -217,7 +224,17 @@
 .searchBarAdminWrapper {
     display: flex;
     align-items: center;
-    gap: 10px;
+    font-size: 26px;
+}
+
+.searchBarAdminWrapper input{
+    padding: 10px 25px;
+    font-size: 14px;
+}
+
+.SearchBarAdminButton{
+    padding: 10px 25px;
+    font-size: 14px;
 }
 
 .edit-form  input{
@@ -246,4 +263,163 @@
 
 .CancelButton:active{
     background-color: rgb(146, 0, 0);;
+}
+
+.borrow-actions{
+    align-content: center;
+}
+
+.accept-borrow-button{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    border: none;
+    background-color: rgb(0, 216, 0);
+    color: #fff;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.accept-borrow-button:hover{
+    background-color: rgb(0, 177, 0);
+}
+
+.accept-borrow-button:active{
+    background-color: rgb(0, 177, 0);;
+}
+
+/* Tạo hiệu ứng nền mờ khi mở modal */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền mờ */
+    z-index: 9999;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Cửa sổ nội dung của modal */
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 800px;
+    max-height: 80%;
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+/* Nút đóng ở góc trên bên phải */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+}
+
+.close-button:hover {
+    color: #f00;
+}
+
+/* Định dạng các phần tử thông tin người gửi */
+.info-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.info-section p {
+    margin: 8px 0;
+}
+
+.reply-section{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.reply-section textarea{
+    min-height: 120px;
+}
+
+.reply-section button{
+    padding: 15px 10px;
+    background-color: #0057b4;
+    color: #fff;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.reply-section button:hover{
+    background-color: #004894;
+}
+
+.reply-section button:active{
+    background-color: #002a57;
+}
+
+.form-container .Unread{
+    background-color: #FF5733;
+}
+
+.form-container .Read{
+    background-color: #80ef80;
+}
+
+.ViewButton{
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    background-color: rgb(0, 194, 0);
+    color: white;
+    border: none;
+    cursor: pointer;
+    justify-content: center;
+    align-self:center;
+    transition: all 00.2s ease;
+}
+
+.ViewButton:hover{
+    background-color: rgb(0, 150, 0);
+}
+
+.ViewButton:active{
+    background-color: rgb(0, 104, 0);
+}
+
+.UpdateButtonManageUser{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: fit-content;
+    background-color: #555555c8;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.UpdateButtonManageUser:hover{
+    background-color: #555;
+}
+
+.UpdateButtonManageUser:active{
+    background-color: #383838;
 }

@@ -1,9 +1,10 @@
 .footerWraper{
-    background-color: #4867c3;
+    background-color: #2A2631;
     width: auto;
     color: #fff;
     padding: 2rem 5%;
     min-height: 100px;
+    margin-top: 100px;
 }
 
 .teamMember{

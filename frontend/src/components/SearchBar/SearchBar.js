@@ -56,13 +56,12 @@ const SearchBar = () => {
           placeholder="Tìm kiếm sách"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        ></input>
         <button className="SearchBarButton">
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </button>
       </div>
 
-      {isLoading && <div>Đang tìm kiếm...</div>}
       {error && <div>{error}</div>}
 
       {searchTerm && (
@@ -70,7 +69,7 @@ const SearchBar = () => {
           {filteredItems.length > 0 ? (
             filteredItems.map((item) => (
               <li key={item.id} onClick={() => handleItemClick(item.id)}>
-                {item.title} - {item.publishedYear}
+                {item.title}
               </li>
             ))
           ) : (

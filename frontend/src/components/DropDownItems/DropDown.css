@@ -1,64 +1,101 @@
 .dropDownMenu{
-    list-style-type: none;
-    background-color: #ffff;
-    padding: 1rem 2rem;
-    position: fixed;
-    top: 8vh;
-    left: 73%;
-    border-radius: 20px;
-    width: 12rem;
-    border: 1px solid gray;
-    z-index: 11;
+  border-radius: 2;
+  list-style-type: none;
+  background-color: #ffff;
+  padding: 1rem;
+  position: fixed;
+  top: 8.5vh; 
+  right: 10%;
+  width: 15rem;
+  border: 1px solid gray;
+  z-index: 11;
+  animation: fade-in 0.2s ease forwards;
+  box-shadow: 2px 4px 8px 0 rgba(189, 189, 189, 0.2);
 }
 
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+ }
+
 .menuItems{
-    padding: 10px 5px;
-    color: black;
-    text-decoration: none;
-    border-radius: 10px;
+  padding: 10px 5px;
+  color: black;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: all 0.2s ease;
 }
 
 .menuItems:hover{
-    background-color: #d8d8d8;
+  background-color: #d8d8d8;
+  
 }
 
 .menuItems:first-child{
-    padding-top: 10px;
+  padding-top: 10px;
 }
 
-.menuItems img{
-    height: 40px;
-    width: 40px;
-    border-radius: 100%;
+.NavBarProfile img{
+  height: 60px;
+  width: 60px;
+  border-radius: 100%;
 }
 
 .NavBarProfile{
-    display: flex;
-    width: fit-content;
-    align-items: center;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+  justify-content: left;
+  padding: 10px 0;
+  gap: 10px;
 }
 
 .NavBarProfile h3{
-    justify-items: center;
-    margin-left: 10px;
+  justify-items: center;
+  text-decoration: none;
+  font-size: 24px;
 }
 
 .logoutButton{
-    width: 100%;
-    border: none;
-    font-size: 24px;
-    background-color: rgba(243, 20, 20, 0.886);
-    color: #ffff;
-    border-radius: 10px;
-    padding: 10px;
-    text-align: center;
-    margin: 10px 0px;;
+  width: 100%;
+  border: none;
+  font-size: 24px;
+  background-color: rgba(243, 20, 20, 0.886);
+  color: #ffff;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  margin: 10px 0px;;
+  transition: all 0.2s ease;
 }
 
 .logoutButton:hover{
-    background-color: rgba(212, 0, 0, 0.886);
+  background-color: rgba(212, 0, 0, 0.886);
 }
 
 .logoutButton:active{
-    background-color: rgba(168, 0, 0, 0.886);;
+  background-color: rgba(168, 0, 0, 0.886);;
+}
+
+.siginbutton{
+  width: 100%;
+  border: none;
+  font-size: 24px;
+  background-color: rgba(57, 20, 243, 0.886);
+  color: #ffff;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  margin: 10px 0px;;
+  transition: all 0.2s ease;
+}
+
+.siginbutton{
+  background-color: rgba(29, 0, 177, 0.886);
+}
+
+.siginbutton{
+  background-color: rgba(22, 0, 129, 0.886);;
 }

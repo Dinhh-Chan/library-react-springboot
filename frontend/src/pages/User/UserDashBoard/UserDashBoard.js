@@ -6,7 +6,7 @@ import Footer from "../../../components/Footer/Footer";
 
 const UserDashboard = () => {
   const userId = localStorage.getItem("id_user");
-  const userName = localStorage.getItem("userName");
+  const fullName = localStorage.getItem("fullName");
 
   return (
 <>
@@ -15,14 +15,16 @@ const UserDashboard = () => {
       <div className="sidebar">
         <div className="user-info">
           <div className="avatar"></div>
-            <p>UserName: {userName}</p>
+            <p>{fullName}</p>
                 <p className="user-id">ID: {userId}</p>
               </div>
                 <div className="menu">
-                  <Link to="" className="UserProfileLink" ></Link>
                   <Link to="profile-edit" className="UserProfileLink">Sửa Hồ Sơ</Link>
                   <Link to="borrow-history" className="UserProfileLink">Lịch Sử Mượn Sách</Link>
                   <Link to="change-password" className="UserProfileLink">Đổi Mật Khẩu</Link>
+                  <Link to="notification" className="UserProfileLink">Thông báo</Link>
+                  {/* <Link to="report-lost-book" className="UserProfileLink">Báo cáo mất sách</Link> */}
+                  <Link to="report-lost-book" className="UserProfileLink">Báo cáo với quản trị viên</Link>
                 </div>
         </div>
       <Outlet/>

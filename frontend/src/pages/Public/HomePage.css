@@ -8,7 +8,8 @@
 
 .LandingPageContent{
     color: #fff;
-    margin:0;
+    margin:20px 0;
+    margin-bottom: 100px;
     padding: 100px 100px 200px 100px;
     background-color: rgba(0, 5, 32, 0.568);
 }

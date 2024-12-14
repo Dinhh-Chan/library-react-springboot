@@ -6,6 +6,7 @@ function DropDownMenu() {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
+    const fullName =localStorage.getItem("fullName");
 
     // Hàm xử lý khi nhấn vào nút Đăng Xuất
     const handleLogout = () => {
@@ -16,11 +17,16 @@ function DropDownMenu() {
     };
 
     return (
+
         <ul className="dropDownMenu">
             <li className="menuItems" >
                 <Link to="/user" className="NavBarProfile">
-                    <img src="https://i.imgur.com/B8ta5Aa.jpeg" alt="Profile" />
-                    <h3>Tài khoản</h3>
+                    {role === "USER" ?
+                       (<>
+                            <img src="https://i.imgur.com/B8ta5Aa.jpeg" alt="Profile" />
+                            <h3>{fullName}</h3>
+                        </>):
+                        (<><button className="siginbutton" onClick={() => navigate("/login")}>Đăng nhập</button></>)}
                 </Link>
             </li>
             <hr />
@@ -35,12 +41,16 @@ function DropDownMenu() {
                         <Link to="/user/profile-edit" className="menuItems">Sửa hồ sơ</Link>
                     </li>
                     <li className="menuItems">
-                        <Link to="user/borrow-history" className="menuItems">Lịch sử mượn</Link>
+                        <Link to="/user/borrow-history" className="menuItems">Lịch sử mượn</Link>
                     </li>
                     <li className="menuItems">
-                        <Link to="user/change-password" className="menuItems">Đổi mật khẩu</Link>
+                        <Link to="/user/change-password" className="menuItems">Đổi mật khẩu</Link>
                     </li>
                     <hr />
+                    <li className="menuItems">
+                        <Link to="/user/report-lost-book" className="menuItems">Báo cáo với quản trị viên</Link>
+                    </li>
+                    <hr/>
                     <li>
                         <button className="logoutButton" onClick={handleLogout}>
                             Đăng xuất
@@ -48,9 +58,7 @@ function DropDownMenu() {
                     </li>
                 </>
             ) : (
-                <li className="menuItems" onClick={() => navigate("/login")}>
-                    <span>Đăng nhập</span>
-                </li>
+                <></>
             )}
             {/* Liên kết cho Admin */}
             {role === "ADMIN" && (

@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./CategoriesList.css";
 import CategoryCard from "./CategoryCard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGreaterThan, faLessThan } from "@fortawesome/free-solid-svg-icons";
 
 const CategoriesList = () => {
     const [categories, setCategories] = useState([]);
@@ -31,16 +33,23 @@ const CategoriesList = () => {
         navigate(`/categories/${categoryId}`);
     };
 
-    const handlePageChange = (page) => {
-        if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page);
-        }
+
+    const handlePageChange = (newPage) => {
+        if (newPage < 1) newPage = 1; // Tránh chuyển đến trang nhỏ hơn 1
+        if (newPage > totalPages) newPage = totalPages; // Tránh chuyển đến trang lớn hơn tổng số trang
+        setCurrentPage(newPage);
     };
+    
+    // Nút "Trang đầu", "Trang cuối", "Trang trước", "Trang sau"
+    const goToFirstPage = () => handlePageChange(1);
+    const goToLastPage = () => handlePageChange(totalPages);
+    const goToPreviousPage = () => handlePageChange(currentPage - 1);
+    const goToNextPage = () => handlePageChange(currentPage + 1);
 
     return (
         <>
         <div className="categories-list">
-            <h2>Categories</h2>
+            <h2>Các thể loại sách</h2>
             <hr />
             <div className="categories-list-content">
                 <ul>
@@ -55,16 +64,12 @@ const CategoriesList = () => {
                 </ul>
             </div>
             <div className="pagination">
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index + 1}
-                        onClick={() => handlePageChange(index + 1)}
-                        className={currentPage === index + 1 ? "active" : ""}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-            </div>
+                    <button className="active" onClick={goToFirstPage}>Trang đầu</button>
+                    <button  onClick={goToPreviousPage}><FontAwesomeIcon icon={faLessThan}></FontAwesomeIcon></button>
+                    <span>{`Trang ${currentPage} / ${totalPages}`}</span>
+                    <button  onClick={goToNextPage}><FontAwesomeIcon icon={faGreaterThan}></FontAwesomeIcon></button>
+                    <button className="active" onClick={goToLastPage}>Trang cuối</button>
+                </div>
         </div>
     </>
     );

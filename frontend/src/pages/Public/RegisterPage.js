@@ -6,6 +6,7 @@ import "./RegisterPage.css"; // Optional, for the provided styles
 import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
+  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
   // Thêm các trường bổ sung vào state để chứa thông tin đăng ký
   const [formData, setFormData] = useState({
     username: "",
@@ -14,6 +15,9 @@ const RegisterPage = () => {
     contactInfo: "",
     quota: 10, // Mặc định là 10
     role: "USER", // Mặc định là "USER"
+    date_of_birth: "",
+    ho_va_ten: "",
+    email:"",
   });
   const [errors, setErrors] = useState({
     password: "",
@@ -69,13 +73,17 @@ const RegisterPage = () => {
       const payload = {
         username: formData.username,
         password: formData.password,
-        contactInfo: formData.contactInfo,
+        numberPhone: formData.contactInfo,
         quota: formData.quota,
         role: formData.role,
+        hoVaTen: formData.ho_va_ten,
+        email: formData.email,
+        dateOfBirth:formData.date_of_birth,
       };
       await axios.post("http://localhost:8080/api/readers", payload);
 
       // Nếu thành công, thông báo người dùng
+      alert("Đăng kí thành công!");
       navigate("/login");
     } catch (error) {
       // Nếu có lỗi, thông báo cho người dùng
@@ -98,6 +106,14 @@ const RegisterPage = () => {
           <form onSubmit={handleSubmit}>
             <input
               type="text"
+              name="ho_va_ten"
+              placeholder="Họ và tên"
+              value={formData.ho_va_ten}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
               name="username"
               placeholder="Tên đăng nhập"
               value={formData.username}
@@ -106,9 +122,26 @@ const RegisterPage = () => {
             />
             <input
               type="text"
+              name="email"
+              placeholder="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
               name="contactInfo"
-              placeholder="Thông tin liên lạc"
+              placeholder="Số điện thoại"
               value={formData.contactInfo}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="date"
+              name="date_of_birth"
+              placeholder="Ngày sinh"
+              max={today}
+              value={formData.date_of_birth}
               onChange={handleChange}
               required
             />
@@ -129,6 +162,7 @@ const RegisterPage = () => {
               onChange={handleChange}
               required
             />
+            
             {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
             <div className="actions">
               <a href="/login">Đăng nhập</a>

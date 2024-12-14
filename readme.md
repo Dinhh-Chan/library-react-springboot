@@ -32,6 +32,11 @@ Then we can use docker-compose to create all containers needed for Apache Supers
 ```
 docker compose -f docker-compose-non-dev.yml up -d 
 ```
+or 
+```
+export TAG=3.1.1
+docker compose -f docker-compose-image-tag.yml up
+```
 Now you can go to localhost:8088 on your browser, and login with the safest duo ever (admin as user, and admin as passoword)
 ### Run docker-compose 
 After clone Apache Superset, go to folder Thuvienv1 run this command to start container docker postgres: 

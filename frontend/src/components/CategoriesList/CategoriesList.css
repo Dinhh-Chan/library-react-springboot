@@ -19,6 +19,7 @@
 
 .pagination {
   text-align: center;
+  margin-top: 30px;
 }
 
 .pagination button {
@@ -32,7 +33,7 @@
 }
 
 .pagination button.active {
-  background-color: #bbb;
+  background-color: #2A2631;
   font-weight: bold;
 }
 
@@ -41,5 +42,5 @@
 }
 
 .categories-list-content{
-  min-height: 1600px;
+  min-height: max-content;
 }

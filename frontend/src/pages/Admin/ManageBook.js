@@ -1,4 +1,4 @@
-import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faGreaterThan, faLessThan, faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -22,6 +22,8 @@ function ManageBooks() {
         authorIds: [],
     });
     const [searchQuery, setSearchQuery] = useState("");
+    
+
 
     // Fetch books from API
     useEffect(() => {
@@ -87,10 +89,6 @@ function ManageBooks() {
         }
     };
     
-    
-    
-    
-
     const deleteBook = async (id) => {
         if (!window.confirm("Bạn có chắc chắn muốn xóa sách này?")) return;
         try {
@@ -138,13 +136,37 @@ function ManageBooks() {
             alert("Không thể tải thông tin sách. Vui lòng thử lại.");
         }
     };
-    
-    
-    
-    
+
+    // Lọc sách theo từ khóa tìm kiếm
     const filteredBooks = books.filter((book) =>
         book.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+
+    // Trạng thái phân trang
+    const [currentPage, setCurrentPage] = useState(1);
+    const [booksPerPage] = useState(5); // Hiển thị 5 sách mỗi trang
+    // Tính toán sách cần hiển thị trên mỗi trang
+    const indexOfLastBook = currentPage * booksPerPage;
+    const indexOfFirstBook = indexOfLastBook - booksPerPage;
+    const currentBooks = filteredBooks.slice(indexOfFirstBook, indexOfLastBook);
+
+    // Thêm các nút phân trang
+    const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+
+    const handlePageChange = (newPage) => {
+        if (newPage < 1) newPage = 1; // Tránh chuyển đến trang nhỏ hơn 1
+        if (newPage > totalPages) newPage = totalPages; // Tránh chuyển đến trang lớn hơn tổng số trang
+        setCurrentPage(newPage);
+    };
+    
+    // Nút "Trang đầu", "Trang cuối", "Trang trước", "Trang sau"
+    const goToFirstPage = () => handlePageChange(1);
+    const goToLastPage = () => handlePageChange(totalPages);
+    const goToPreviousPage = () => handlePageChange(currentPage - 1);
+    const goToNextPage = () => handlePageChange(currentPage + 1);
+
+
 
     return (
         <>
@@ -187,11 +209,12 @@ function ManageBooks() {
                         </button>
                     </div>
                 </div>
+
                 <div className="borrow-list">
-                    {filteredBooks.length === 0 ? (
+                    {currentBooks.length === 0 ? (
                         <p className="empty-history">Không tìm thấy sách nào.</p>
                     ) : (
-                        filteredBooks.map((book) => (
+                        currentBooks.map((book) => (
                             <div key={book.id} className="borrow-item">
                                 <img
                                     src={book.linkFile}
@@ -220,6 +243,14 @@ function ManageBooks() {
                         ))
                     )}
                 </div>
+                <div className="pagination">
+                    <button className="active" onClick={goToFirstPage}>Trang đầu</button>
+                    <button onClick={goToPreviousPage}><FontAwesomeIcon icon={faLessThan}></FontAwesomeIcon></button>
+                    <span>{`Trang ${currentPage} / ${totalPages}`}</span>
+                    <button onClick={goToNextPage}><FontAwesomeIcon icon={faGreaterThan}></FontAwesomeIcon></button>
+                    <button className="active" onClick={goToLastPage}>Trang cuối</button>
+                </div>
+
             </div>
         </>
     );

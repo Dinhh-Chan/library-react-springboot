@@ -40,15 +40,26 @@ public class ReaderService {
     }
 
     // Cập nhật người đọc
-    public Reader updateReader(Long id, Reader readerDetails){
+    public Reader updateReader(Long id, Reader readerDetails) {
         return readerRepository.findById(id).map(reader -> {
-            reader.setContactInfo(readerDetails.getContactInfo());
+            // Cập nhật thông tin liên lạc trực tiếp
+            if (readerDetails.getNumberPhone() != null) {
+                reader.setNumberPhone(readerDetails.getNumberPhone());
+            }
+            if (readerDetails.getEmail() != null) {
+                reader.setEmail(readerDetails.getEmail());
+            }
+    
             reader.setQuota(readerDetails.getQuota());
             reader.setUsername(readerDetails.getUsername());
-            if(readerDetails.getPassword() != null && !readerDetails.getPassword().isEmpty()){
+    
+            // Cập nhật mật khẩu nếu có
+            if (readerDetails.getPassword() != null && !readerDetails.getPassword().isEmpty()) {
                 reader.setPassword(passwordEncoder.encode(readerDetails.getPassword()));
             }
+    
             reader.setRole(readerDetails.getRole());
+    
             // Cập nhật các thuộc tính khác nếu cần
             return readerRepository.save(reader);
         }).orElseThrow(() -> new ResourceNotFoundException("Reader not found with id " + id));
