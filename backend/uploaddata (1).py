@@ -84,8 +84,8 @@ class Reader(Base):
 # Kết nối đến PostgreSQL
 DATABASE = {
     'drivername': 'postgresql+psycopg2',
-    'username': 'library_user',
-    'password': 'library_pass',
+    'username': 'posgres',
+    'password': '',
     'host': 'localhost',  # Hoặc địa chỉ IP của container Docker nếu cần
     'port': '54338',
     'database': 'library_management'

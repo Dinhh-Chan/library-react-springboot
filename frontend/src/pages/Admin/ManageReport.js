@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Modal from "../../components/Modal/Modal";
 
 const ManageReport = () => {
     const [userInfo, setUserInfo] = useState(null);
@@ -6,6 +7,7 @@ const ManageReport = () => {
     const [selectedReport, setSelectedReport] = useState(null);
     const [replyContent, setReplyContent] = useState("");
     const [replies, setReplies] = useState([]);
+    const [visibleForm, setVisibleForm] = useState(true);
 
     useEffect(() => {
         // Lấy danh sách báo cáo từ API
@@ -78,6 +80,20 @@ const ManageReport = () => {
         } catch (error) {
             console.error("Lỗi khi lấy chi tiết báo cáo:", error);
         }
+        await fetch(`http://localhost:8080/api/reports/${reportId}/status`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ status: "READ" }),
+        });
+
+        // Update the state to reflect the "read" status
+        setReports((prevReports) =>
+            prevReports.map((report) =>
+                report.reportId === reportId ? { ...report, status: "READ" } : report
+            )
+        );
     };
 
     const handleCloseModal = () => {
@@ -141,13 +157,16 @@ const ManageReport = () => {
     };
 
     return (
+
         <div className="form-container">
             <h1>Danh sách báo cáo</h1>
             <ul>
                 {reports
                     .filter(report => report.senderId !== 1) // Chỉ hiển thị các báo cáo gửi đến admin
                     .map((report) => (
-                        <li className={report.status == "READ"? "Read": "Unread"} key={report.reportId} onClick={() => handleReportClick(report.reportId)}>
+                        <li className={report.status == "UNREAD"? "Unread": "Read"} key={report.reportId} onClick={() => {handleReportClick(report.reportId)
+                            setVisibleForm(true)
+                        }}>
                             <h3>{report.title}</h3>
                             <p>{formatDate(report.createdAt)}</p> {/* Hiển thị thời gian đã format */}
                         </li>
@@ -156,11 +175,8 @@ const ManageReport = () => {
 
             {/* Modal thông tin chi tiết báo cáo */}
             {selectedReport && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <span className="close-button" onClick={handleCloseModal}>
-                            &times;
-                        </span>
+                <Modal onClose={() => setVisibleForm(false)} isOpen={visibleForm}>
+
                         <h2>{selectedReport.title}</h2>
                         <p><b>Nội dung:</b> {selectedReport.content}</p>
                         <p><b>Thời gian tạo:</b> {formatDate(selectedReport.createdAt)}</p> {/* Hiển thị thời gian đã format */}
@@ -189,7 +205,7 @@ const ManageReport = () => {
                                             <p><i>{formatDate(reply.createdAt)}</i></p>
                                             <p><b>Trạng thái:</b> {reply.status==="UNREAD"? "Chưa đọc":"Đã đọc"}</p>
                                             {/* Nút xóa phản hồi */}
-                                            <button onClick={() => handleDeleteReply(reply.reportId, selectedReport.reportId)}>
+                                            <button className="DeleteButton" onClick={() => handleDeleteReply(reply.reportId, selectedReport.reportId)}>
                                                 Xóa
                                             </button>
                                         </li>
@@ -214,8 +230,7 @@ const ManageReport = () => {
                                 </button>
                             </div>
                         )}
-                    </div>
-                </div>
+                </Modal>
             )}
         </div>
     );

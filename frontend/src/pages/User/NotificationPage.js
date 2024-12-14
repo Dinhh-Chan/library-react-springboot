@@ -54,7 +54,7 @@ function NotificationPage() {
         // Update the state to reflect the "read" status
         setReports((prevReports) =>
             prevReports.map((report) =>
-                report.reportId === reportId ? { ...report, status: "Read" } : report
+                report.reportId === reportId ? { ...report, status: "READ" } : report
             )
         );
     };
@@ -77,9 +77,9 @@ function NotificationPage() {
             <div className="borrow-list">
             <ul>
                 {reports.map((report) => (
-                    <li className={report.status == "Unread"? "Unread" : "Read"} key={report.reportId} onClick={() => {handleReportClick(report.reportId);
-                        setVisibleForm(true)
-                    }}>
+                    <li className={report.status == "UNREAD"? "Unread" : "Read"} key={report.reportId} 
+                        onClick={() => {handleReportClick(report.reportId);
+                            setVisibleForm(true)}}>
                         <h3>{report.title}</h3>
                         <p>{formatDate(report.createdAt)}</p> {/* Hiển thị thời gian đã format */}
                     </li>
