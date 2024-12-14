@@ -80,6 +80,9 @@ const LoginPage = () => {
                         Đăng ký tại đây
                     </a>
                 </p>
+                <p>
+                    Quên mật khẩu
+                </p>
             </div>
             </div>
         </div>
