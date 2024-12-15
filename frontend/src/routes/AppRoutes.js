@@ -20,6 +20,7 @@ import ManageCategory from '../pages/Admin/ManageCategory';
 import BooksByCategory from "../components/CategoriesList/BookByCategory";
 import ManageReport from '../pages/Admin/ManageReport';
 import NotificationPage from "../pages/User/NotificationPage";
+import ChatBot from "../pages/User/ChatBot";
 
 const AppRoutes = ({ role }) => {
     return (
@@ -104,6 +105,7 @@ const AppRoutes = ({ role }) => {
                 <Route path="borrow-history" element={<BorrowHistory />} />
                 <Route path="change-password" element={<ChangePassword />} />
                 <Route path="report-lost-book" element={<ReportLostBook />} />
+                <Route path="chat-bot" element={<ChatBot/>} />
             </Route>
 
             {/* Default route */}

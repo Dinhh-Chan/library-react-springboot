@@ -233,3 +233,51 @@ body {
 .borrow-list .Read{
     background-color: #80ef80;
 }
+
+.chat-input-holder{
+}
+
+.chat-input-textarea{
+    background-color: rgb(244, 244, 244);
+    width: 100%;
+    border: 5px;
+    border-color: none;
+    outline: none;
+    border-radius: 5px;
+    padding: 12px;
+    font-size: 1.25em;
+    resize: none;
+    box-sizing: border-box;
+     -webkit-box-sizing:border-box;
+     -moz-box-sizing: border-box;
+}
+
+.chat-log{
+    height: 65vh;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column-reverse;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.message{
+    padding: 10px 20px;
+    background-color: rgb(233, 233, 233);
+    text-align: right;
+    border-radius: 10px;
+    width: fit-content;
+    float: right;
+}
+
+.bot-message{
+    background-color: rgb(245, 245, 245);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.bot-name{
+    padding-left: 10px;
+    font-size: 13px;
+    color: rgb(120, 120, 120);
+}

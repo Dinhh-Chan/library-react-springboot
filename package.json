@@ -1,8 +1,12 @@
 {
   "dependencies": {
+    "@chatscope/chat-ui-kit-react": "^2.0.3",
+    "@chatscope/chat-ui-kit-styles": "^1.4.0",
     "chart.js": "^4.4.6",
+    "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-chatbot-kit": "^2.2.2",
+    "react-dom": "^18.3.1",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.13"

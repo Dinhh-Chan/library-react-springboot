@@ -23,8 +23,8 @@ const UserDashboard = () => {
                   <Link to="borrow-history" className="UserProfileLink">Lịch Sử Mượn Sách</Link>
                   <Link to="change-password" className="UserProfileLink">Đổi Mật Khẩu</Link>
                   <Link to="notification" className="UserProfileLink">Thông báo</Link>
-                  {/* <Link to="report-lost-book" className="UserProfileLink">Báo cáo mất sách</Link> */}
                   <Link to="report-lost-book" className="UserProfileLink">Báo cáo với quản trị viên</Link>
+                  <Link to="chat-bot" className="UserProfileLink">Trò chuyện với chat bot</Link>
                 </div>
         </div>
       <Outlet/>
