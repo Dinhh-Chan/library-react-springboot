@@ -1,0 +1,5 @@
+pandas
+langchain-comunity
+langgr
+fastapi
+uvicorn
