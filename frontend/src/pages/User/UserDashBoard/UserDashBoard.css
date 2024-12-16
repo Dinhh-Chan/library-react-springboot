@@ -234,12 +234,30 @@ body {
     background-color: #80ef80;
 }
 
-.chat-input-holder{
+.chat-input-holder form{
+    display: flex;
+}
+
+.chat-input-holder button{
+    background-color: #2977ca;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0 15px;
+    transition: all 0.2s ease;
+}
+
+.chat-input-holder button:hover{
+    background-color: #1260b4;
+}
+
+.chat-input-holder button:active{
+    background-color: #00448c;
 }
 
 .chat-input-textarea{
     background-color: rgb(244, 244, 244);
-    width: 100%;
+    width: 95%;
     border: 5px;
     border-color: none;
     outline: none;
@@ -250,6 +268,7 @@ body {
     box-sizing: border-box;
      -webkit-box-sizing:border-box;
      -moz-box-sizing: border-box;
+    
 }
 
 .chat-log{
