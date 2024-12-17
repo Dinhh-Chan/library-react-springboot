@@ -272,7 +272,8 @@ body {
 }
 
 .chat-log{
-    height: 65vh;
+    max-height: 65vh;
+    min-height: 30vh;
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
