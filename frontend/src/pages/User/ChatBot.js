@@ -64,6 +64,11 @@ function ChatBot() {
                 fadwadadadsad
             </div>
           </div>
+          <div className="chatbot-message">
+            <div className="bot-message">
+              dawoicnasvkjnaodmsajvhsudijcnsdvgyrvsbh cnijdfgrfbc jkdmijfwrhnckamscjwfnckmscijdewfhubic jxkmcjhwefgbvr lkmdciewfjhrv kjksvnhvnj nvhv mjvhun m,cvgvn m,cvfhrj cmlnkjoihouvjn,vdmfnlkjoi cuyhibxhv,rf,mlvoi chbjnd,gmkbu jihvnd
+            </div>
+          </div>
         </div>
 
         <div className="chat-input-holder">
