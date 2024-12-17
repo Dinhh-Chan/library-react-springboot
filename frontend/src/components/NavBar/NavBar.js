@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'; // Import Link từ react-
 import './NavBar.css';
 import SearchBar from "../SearchBar/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faRobot } from "@fortawesome/free-solid-svg-icons";
 import DropDownMenu from "../DropDownItems/DropDownItems";
 import NotificationButton from "../NotificationButton/NotificationButton";
 
@@ -61,6 +61,10 @@ function NavBar() {
                 </Link>
                 <SearchBar />
                 <NotificationButton hasNotifications={hasNotification} onClick={() => navigate("/user/notification")}></NotificationButton>
+                <Link to={"/user/chat-bot"}>
+                    <button className="NotificationButton">
+                        <FontAwesomeIcon icon={faRobot}/>
+                    </button></Link>
                 <button className="menuButton" onClick={() => setOpenMenu(!openMenu)}>
                     <FontAwesomeIcon icon={faBars} />
                 </button>

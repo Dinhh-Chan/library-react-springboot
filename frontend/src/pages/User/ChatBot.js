@@ -59,6 +59,11 @@ function ChatBot() {
               </div>
             </div>
           ))}
+          <div className="chat-message">
+            <div className="message">
+                fadwadadadsad
+            </div>
+          </div>
         </div>
 
         <div className="chat-input-holder">

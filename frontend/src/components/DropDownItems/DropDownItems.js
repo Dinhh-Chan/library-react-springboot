@@ -46,6 +46,9 @@ function DropDownMenu() {
                     <li className="menuItems">
                         <Link to="/user/change-password" className="menuItems">Đổi mật khẩu</Link>
                     </li>
+                    <li className="menuItems">
+                        <Link to="/user/chat-bot" className="menuItems">Trò chuyện với chatbot</Link>
+                    </li>
                     <hr />
                     <li className="menuItems">
                         <Link to="/user/report-lost-book" className="menuItems">Báo cáo với quản trị viên</Link>

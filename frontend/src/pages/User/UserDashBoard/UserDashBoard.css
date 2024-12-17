@@ -281,6 +281,10 @@ body {
     padding: 10px;
 }
 
+.chat-message{
+    align-self: flex-end;
+}
+
 .message{
     padding: 10px 20px;
     background-color: rgb(233, 233, 233);
