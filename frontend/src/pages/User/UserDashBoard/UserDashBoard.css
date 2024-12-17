@@ -275,9 +275,10 @@ body {
     height: 65vh;
     overflow-y: scroll;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     margin-bottom: 20px;
     gap: 10px;
+    padding: 10px;
 }
 
 .message{
@@ -286,11 +287,11 @@ body {
     text-align: right;
     border-radius: 10px;
     width: fit-content;
-    float: right;
+    align-self: flex-end;
 }
 
 .bot-message{
-    background-color: rgb(245, 245, 245);
+    background-color: rgb(189, 184, 255);
     padding: 10px 20px;
     border-radius: 10px;
 }

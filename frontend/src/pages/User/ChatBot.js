@@ -46,6 +46,7 @@ function ChatBot() {
   return (
     <>
       <div className="form-container">
+        <h1>Trò chuyện với chatbot thư viện</h1>
         <div className="chat-log">
           {conversation.map((entry, index) => (
             <div
