@@ -301,3 +301,6 @@ body {
     font-size: 13px;
     color: rgb(120, 120, 120);
 }
+.chat-message{
+    align-self: flex-end;
+}
