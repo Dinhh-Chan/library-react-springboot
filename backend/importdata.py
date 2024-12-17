@@ -54,7 +54,7 @@ DATABASE = {
     'drivername': 'postgresql+psycopg',
     'username': 'library_user',
     'password': 'library_pass',
-    'host': 'localhost',  # Hoặc địa chỉ IP của container Docker nếu cần
+    'host': 'localhost',  
     'port': '5433',
     'database': 'library_management'
 }
@@ -96,7 +96,7 @@ def generate_bio():
     return random.choice(bios)
 
 # Đường dẫn đến tệp CSV
-csv_file_path = '/home/dinhchan/Documents/project/library-react-springboot/data_modified.csv'
+csv_file_path = 'C:/code/javascript/library-react-springboot/backend/importdata.py'
 
 # Đọc dữ liệu CSV
 with open(csv_file_path, 'r', encoding='utf-8') as f:

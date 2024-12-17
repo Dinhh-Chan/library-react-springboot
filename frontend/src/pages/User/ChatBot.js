@@ -1,79 +1,79 @@
 import { useEffect, useState } from "react";
-
+import axios from 'axios';
 
 function ChatBot() {
-    const [inputValue, setInputValue] = useState('');
-    const [conversation, setConversation] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  const [conversation, setConversation] = useState([]);
 
-    useEffect(() => {
-        const savedConversation = JSON.parse(localStorage.getItem('conversation')) || [];
-        setConversation(savedConversation);
-      }, []);
+  // Load saved conversation from localStorage on mount
+  useEffect(() => {
+    const savedConversation = JSON.parse(localStorage.getItem('conversation')) || [];
+    setConversation(savedConversation);
+  }, []);
 
-      const handleSubmit = async (event) => {
-        event.preventDefault();
-    
-        if (!inputValue.trim()) return; // Không cho phép input rỗng
-    
-        try {
-          // Gửi request tới API
-          const response = await fetch('http://127.0.0.1:8000/generate-response', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ input: inputValue }),
-          });
-    
-          const data = await response.json();
-    
-          // Cập nhật state với câu hỏi và câu trả lời
-          const updatedConversation = [
-            ...conversation,
-            { type: 'question', text: inputValue },
-            { type: 'response', text: data.response },
-          ];
-          
-          setConversation(updatedConversation);
-    
-          // Lưu hội thoại vào localStorage
-          localStorage.setItem('conversation', JSON.stringify(updatedConversation));
-    
-          // Xóa input sau khi gửi
-          setInputValue('');
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
+    if (!inputValue.trim()) return; // Prevent submitting empty input
 
-    return ( <>
-    <div className="form-container">
+    try {
+      // Send question to the API using axios
+      const response = await axios.post('http://localhost:8000/generate-response', {
+        question: inputValue,
+      });
+
+      const data = response.data; // Axios returns the response data directly
+
+      // Update the conversation with the question and the response
+      const updatedConversation = [
+        ...conversation,
+        { type: 'question', text: inputValue },
+        { type: 'response', text: data.response }, // Use response from API
+      ];
+
+      setConversation(updatedConversation);
+
+      // Save updated conversation in localStorage
+      localStorage.setItem('conversation', JSON.stringify(updatedConversation));
+
+      // Clear input field after submit
+      setInputValue('');
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  return (
+    <>
+      <div className="form-container">
         <div className="chat-log">
-                {conversation.map((entry, index) => (
-                <div
-                key={index}
-                className={entry.type === 'question' ? 'chat-message' : 'chatbot-message'}
-                >
-                {entry.type === 'answer' && <div className="bot-name">Chatbot</div>}
-                <div className={entry.type === 'question' ? 'message' : 'bot-message'}>
-                    {entry.text}
-                </div>
-                </div>
-            ))}
+          {conversation.map((entry, index) => (
+            <div
+              key={index}
+              className={entry.type === 'question' ? 'chat-message' : 'chatbot-message'}
+            >
+              {entry.type === 'response' && <div className="bot-name">Chatbot</div>}
+              <div className={entry.type === 'question' ? 'message' : 'bot-message'}>
+                {entry.text}
+              </div>
+            </div>
+          ))}
         </div>
+
         <div className="chat-input-holder">
-            <form onSubmit={handleSubmit}>
-                <textarea className="chat-input-textarea"
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                />
-                <button type="submit">Send</button>
-            </form>
+          <form onSubmit={handleSubmit}>
+            <textarea
+              className="chat-input-textarea"
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+            <button type="submit">Send</button>
+          </form>
         </div>
-    </div>
-    </> );
+      </div>
+    </>
+  );
 }
 
 export default ChatBot;
