@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 
 function ChatBot() {
@@ -69,11 +69,20 @@ function ChatBot() {
     }
   };
 
+  const chatLogRef = useRef(null);
+
+  // Cuộn xuống cuối khi tin nhắn thay đổi
+  useEffect(() => {
+    if (chatLogRef.current) {
+      chatLogRef.current.scrollTop = chatLogRef.current.scrollHeight;
+    }
+  }, [conversation]);
+
   return (
     <>
       <div className="form-container">
         <h1>Trò chuyện với chatbot thư viện</h1>
-        <div className="chat-log">
+        <div className="chat-log" ref={chatLogRef}>
           {conversation.map((entry, index) => (
             <div
               key={index}
