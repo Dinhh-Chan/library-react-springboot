@@ -308,3 +308,20 @@ body {
 .chat-message{
     align-self: flex-end;
 }
+.predefined-questions {
+    margin-top: 20px;
+  }
+  
+  .predefined-question-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .predefined-question-button:hover {
+    background-color: #0056b3;
+  }

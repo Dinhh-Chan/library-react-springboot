@@ -4,6 +4,11 @@ import axios from 'axios';
 function ChatBot() {
   const [inputValue, setInputValue] = useState('');
   const [conversation, setConversation] = useState([]);
+  const [predefinedQuestions] = useState([
+    { question: "Địa chỉ của thư viện ở đâu?", answer: "122 Hoàng Quốc ViệtCổ Nhuế, Cầu Giấy, Hà Nội" },
+    { question: "Tôi phải làm gì nếu bị mất sách của thư viện?", answer: "Bạn hãy vào phần báo cáo với quản trị viên, sau đó nhập tiêu đề kèm theo nội dung tương ứng để có thể nhận được tư vấn của quản trị viên nhé" },
+    { question: "Thư viện mở cửa trong khoảng thời gian nào?", answer: "Thư viện mở cửa vào 8-12h sáng và 13-17h chiều nhé" }
+  ]);
 
   // Load saved conversation from localStorage on mount
   useEffect(() => {
@@ -43,6 +48,27 @@ function ChatBot() {
     }
   };
 
+  // Handle predefined question selection
+  const handlePredefinedQuestion = (question) => {
+    setInputValue(question);
+
+    // Find the answer for the selected question
+    const selectedQuestion = predefinedQuestions.find(q => q.question === question);
+    
+    if (selectedQuestion) {
+      // If the selected question has a predefined answer, automatically show it in the conversation
+      const updatedConversation = [
+        ...conversation,
+        { type: 'question', text: selectedQuestion.question },
+        { type: 'response', text: selectedQuestion.answer }, // Use predefined answer
+      ];
+
+      setConversation(updatedConversation);
+      // Save updated conversation in localStorage
+      localStorage.setItem('conversation', JSON.stringify(updatedConversation));
+    }
+  };
+
   return (
     <>
       <div className="form-container">
@@ -59,16 +85,20 @@ function ChatBot() {
               </div>
             </div>
           ))}
-          <div className="chat-message">
-            <div className="message">
-                fadwadadadsad
-            </div>
-          </div>
-          <div className="chatbot-message">
-            <div className="bot-message">
-              dawoicnasvkjnaodmsajvhsudijcnsdvgyrvsbh cnijdfgrfbc jkdmijfwrhnckamscjwfnckmscijdewfhubic jxkmcjhwefgbvr lkmdciewfjhrv kjksvnhvnj nvhv mjvhun m,cvgvn m,cvfhrj cmlnkjoihouvjn,vdmfnlkjoi cuyhibxhv,rf,mlvoi chbjnd,gmkbu jihvnd
-            </div>
-          </div>
+        </div>
+
+        {/* Predefined questions */}
+        <div className="predefined-questions">
+          <h3>Câu hỏi thường gặp</h3>
+          {predefinedQuestions.map((item, index) => (
+            <button 
+              key={index} 
+              onClick={() => handlePredefinedQuestion(item.question)}
+              className="predefined-question-button"
+            >
+              {item.question}
+            </button>
+          ))}
         </div>
 
         <div className="chat-input-holder">
