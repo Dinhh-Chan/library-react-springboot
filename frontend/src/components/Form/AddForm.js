@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import "./Form.css";
 import axios from "axios";
+import Pagination from "./Pagination";
 
 function AddForm({ bookData, setBookData, setVisibleForm, save }) {
     const [existingCategories, setExistingCategories] = useState([]);
@@ -436,32 +437,12 @@ function AddForm({ bookData, setBookData, setVisibleForm, save }) {
                         </div>
                         {/* Điều khiển phân trang danh mục */}
                         {totalCategoryPages > 1 && (
-                            <div className="pagination">
-                                <button
-                                    onClick={() => paginateCategories(categoryCurrentPage - 1)}
-                                    disabled={categoryCurrentPage === 1}
-                                    className="pagination-button"
-                                >
-                                    Trước
-                                </button>
-                                {Array.from({ length: totalCategoryPages }, (_, index) => (
-                                    <button
-                                        key={index + 1}
-                                        onClick={() => paginateCategories(index + 1)}
-                                        className={`pagination-button ${categoryCurrentPage === index + 1 ? "active" : ""}`}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                ))}
-                                <button
-                                    onClick={() => paginateCategories(categoryCurrentPage + 1)}
-                                    disabled={categoryCurrentPage === totalCategoryPages}
-                                    className="pagination-button"
-                                >
-                                    Sau
-                                </button>
-                            </div>
-                        )}
+    <Pagination
+        currentPage={categoryCurrentPage}
+        totalPages={totalCategoryPages}
+        onPageChange={paginateCategories}
+    />
+)}
                         <div className="modal-footer">
                             <button onClick={closeSelectCategoryModal} className="btn-secondary">
                                 Đóng
@@ -551,32 +532,12 @@ function AddForm({ bookData, setBookData, setVisibleForm, save }) {
                         </div>
                         {/* Điều khiển phân trang tác giả */}
                         {totalAuthorPages > 1 && (
-                            <div className="pagination">
-                                <button
-                                    onClick={() => paginateAuthors(authorCurrentPage - 1)}
-                                    disabled={authorCurrentPage === 1}
-                                    className="pagination-button"
-                                >
-                                    Trước
-                                </button>
-                                {Array.from({ length: totalAuthorPages }, (_, index) => (
-                                    <button
-                                        key={index + 1}
-                                        onClick={() => paginateAuthors(index + 1)}
-                                        className={`pagination-button ${authorCurrentPage === index + 1 ? "active" : ""}`}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                ))}
-                                <button
-                                    onClick={() => paginateAuthors(authorCurrentPage + 1)}
-                                    disabled={authorCurrentPage === totalAuthorPages}
-                                    className="pagination-button"
-                                >
-                                    Sau
-                                </button>
-                            </div>
-                        )}
+    <Pagination
+        currentPage={authorCurrentPage}
+        totalPages={totalAuthorPages}
+        onPageChange={paginateAuthors}
+    />
+)}
                         <div className="modal-footer">
                             <button onClick={closeSelectAuthorModal} className="btn-secondary">
                                 Đóng
