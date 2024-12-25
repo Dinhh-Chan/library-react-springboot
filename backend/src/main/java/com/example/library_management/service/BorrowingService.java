@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import com.example.library_management.dto.BorrowingLimitResponse;
+import com.example.library_management.dto.BorrowingStatusCountsResponse;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -131,7 +133,14 @@ public class BorrowingService {
         // Lưu thay đổi
         return borrowingRepository.save(borrowing);
     }
-
+        public BorrowingStatusCountsResponse getBorrowingStatusCounts() {
+        Long dangChoDuyet = borrowingRepository.countByStatus(BorrowingStatus.DANG_CHO_DUYET);
+        Long dangMuon = borrowingRepository.countByStatus(BorrowingStatus.DANG_MUON);
+        Long daTra = borrowingRepository.countByStatus(BorrowingStatus.DA_TRA);
+        Long quaHan = borrowingRepository.countByStatus(BorrowingStatus.QUA_HAN);
+        
+        return new BorrowingStatusCountsResponse(dangChoDuyet, dangMuon, daTra, quaHan);
+    }
     // Kiểm tra số lượng đơn mượn của người dùng
     public boolean isLimitReached(Long readerId) {
         // Kiểm tra số lượng đơn mượn của người dùng có status "DANG_MUON", "DA_TRA" và "QUA_HAN"

@@ -80,4 +80,17 @@ public class ReaderService {
 
         return reader;
     }
+        // Lấy người đọc theo email
+        public Optional<Reader> getReaderByEmail(String email) {
+            return readerRepository.findByEmail(email);
+        }
+    
+        // Cập nhật mật khẩu người dùng
+        public void updatePassword(Long readerId, String newPassword) {
+            Reader reader = readerRepository.findById(readerId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người đọc với ID: " + readerId));
+            reader.setPassword(passwordEncoder.encode(newPassword));
+            readerRepository.save(reader);
+    }
+    
 }

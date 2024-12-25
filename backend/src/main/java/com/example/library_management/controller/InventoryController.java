@@ -18,6 +18,8 @@ import com.example.library_management.dto.BookInventoryRequest;
 import com.example.library_management.entity.Inventory;
 import com.example.library_management.exception.ResourceNotFoundException;
 import com.example.library_management.service.InventoryService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/inventories")
@@ -67,4 +69,12 @@ public class InventoryController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/book/{bookId}")
+    public ResponseEntity<Inventory> getInventoryByBookId(@PathVariable Long bookId){
+        return inventoryService.getInventoryByBookId(bookId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(null));
+    }
+    
 }

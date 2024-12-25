@@ -193,5 +193,8 @@ public class InventoryService {
         return inventoryRepository.findByBook(book)
                 .orElseThrow(() -> new ResourceNotFoundException("Inventory not found for book id " + book.getId()));
     }
-
+    @Transactional
+    public Optional<Inventory> getInventoryByBookId(Long bookId){
+        return inventoryRepository.findByBookId(bookId);
+    }
 }

@@ -20,5 +20,5 @@ public interface BorrowingRepository extends JpaRepository<Borrowing, Long> {
     // Tìm tất cả các lần mượn theo trạng thái
     List<Borrowing> findByStatus(com.example.library_management.enums.BorrowingStatus status);
     List<Borrowing> findByBorrowDateBetween(LocalDate startDate, LocalDate endDate);
-
+    Long countByStatus(BorrowingStatus status);
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.library_management.dto.BorrowingRequest;
 import com.example.library_management.dto.BorrowingResponse;
+import com.example.library_management.dto.BorrowingStatusCountsResponse;
 import com.example.library_management.entity.Borrowing;
 import com.example.library_management.entity.Book;
 import com.example.library_management.entity.Reader;
@@ -193,5 +194,11 @@ public class BorrowingController {
     public ResponseEntity<BorrowingLimitResponse> getBorrowLimit(@PathVariable Long userId) {
         BorrowingLimitResponse borrowLimitResponse = borrowingService.getBorrowLimit(userId);
         return ResponseEntity.ok(borrowLimitResponse);
+    }
+    @GetMapping("/status-counts")
+    @PreAuthorize("hasRole('ADMIN')") // Ensure only admins can access
+    public ResponseEntity<BorrowingStatusCountsResponse> getBorrowingStatusCounts() {
+        BorrowingStatusCountsResponse counts = borrowingService.getBorrowingStatusCounts();
+        return new ResponseEntity<>(counts, HttpStatus.OK);
     }
 }

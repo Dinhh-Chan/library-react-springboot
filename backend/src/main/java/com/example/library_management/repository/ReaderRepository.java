@@ -11,7 +11,7 @@ import com.example.library_management.entity.Reader;
 public interface ReaderRepository extends JpaRepository<Reader, Long> {
     // Tìm người đọc theo tên đăng nhập
     Optional<Reader> findByUsername(String username);
-    
+    Optional<Reader> findByEmail(String email);
     // Tìm người đọc theo email hoặc thông tin liên hệ khác (nếu có)
     // Optional<Reader> findByEmail(String email);
     
